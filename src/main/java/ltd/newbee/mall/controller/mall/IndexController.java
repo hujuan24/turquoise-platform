@@ -25,6 +25,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import java.util.ArrayList;
+
+
+
 @Controller
 public class IndexController {
 
@@ -40,9 +44,23 @@ public class IndexController {
     @GetMapping({"/index", "/", "/index.html"})
     public String indexPage(HttpServletRequest request) {
         List<NewBeeMallIndexCategoryVO> categories = newBeeMallCategoryService.getCategoriesForIndex();
+
+
+
+
+//        if (CollectionUtils.isEmpty(categories)) {
+//            NewBeeMallException.fail("分类数据不完善");
+//        }
         if (CollectionUtils.isEmpty(categories)) {
-            NewBeeMallException.fail("分类数据不完善");
+            // 前端已使用静态菜单，不抛出异常
+            categories = new ArrayList<>();
         }
+
+
+
+
+
+
         List<NewBeeMallIndexCarouselVO> carousels = newBeeMallCarouselService.getCarouselsForIndex(Constants.INDEX_CAROUSEL_NUMBER);
         List<NewBeeMallIndexConfigGoodsVO> hotGoodses = newBeeMallIndexConfigService.getConfigGoodsesForIndex(IndexConfigTypeEnum.INDEX_GOODS_HOT.getType(), Constants.INDEX_GOODS_HOT_NUMBER);
         List<NewBeeMallIndexConfigGoodsVO> newGoodses = newBeeMallIndexConfigService.getConfigGoodsesForIndex(IndexConfigTypeEnum.INDEX_GOODS_NEW.getType(), Constants.INDEX_GOODS_NEW_NUMBER);

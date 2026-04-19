@@ -8,29 +8,95 @@
 <content id="content">
     <nav th:replace="mall/header::nav-fragment"></nav>
     <div id="banner">
+
+
         <div class="all-sort-list">
-            <th:block th:each="category : ${categories}">
+            <!-- 原石 -->
             <div class="item">
-                <h3><span>·</span><a href="##"><th:block th:text="${category.categoryName}"></th:block></a></h3>
+                <h3><span>.</span><a href=" ">原石</a ></h3>
                 <div class="item-list clearfix">
                     <div class="subitem">
-                        <th:block th:each="secondLevelCategory : ${category.secondLevelCategoryVOS}">
                         <dl class="fore1">
-                            <dt><a href="#"><th:block th:text="${secondLevelCategory.categoryName}"></th:block></a></dt>
-                            <dd>
-                                <th:block th:each="thirdLevelCategory : ${secondLevelCategory.thirdLevelCategoryVOS}">
-                                <em><a href="#"th:href="@{'/search?goodsCategoryId='+${thirdLevelCategory.categoryId}}">
-                                    <th:block th:text="${thirdLevelCategory.categoryName}"></th:block>
-                                </a></em>
-                                </th:block>
-                            </dd>
+                            <dt><a href="/search?goodsCategoryId=101">全皮籽料</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=102">开口料</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=103">明料</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=104">随形</a ></dt>
                         </dl>
-                        </th:block>
                     </div>
                 </div>
             </div>
-            </th:block>
+            <!-- 雕件 -->
+            <div class="item">
+                <h3><span>.</span><a href="/search?goodsCategoryId=201">雕件</a ></h3>
+                <div class="item-list clearfix">
+                    <div class="subitem">
+                        <dl class="fore1">
+                            <dt><a href="/search?goodsCategoryId=201">人物</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=202">瑞兽</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=203">花鸟山水</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=204">纹饰牌</a ></dt>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <!-- 手串 -->
+            <div class="item">
+                <h3><span>.</span><a href="/search?goodsCategoryId=301">手串</a ></h3>
+                <div class="item-list clearfix">
+                    <div class="subitem">
+                        <dl class="fore1">
+                            <dt><a href="/search?goodsCategoryId=301">单圈手串</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=302">108佛珠</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=303">手持十八子</a ></dt>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <!-- 珠链 -->
+            <div class="item">
+                <h3><span>.</span><a href="/search?goodsCategoryId=401">珠链</a ></h3>
+                <div class="item-list clearfix">
+                    <div class="subitem">
+                        <dl class="fore1">
+                            <dt><a href="/search?goodsCategoryId=401">圆珠项链</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=402">桶珠链</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=403">锁骨链</a ></dt>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <!-- 配饰 -->
+            <div class="item">
+                <h3><span>.</span><a href="/search?goodsCategoryId=501">配饰</a ></h3>
+                <div class="item-list clearfix">
+                    <div class="subitem">
+                        <dl class="fore1">
+                            <dt><a href="/search?goodsCategoryId=501">三通</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=502">隔片</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=503">吊坠</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=504">戒指</a ></dt>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <!-- 收藏级孤品 -->
+            <div class="item">
+                <h3><span>.</span><a href="/search?goodsCategoryId=601">收藏级孤品</a ></h3>
+                <div class="item-list clearfix">
+                    <div class="subitem">
+                        <dl class="fore1">
+                            <dt><a href="/search?goodsCategoryId=601">大师雕刻</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=602">高瓷蓝料</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=603">乌兰花</a ></dt>
+                            <dt><a href="/search?goodsCategoryId=604">菜籽黄</a ></dt>
+                        </dl>
+                    </div>
+                </div>
+            </div>
         </div>
+
+
+
         <div class="swiper-container fl">
             <div class="swiper-wrapper">
                 <!-- 配置了轮播图则显示后台配置的轮播图 -->
@@ -46,14 +112,14 @@
                 <!-- 未配置轮播图则显示默认的三张轮播图 -->
                 <th:block th:if="${#lists.isEmpty(carousels)}">
                     <div class="swiper-slide">
-                        <img src="./mall/image/swiper/banner01.jpg" alt="">
+                        <img src="./mall/image/swiper/banner01.png" alt="">
                     </div>
                     <div class="swiper-slide">
-                        <img src="./mall/image/swiper/banner02.jpg" alt="">
+                        <img src="./mall/image/swiper/banner02.png" alt="">
                     </div>
-                    <div class="swiper-slide">
-                        <img src="./mall/image/swiper/banner03.jpg" alt="">
-                    </div>
+<!--                    <div class="swiper-slide">-->
+<!--                        <img src="./mall/image/swiper/banner03.png" alt="">-->
+<!--                    </div>-->
                 </th:block>
             </div>
             <div class="swiper-pagination"></div>

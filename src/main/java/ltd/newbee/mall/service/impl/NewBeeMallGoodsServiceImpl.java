@@ -44,6 +44,11 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
         PageResult pageResult = new PageResult(goodsList, total, pageUtil.getLimit(), pageUtil.getPage());
         return pageResult;
     }
+    @Override
+    public boolean deleteGoodsById(Long goodsId) {
+        // 物理删除：直接根据主键删除记录
+        return goodsMapper.deleteByPrimaryKey(goodsId) > 0;
+    }
 
     @Override
     public String saveNewBeeMallGoods(NewBeeMallGoods goods) {

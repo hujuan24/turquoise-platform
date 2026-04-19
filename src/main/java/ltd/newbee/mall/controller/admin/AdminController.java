@@ -45,11 +45,21 @@ public class AdminController {
     }
 
 
+//    @GetMapping({"", "/", "/index", "/index.html"})
+//    public String index(HttpServletRequest request) {
+//        request.setAttribute("path", "index");
+//        return "admin/index";
+//    }
+
     @GetMapping({"", "/", "/index", "/index.html"})
     public String index(HttpServletRequest request) {
-        request.setAttribute("path", "index");
-        return "admin/index";
+        return "redirect:/admin/goods";
     }
+
+
+
+
+
 
     @PostMapping(value = "/login")
     public String login(@RequestParam("userName") String userName,

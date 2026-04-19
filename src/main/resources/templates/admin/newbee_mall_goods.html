@@ -3,6 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <header th:replace="admin/header::header-fragment">
 </header>
+
 <style>
     .ui-jqgrid tr.jqgrow td {
         white-space: normal !important;
@@ -10,6 +11,7 @@
         vertical-align: text-top;
         padding-top: 2px;
     }
+  <a class="btn btn-danger btn-sm" th:href="@{/admin/goods/delete/{goodsId}(goodsId=${goods.goodsId})}" onclick="return confirm('确定删除该商品吗？')">删除</a >
 
     a {
         color: #1baeae;
@@ -51,6 +53,9 @@
                             <button class="btn btn-info" onclick="editGoods()"><i
                                     class="fa fa-pencil-square-o"></i>&nbsp;修改商品
                             </button>
+                            <button class="btn btn-danger" onclick="deleteGoods()"><i
+                                class="fa fa-pencil-square-o"></i>&nbsp;删除商品
+                            </button>
                             <button class="btn btn-success" onclick="putUpGoods()"><i
                                     class="fa fa-arrow-up"></i>&nbsp;上架商品
                             </button>
@@ -83,5 +88,69 @@
 <script th:src="@{/admin/plugins/sweetalert2/sweetalert2.all.min.js}"></script>
 <script th:src="@{/admin/dist/js/public.js}"></script>
 <script th:src="@{/admin/dist/js/newbee_mall_goods.js}"></script>
+
+<script>
+    function deleteGoods() {
+        // 获取所有被选中的复选框
+        var checkboxes = document.querySelectorAll('input[name="goodsIds"]:checked');
+        if (checkboxes.length === 0) {
+            alert('请先选择要删除的商品');
+            return;
+        }
+        if (confirm('确定删除选中的商品吗？')) {
+            // 如果是批量删除，可能需要发送 POST 请求，这里简单实现逐个跳转
+            for (var i = 0; i < checkboxes.length; i++) {
+                window.location.href = '/admin/goods/delete/' + checkboxes[i].value;
+            }
+        }
+    }
+</script>
+<script th:inline="javascript">
+    // 等待 jqGrid 加载完成后，为每一行添加删除按钮
+    $(document).ready(function() {
+        // 监听 jqGrid 加载完成事件（如果使用 jqGrid 的 loadComplete）
+        $("#jqGrid").on("jqGridLoadComplete", function() {
+            addDeleteButtons();
+        });
+        // 初次加载也执行一次
+        addDeleteButtons();
+    });
+
+    function addDeleteButtons() {
+        // 遍历每个商品行
+        $("#jqGrid tbody tr.jqgrow").each(function() {
+            var row = $(this);
+            // 如果该行已经有删除按钮，跳过
+            if (row.find(".custom-delete-btn").length > 0) return;
+
+            // 获取商品 ID（从行的 id 属性获取，例如 "10907"）
+            var goodsId = row.attr("id");
+            if (!goodsId) return;
+
+            // 创建删除按钮
+            var deleteBtn = $('<a href=" " class="btn btn-danger btn-sm custom-delete-btn" style="margin-left:5px;">删除</a >');
+            deleteBtn.on("click", function(e) {
+                e.preventDefault();
+                if (confirm("确定删除该商品吗？")) {
+                    window.location.href = "/admin/goods/delete/" + goodsId;
+                }
+            });
+
+            // 找到表格的最后一列（操作列），如果不存在操作列则添加一个新列
+            var lastCell = row.find("td:last");
+            if (lastCell.length) {
+                // 如果最后一列已经有按钮（比如编辑按钮），则追加到后面
+                lastCell.append(deleteBtn);
+            } else {
+                // 没有操作列，新增一列
+                row.append($('<td></td>').append(deleteBtn));
+                // 同时需要给表头添加操作列（如果没有）
+                if ($("#jqGrid th:last").text() !== "操作") {
+                    $("#jqGrid thead tr").append('<th>操作</th>');
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>

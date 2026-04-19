@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  * @author 13
  * @qq交流群 796794009
@@ -195,7 +195,18 @@ public class NewBeeMallGoodsController {
             return ResultGenerator.genFailResult(result);
         }
     }
-
+    /**
+     * 删除
+     */
+    @GetMapping("/goods/delete/{goodsId}")
+    public String deleteGoods(@PathVariable("goodsId") Long goodsId, RedirectAttributes redirectAttributes) {
+        if (newBeeMallGoodsService.deleteGoodsById(goodsId)) {
+            redirectAttributes.addFlashAttribute("message", "删除成功");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "删除失败");
+        }
+        return "redirect:/admin/goods";
+    }
     /**
      * 详情
      */

@@ -70,4 +70,10 @@ public interface NewBeeMallGoodsService {
      * @return
      */
     PageResult searchNewBeeMallGoods(PageQueryUtil pageUtil);
+    /**
+     * 根据商品id物理删除商品
+     * @param goodsId 商品id
+     * @return 是否删除成功
+     */
+    boolean deleteGoodsById(Long goodsId);
 }
