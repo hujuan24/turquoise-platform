@@ -2,11 +2,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="mall/header::head-fragment('NewBee商城-商品详情','detail')">
+    <link rel="stylesheet" th:href="@{/mall/styles/detail.css}">
 </head>
 <body>
 <header th:replace="mall/header::header-fragment"></header>
 
-<div id="detail">
+<div id="detail-container">
     <!-- nav -->
     <nav th:replace="mall/header::nav-fragment"></nav>
 
@@ -17,27 +18,50 @@
         </div>
     </div>
 
-    <div class="intro mt20 w clearfix">
-        <div class="left fl" style="position: relative;">
-            <div class="swiper-container fl">
+    <div id="goods-info">
+        <div id="goods-image">
+            <div id="main-image">
                 <img th:src="@{${goodsDetail.goodsCoverImg}}">
             </div>
+            <div id="thumbnails">
+                <div class="thumbnail-item active">
+                    <img th:src="@{${goodsDetail.goodsCoverImg}}">
+                </div>
+                <!-- 可以根据实际情况添加更多缩略图 -->
+            </div>
         </div>
-        <div class="right fr">
-            <div class="h3 ml20 mt20" th:text="${goodsDetail.goodsName}">NewBeeMall</div>
-            <div class="sub_title mr40 ml20 mt10" th:text="${goodsDetail.goodsIntro}">NewBeeMall</div>
-            <div class="item_price mr40 ml20 mt10">
-                <th:block th:text="${goodsDetail.sellingPrice}+'.00 元'"></th:block>
-                <del>
-                    <th:block th:text="${goodsDetail.originalPrice}+'.00 元'"></th:block>
-                </del>
+        <div id="goods-details">
+            <div id="goods-title" th:text="${goodsDetail.goodsName}">商品名称</div>
+            <div id="goods-desc" th:text="${goodsDetail.goodsIntro}">商品描述</div>
+            <div id="price-info">
+                <span class="price-label">价格：</span>
+                <span class="price-value" th:text="${goodsDetail.sellingPrice}+'.00 元'"></span>
+                <span class="original-price" th:text="${goodsDetail.originalPrice}+'.00 元'"></span>
             </div>
-
-            <div class="order">
-                <input class="car" type="button" th:onclick="'saveAndGoCart('+${goodsDetail.goodsId}+')'" value="立即选购"/>
-                <input class="car" type="button" th:onclick="'saveToCart('+${goodsDetail.goodsId}+')'" value="加入购物车"/>
+            <div id="sales-info">
+                <span>销量：100</span>
+                <span>评价：50</span>
             </div>
-            <div class="tb-extra ml20" id="J_tbExtra">
+            <div id="specification">
+                <div class="spec-title">规格：</div>
+                <div class="spec-options">
+                    <div class="spec-option active">默认</div>
+                </div>
+            </div>
+            <div id="quantity">
+                <span class="quantity-label">数量：</span>
+                <div class="quantity-control">
+                    <div class="quantity-btn" onclick="decreaseQuantity()">-</div>
+                    <input type="number" class="quantity-input" id="quantityInput" value="1" min="1">
+                    <div class="quantity-btn" onclick="increaseQuantity()">+</div>
+                </div>
+            </div>
+            <div id="buy-area">
+                <button class="btn btn-add-cart" th:onclick="'saveToCart('+${goodsDetail.goodsId}+')'">加入购物车</button>
+                <button class="btn btn-buy-now" th:onclick="'saveAndGoCart('+${goodsDetail.goodsId}+')'">立即购买</button>
+                <button class="btn btn-favorite" id="favoriteBtn" th:classappend="${isCollected ? 'active' : ''}" th:onclick="'addFavorite('+${goodsDetail.goodsId}+')'" th:text="${isCollected ? '❤️ 已收藏' : '❤️ 加入收藏'}"></button>
+            </div>
+            <div class="tb-extra" id="J_tbExtra">
                 <dl>
                     <dt>承诺</dt>
                     <dd><a class="J_Cont" title="满足7天无理由退换货申请的前提下，包邮商品需要买家承担退货邮费，非包邮商品需要买家承担发货和退货邮费。" href="#"
@@ -54,13 +78,14 @@
                     <dt>支持</dt>
                     <dd>折旧变现，买新更省钱。<a style="float:none;text-decoration: underline;" href="##">详情</a></dd>
                 </dl>
-
             </div>
         </div>
-        <div class="clear"></div>
     </div>
     <!-- 这里使用的是 th:utext 标签，用 th:text 不会解析 html，用 th:utext 会解析 html -->
-    <div class="goods mt20 w clearfix" th:utext="${goodsDetail.goodsDetailContent}">
+    <div id="goods-intro">
+        <div class="intro-title">商品详情</div>
+        <div class="intro-content" th:utext="${goodsDetail.goodsDetailContent}">
+        </div>
     </div>
 </div>
 
@@ -72,10 +97,27 @@
 <script th:src="@{/mall/js/search.js}" type="text/javascript"></script>
 <script type="text/javascript">
     /**
+     * 数量控制
+     */
+    function decreaseQuantity() {
+        var input = document.getElementById('quantityInput');
+        var value = parseInt(input.value);
+        if (value > 1) {
+            input.value = value - 1;
+        }
+    }
+
+    function increaseQuantity() {
+        var input = document.getElementById('quantityInput');
+        var value = parseInt(input.value);
+        input.value = value + 1;
+    }
+
+    /**
      * 添加到购物车
      */
     function saveToCart(id) {
-        var goodsCount = 1;
+        var goodsCount = parseInt(document.getElementById('quantityInput').value);
         var data = {
             "goodsId": id,
             "goodsCount": goodsCount
@@ -120,7 +162,7 @@
      * 添加到购物车并跳转至购物车页面
      */
     function saveAndGoCart(id) {
-        var goodsCount = 1;
+        var goodsCount = parseInt(document.getElementById('quantityInput').value);
         var data = {
             "goodsId": id,
             "goodsCount": goodsCount
@@ -141,7 +183,7 @@
                         cancelButtonText: '留在当前页'
                     }).then((flag) => {
                             if (flag.value) {
-                                window.location.href = '/shop-cart';
+                                window.location.href = 'shop-cart';
                             }
                         }
                     );
@@ -155,6 +197,55 @@
             error: function () {
                 Swal.fire({
                     text: "操作失败",
+                    icon: "error",iconColor:"#f05b72",
+                });
+            }
+        });
+    }
+
+    /**
+     * 添加收藏
+     */
+    function addFavorite(goodsId) {
+        console.log('收藏商品ID:', goodsId);
+        // 使用表单数据格式传递
+        $.ajax({
+            type: 'POST',
+            url: '/collect/add',
+            data: { productId: goodsId },
+            contentType: 'application/x-www-form-urlencoded',
+            success: function (result) {
+                console.log('收藏请求响应:', result);
+                if (result.resultCode === 200) {
+                    Swal.fire({
+                        text: "收藏成功",
+                        icon: "success",iconColor:"#1d953f",
+                    });
+                    document.getElementById('favoriteBtn').classList.add('active');
+                    document.getElementById('favoriteBtn').textContent = '❤️ 已收藏';
+                } else if (result.message === '用户未登录') {
+                    Swal.fire({
+                        text: "请先登录",
+                        icon: "info",iconColor:"#3b82f6",
+                        showCancelButton: true,
+                        confirmButtonText: '去登录',
+                        cancelButtonText: '取消'
+                    }).then((flag) => {
+                        if (flag.value) {
+                            window.location.href = '/login';
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        text: result.message || "收藏失败",
+                        icon: "error",iconColor:"#f05b72",
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('收藏请求错误:', xhr, status, error);
+                Swal.fire({
+                    text: "操作失败，请稍后重试",
                     icon: "error",iconColor:"#f05b72",
                 });
             }

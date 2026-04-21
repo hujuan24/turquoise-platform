@@ -87,5 +87,34 @@
 <script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/admin/dist/js/plugins/particles.js}"></script>
 <script th:src="@{/admin/dist/js/plugins/login-bg-particles.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        // 登录表单提交处理
+        $('form').on('submit', function(e) {
+            e.preventDefault();
+            
+            var userName = $('#userName').val();
+            var password = $('#password').val();
+            var verifyCode = $('input[name="verifyCode"]').val();
+            
+            // 简单验证
+            if (!userName) {
+                alert('请输入账号');
+                return;
+            }
+            if (!password) {
+                alert('请输入密码');
+                return;
+            }
+            if (!verifyCode) {
+                alert('请输入验证码');
+                return;
+            }
+            
+            // 提交表单
+            this.submit();
+        });
+    });
+</script>
 </body>
 </html>

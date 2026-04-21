@@ -12,10 +12,13 @@ import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.NewBeeMallException;
 import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallGoodsDetailVO;
+import ltd.newbee.mall.controller.vo.NewBeeMallUserVO;
 import ltd.newbee.mall.controller.vo.SearchPageCategoryVO;
 import ltd.newbee.mall.entity.NewBeeMallGoods;
+import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.service.NewBeeMallCategoryService;
 import ltd.newbee.mall.service.NewBeeMallGoodsService;
+import ltd.newbee.mall.service.UserCollectService;
 import ltd.newbee.mall.util.BeanUtil;
 import ltd.newbee.mall.util.PageQueryUtil;
 import org.springframework.stereotype.Controller;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
@@ -36,6 +40,8 @@ public class GoodsController {
     private NewBeeMallGoodsService newBeeMallGoodsService;
     @Resource
     private NewBeeMallCategoryService newBeeMallCategoryService;
+    @Resource
+    private UserCollectService userCollectService;
 
     @GetMapping({"/search", "/search.html"})
     public String searchPage(@RequestParam Map<String, Object> params, HttpServletRequest request) {
@@ -72,7 +78,7 @@ public class GoodsController {
     }
 
     @GetMapping("/goods/detail/{goodsId}")
-    public String detailPage(@PathVariable("goodsId") Long goodsId, HttpServletRequest request) {
+    public String detailPage(@PathVariable("goodsId") Long goodsId, HttpServletRequest request, HttpSession session) {
         if (goodsId < 1) {
             NewBeeMallException.fail("参数异常");
         }
@@ -83,6 +89,15 @@ public class GoodsController {
         NewBeeMallGoodsDetailVO goodsDetailVO = new NewBeeMallGoodsDetailVO();
         BeanUtil.copyProperties(goods, goodsDetailVO);
         goodsDetailVO.setGoodsCarouselList(goods.getGoodsCarousel().split(","));
+        
+        // 检查用户登录状态并获取收藏状态
+        NewBeeMallUserVO user = (NewBeeMallUserVO) session.getAttribute(Constants.MALL_USER_SESSION_KEY);
+        boolean isCollected = false;
+        if (user != null) {
+            Long userId = user.getUserId();
+            isCollected = userCollectService.checkCollectStatus(userId, goodsId);
+        }
+        request.setAttribute("isCollected", isCollected);
         request.setAttribute("goodsDetail", goodsDetailVO);
         return "mall/detail";
     }

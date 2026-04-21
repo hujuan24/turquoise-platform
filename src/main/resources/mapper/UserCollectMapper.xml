@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ltd.newbee.mall.mapper.UserCollectMapper">
+    <resultMap id="BaseResultMap" type="ltd.newbee.mall.entity.UserCollect">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="product_id" property="productId" jdbcType="BIGINT"/>
+        <result column="collect_time" property="collectTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="ltd.newbee.mall.entity.UserCollect">
+        INSERT INTO user_collect (user_id, product_id, collect_time)
+        VALUES (#{userId}, #{productId}, #{collectTime})
+    </insert>
+
+    <delete id="deleteByUserIdAndProductId">
+        DELETE FROM user_collect
+        WHERE user_id = #{userId} AND product_id = #{productId}
+    </delete>
+
+    <select id="selectByUserIdAndProductId" resultMap="BaseResultMap">
+        SELECT * FROM user_collect
+        WHERE user_id = #{userId} AND product_id = #{productId}
+    </select>
+
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT * FROM user_collect
+        WHERE user_id = #{userId}
+        ORDER BY collect_time DESC
+    </select>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ltd.newbee.mall.dao.UserFavoriteMapper">
+    <resultMap id="BaseResultMap" type="ltd.newbee.mall.entity.UserFavorite">
+        <id column="favorite_id" property="favoriteId" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="goods_id" property="goodsId" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="ltd.newbee.mall.entity.UserFavorite">
+        INSERT INTO user_favorite (user_id, goods_id, create_time)
+        VALUES (#{userId}, #{goodsId}, NOW())
+    </insert>
+
+    <delete id="deleteByUserIdAndGoodsId">
+        DELETE FROM user_favorite WHERE user_id = #{userId} AND goods_id = #{goodsId}
+    </delete>
+
+    <select id="selectByUserIdAndGoodsId" resultMap="BaseResultMap">
+        SELECT * FROM user_favorite WHERE user_id = #{userId} AND goods_id = #{goodsId}
+    </select>
+
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT * FROM user_favorite WHERE user_id = #{userId} ORDER BY create_time DESC
+    </select>
+
+    <select id="countByUserId" resultType="int">
+        SELECT COUNT(*) FROM user_favorite WHERE user_id = #{userId}
+    </select>
+</mapper>

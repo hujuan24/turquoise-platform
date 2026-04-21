@@ -13,6 +13,8 @@ import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.entity.AdminUser;
 import ltd.newbee.mall.service.AdminUserService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,8 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @Resource
     private AdminUserService adminUserService;
@@ -66,28 +70,49 @@ public class AdminController {
                         @RequestParam("password") String password,
                         @RequestParam("verifyCode") String verifyCode,
                         HttpSession session) {
-        if (!StringUtils.hasText(verifyCode)) {
-            session.setAttribute("errorMsg", "验证码不能为空");
-            return "admin/login";
-        }
-        if (!StringUtils.hasText(userName) || !StringUtils.hasText(password)) {
-            session.setAttribute("errorMsg", "用户名或密码不能为空");
-            return "admin/login";
-        }
-        ShearCaptcha shearCaptcha = (ShearCaptcha) session.getAttribute("verifyCode");
-        if (shearCaptcha == null || !shearCaptcha.verify(verifyCode)) {
-            session.setAttribute("errorMsg", "验证码错误");
-            return "admin/login";
-        }
-        AdminUser adminUser = adminUserService.login(userName, password);
-        if (adminUser != null) {
-            session.setAttribute("loginUser", adminUser.getNickName());
-            session.setAttribute("loginUserId", adminUser.getAdminUserId());
-            //session过期时间设置为7200秒 即两小时
-            //session.setMaxInactiveInterval(60 * 60 * 2);
-            return "redirect:/admin/index";
-        } else {
-            session.setAttribute("errorMsg", "登录失败");
+        try {
+            logger.info("管理员登录请求：userName={}", userName);
+            
+            if (!StringUtils.hasText(verifyCode)) {
+                logger.warn("验证码为空");
+                session.setAttribute("errorMsg", "验证码不能为空");
+                return "admin/login";
+            }
+            if (!StringUtils.hasText(userName) || !StringUtils.hasText(password)) {
+                logger.warn("用户名或密码为空");
+                session.setAttribute("errorMsg", "用户名或密码不能为空");
+                return "admin/login";
+            }
+            
+            ShearCaptcha shearCaptcha = (ShearCaptcha) session.getAttribute("verifyCode");
+            if (shearCaptcha == null) {
+                logger.warn("验证码已过期");
+                session.setAttribute("errorMsg", "验证码已过期");
+                return "admin/login";
+            }
+            if (!shearCaptcha.verify(verifyCode)) {
+                logger.warn("验证码错误：输入={}", verifyCode);
+                session.setAttribute("errorMsg", "验证码错误");
+                return "admin/login";
+            }
+            
+            logger.info("验证码校验通过，开始验证账号密码");
+            AdminUser adminUser = adminUserService.login(userName, password);
+            if (adminUser != null) {
+                logger.info("登录成功：userName={}", userName);
+                session.setAttribute("loginUser", adminUser.getNickName());
+                session.setAttribute("loginUserId", adminUser.getAdminUserId());
+                //session过期时间设置为7200秒 即两小时
+                //session.setMaxInactiveInterval(60 * 60 * 2);
+                return "redirect:/admin/index";
+            } else {
+                logger.warn("账号或密码错误：userName={}", userName);
+                session.setAttribute("errorMsg", "账号或密码错误");
+                return "admin/login";
+            }
+        } catch (Exception e) {
+            logger.error("登录过程中发生异常", e);
+            session.setAttribute("errorMsg", "登录异常：" + e.getMessage());
             return "admin/login";
         }
     }

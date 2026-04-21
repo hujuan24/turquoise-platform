@@ -4,19 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <title>NewBee商城-购物车</title>
-    <link rel="stylesheet" th:href="@{mall/css/iconfont.css}">
-    <link rel="stylesheet" th:href="@{mall/css/common.css}">
-    <link rel="stylesheet" th:href="@{mall/styles/header.css}">
-    <link rel="stylesheet" th:href="@{mall/styles/cart.css}">
+    <link rel="stylesheet" th:href="@{/mall/css/iconfont.css}">
+    <link rel="stylesheet" th:href="@{/mall/css/common.css}">
+    <link rel="stylesheet" th:href="@{/mall/styles/header.css}">
+    <link rel="stylesheet" th:href="@{/mall/styles/cart.css}">
     <link rel="stylesheet" th:href="@{/admin/plugins/sweetalert2/sweetalert2.min.css}"/>
 </head>
 <body>
 
 <div id="cart">
     <div class="banner_x center">
-        <a th:href="@{/index}" target="_blank">
+        <a th:href="@{index}" target="_blank">
             <div class="logo fl">
-                <img src="mall/image/new-bee-logo-3.png"/>
+                <img th:src="@{/mall/image/new-bee-logo-3.png}"/>
             </div>
         </a>
 
@@ -28,7 +28,7 @@
     <div class="cart_bg">
         <th:block th:if="${#lists.isEmpty(myShoppingCartItems)}">
             <div class="list center">
-                <img style="position: absolute;margin-top: 16px;left: 45%;" th:src="@{/mall/image/null-content.png}">
+                <img style="position: absolute;margin-top: 16px;left: 45%;" th:src="@{mall/image/null-content.png}">
             </div>
         </th:block>
         <th:block th:unless="${#lists.isEmpty(myShoppingCartItems)}">
@@ -67,7 +67,7 @@
         <div class="pre_order mt20 center">
             <div class="tips fl ml20">
                 <ul>
-                    <li><a th:href="@{/index}">继续购物</a></li>
+                    <li><a th:href="@{index}">继续购物</a></li>
                     <li>|</li>
                     <li>共<span th:text="${itemsTotal}">13</span>件商品</li>
                     <div class="clear"></div>
@@ -99,6 +99,7 @@
 <!-- jQuery -->
 <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
 <script th:src="@{/admin/plugins/sweetalert2/sweetalert2.all.min.js}"></script>
+<script th:src="@{/mall/js/search.js}" type="text/javascript"></script>
 <script type="text/javascript">
 
     /**
@@ -115,7 +116,7 @@
      * 跳转至结算页面
      */
     function settle() {
-        window.location.href = '/shop-cart/settle'
+        window.location.href = 'shop-cart/settle'
     }
 
     /**
@@ -144,7 +145,7 @@
         };
         $.ajax({
             type: 'PUT',
-            url: '/shop-cart',
+            url: 'shop-cart',
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (result) {
@@ -182,7 +183,7 @@
                 if (flag.value) {
                     $.ajax({
                         type: 'DELETE',
-                        url: '/shop-cart/' + id,
+                        url: 'shop-cart/' + id,
                         success: function (result) {
                             if (result.resultCode == 200) {
                                 window.location.reload();
