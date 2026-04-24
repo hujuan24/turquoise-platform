@@ -352,3 +352,307 @@
         padding-bottom: 10px;
     }
 }
+
+/* ===== 评价功能样式 ===== */
+
+/* 评价板块容器 */
+.turquoise-review-section {
+    margin-top: 30px;
+    background-color: #fff;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* 评价标题 */
+.turquoise-review-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* 评价统计区域 */
+.turquoise-review-stats {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* 整体评分 */
+.turquoise-review-overall {
+    flex: 0 0 200px;
+    text-align: center;
+}
+
+.turquoise-review-score {
+    font-size: 36px;
+    font-weight: bold;
+    color: #ff9800;
+    margin-bottom: 10px;
+}
+
+.turquoise-review-stars {
+    color: #ff9800;
+    font-size: 18px;
+}
+
+/* 评分分布 */
+.turquoise-review-distribution {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+}
+
+.turquoise-review-distribution-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.turquoise-review-distribution-star {
+    color: #ff9800;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.turquoise-review-distribution-count {
+    font-size: 14px;
+    color: #666;
+}
+
+.turquoise-review-distribution-percent {
+    font-size: 12px;
+    color: #999;
+}
+
+/* 评价筛选 */
+.turquoise-review-filter {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.turquoise-review-filter-btn {
+    padding: 8px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+}
+
+.turquoise-review-filter-btn:hover {
+    border-color: #1baeae;
+    color: #1baeae;
+}
+
+.turquoise-review-filter-btn.active {
+    background-color: #1baeae;
+    color: #fff;
+    border-color: #1baeae;
+}
+
+/* 评价列表 */
+.turquoise-review-list {
+    margin-bottom: 30px;
+}
+
+.turquoise-review-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.turquoise-review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.turquoise-review-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+    overflow: hidden;
+}
+
+.turquoise-review-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.turquoise-review-user {
+    flex: 1;
+}
+
+.turquoise-review-username {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.turquoise-review-time {
+    font-size: 12px;
+    color: #999;
+}
+
+.turquoise-review-rating {
+    color: #ff9800;
+    font-size: 14px;
+}
+
+.turquoise-review-content {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+/* 写评价区域 */
+.turquoise-review-write {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.turquoise-review-write-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.turquoise-review-write-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.turquoise-review-write-rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.turquoise-review-write-rating label {
+    font-size: 14px;
+    color: #666;
+}
+
+.turquoise-review-write-stars {
+    color: #ddd;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.turquoise-review-write-stars .star {
+    transition: color 0.3s;
+}
+
+.turquoise-review-write-stars .star:hover,
+.turquoise-review-write-stars .star.active {
+    color: #ff9800;
+}
+
+.turquoise-review-write-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.turquoise-review-write-content label {
+    font-size: 14px;
+    color: #666;
+}
+
+.turquoise-review-write-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.turquoise-review-write-submit {
+    align-self: flex-start;
+    padding: 10px 30px;
+    background-color: #1baeae;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.turquoise-review-write-submit:hover {
+    background-color: #159a9a;
+}
+
+/* 分页 */
+.turquoise-review-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.turquoise-review-pagination-btn {
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+}
+
+.turquoise-review-pagination-btn:hover {
+    border-color: #1baeae;
+    color: #1baeae;
+}
+
+.turquoise-review-pagination-btn.active {
+    background-color: #1baeae;
+    color: #fff;
+    border-color: #1baeae;
+}
+
+.turquoise-review-pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .turquoise-review-stats {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    
+    .turquoise-review-distribution {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .turquoise-review-filter {
+        flex-wrap: wrap;
+    }
+    
+    .turquoise-review-pagination {
+        flex-wrap: wrap;
+    }
+}

@@ -7,6 +7,49 @@
 <header th:replace="mall/header::header-fragment"></header>
 <content id="content">
     <nav th:replace="mall/header::nav-fragment"></nav>
+    
+    <!-- 文化沉浸板块 -->
+    <div class="culture-immersion">
+        <div class="culture-content">
+            <h2 class="culture-title">石韵千年</h2>
+            <p class="culture-subtitle">绿松石文化展销·从矿脉到腕间的东方美学</p>
+            <div class="culture-buttons">
+                <a href="#culture-origin" class="culture-btn">探索文化渊源</a>
+                <a href="#treasure-hall" class="culture-btn">进入珍宝馆</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 文化渊源板块 -->
+    <div id="culture-origin" class="culture-section">
+        <div class="section-content">
+            <h2 class="section-title">文化渊源</h2>
+            <div class="culture-content-wrapper">
+                <div class="culture-image-left">
+                    <img src="./mall/image/culture-left.jpg" alt="绿松石文化">
+                </div>
+                <div class="culture-text">
+                    <p>新石器时代：绿松石就被人类视为珍贵的宝石，用于制作装饰品和宗教仪式用品。在我国的仰韶文化、龙山文化等遗址中，都发现了绿松石制品。</p>
+                    <p>商周时期：绿松石被广泛用于制作礼器和装饰品，如殷墟妇好墓中就出土了大量精美的绿松石镶嵌器物，显示了当时高超的工艺水平。</p>
+                    <p>清代：绿松石成为宫廷御用宝石，被大量用于制作朝珠、佩饰等，同时也是官员品级的象征之一，具有极高的地位和价值。</p>
+                </div>
+                <div class="culture-image-right">
+                    <img src="./mall/image/culture-right.jpg" alt="绿松石历史">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 珍宝馆板块 -->
+    <div id="treasure-hall" class="culture-section">
+        <div class="section-content">
+            <h2 class="section-title">珍宝馆</h2>
+            <div class="treasure-content">
+                <p>这里展示了各种珍贵的绿松石制品，包括原石、雕件、手串、珠链等。每一件作品都经过精心挑选，展现了绿松石的独特魅力和工艺价值。</p>
+            </div>
+        </div>
+    </div>
+    
     <div id="banner">
 
 
@@ -432,18 +475,18 @@
             
             // 检查是否已登录
             $.ajax({
-                url: '/favorite/check',
+                url: '/collect/check',
                 type: 'POST',
-                data: { goodsId: goodsId },
+                data: { productId: goodsId },
                 success: function(res) {
                     if (res.result === 'SUCCESS') {
                         var isFavorited = res.data;
                         if (isFavorited) {
                             // 已收藏，取消收藏
                             $.ajax({
-                                url: '/favorite/delete',
+                                url: '/collect/delete',
                                 type: 'POST',
-                                data: { goodsId: goodsId },
+                                data: { productId: goodsId },
                                 success: function(res) {
                                     if (res.result === 'SUCCESS') {
                                         $icon.removeClass('icon-heart-fill').addClass('icon-heart');
@@ -475,13 +518,13 @@
                         } else {
                             // 未收藏，添加收藏
                             $.ajax({
-                                url: '/favorite/add',
+                                url: '/collect/add',
                                 type: 'POST',
-                                data: { goodsId: goodsId },
+                                data: { productId: goodsId },
                                 success: function(res) {
                                     if (res.result === 'SUCCESS') {
                                         $icon.removeClass('icon-heart').addClass('icon-heart-fill');
-                                        $icon.css('color', '#ff6b35');
+                                        $icon.css('color', '#C14953');
                                         Swal.fire({
                                             title: '成功',
                                             text: '收藏成功',
@@ -558,13 +601,13 @@
             var $icon = $this.find('i');
             
             $.ajax({
-                url: '/favorite/check',
+                url: '/collect/check',
                 type: 'POST',
-                data: { goodsId: goodsId },
+                data: { productId: goodsId },
                 success: function(res) {
                     if (res.result === 'SUCCESS' && res.data) {
                         $icon.removeClass('icon-heart').addClass('icon-heart-fill');
-                        $icon.css('color', '#ff6b35');
+                        $icon.css('color', '#C14953');
                     }
                 }
             });
@@ -572,36 +615,8 @@
     });
 </script>
 <style>
-    .favorite-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(255, 255, 255, 0.8);
-        border: none;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        z-index: 10;
-        transition: all 0.3s ease;
-    }
-    .favorite-btn:hover {
-        background: rgba(255, 255, 255, 1);
-        transform: scale(1.1);
-    }
-    .favorite-btn i {
-        font-size: 16px;
-        color: #999;
-        transition: all 0.3s ease;
-    }
     #flash li, #recommend li {
         position: relative;
-    }
-    .icon-heart-fill {
-        color: #ff6b35 !important;
     }
 </style>
 </body>

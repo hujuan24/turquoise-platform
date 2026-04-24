@@ -81,6 +81,92 @@
             </div>
         </div>
     </div>
+    
+    <!-- 评价功能板块 -->
+    <div class="turquoise-review-section">
+        <h2 class="turquoise-review-title">商品评价</h2>
+        
+        <!-- 评价统计 -->
+        <div class="turquoise-review-stats">
+            <div class="turquoise-review-overall">
+                <div class="turquoise-review-score" id="reviewScore">0.0</div>
+                <div class="turquoise-review-stars" id="reviewStars">
+                    <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+                </div>
+                <div class="turquoise-review-count" id="reviewCount">0 条评价</div>
+            </div>
+            <div class="turquoise-review-distribution">
+                <div class="turquoise-review-distribution-item">
+                    <div class="turquoise-review-distribution-star">5星</div>
+                    <div class="turquoise-review-distribution-count" id="fiveStarCount">0</div>
+                    <div class="turquoise-review-distribution-percent" id="fiveStarPercent">0%</div>
+                </div>
+                <div class="turquoise-review-distribution-item">
+                    <div class="turquoise-review-distribution-star">4星</div>
+                    <div class="turquoise-review-distribution-count" id="fourStarCount">0</div>
+                    <div class="turquoise-review-distribution-percent" id="fourStarPercent">0%</div>
+                </div>
+                <div class="turquoise-review-distribution-item">
+                    <div class="turquoise-review-distribution-star">3星</div>
+                    <div class="turquoise-review-distribution-count" id="threeStarCount">0</div>
+                    <div class="turquoise-review-distribution-percent" id="threeStarPercent">0%</div>
+                </div>
+                <div class="turquoise-review-distribution-item">
+                    <div class="turquoise-review-distribution-star">2星</div>
+                    <div class="turquoise-review-distribution-count" id="twoStarCount">0</div>
+                    <div class="turquoise-review-distribution-percent" id="twoStarPercent">0%</div>
+                </div>
+                <div class="turquoise-review-distribution-item">
+                    <div class="turquoise-review-distribution-star">1星</div>
+                    <div class="turquoise-review-distribution-count" id="oneStarCount">0</div>
+                    <div class="turquoise-review-distribution-percent" id="oneStarPercent">0%</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 评价筛选 -->
+        <div class="turquoise-review-filter">
+            <button class="turquoise-review-filter-btn active" data-type="all">全部评价</button>
+            <button class="turquoise-review-filter-btn" data-type="5">好评</button>
+            <button class="turquoise-review-filter-btn" data-type="3">中评</button>
+            <button class="turquoise-review-filter-btn" data-type="1">差评</button>
+        </div>
+        
+        <!-- 评价列表 -->
+        <div class="turquoise-review-list" id="reviewList">
+            <!-- 评价项将通过JavaScript动态加载 -->
+        </div>
+        
+        <!-- 分页 -->
+        <div class="turquoise-review-pagination" id="reviewPagination">
+            <!-- 分页按钮将通过JavaScript动态加载 -->
+        </div>
+        
+        <!-- 写评价 -->
+        <div class="turquoise-review-write">
+            <h3 class="turquoise-review-write-title">写评价</h3>
+            <form class="turquoise-review-write-form" id="reviewForm">
+                <input type="hidden" id="goodsId" th:value="${goodsDetail.goodsId}">
+                <div class="turquoise-review-write-rating">
+                    <label for="rating">评分：</label>
+                    <div class="turquoise-review-write-stars" id="writeStars">
+                        <span class="star" data-score="1">☆</span>
+                        <span class="star" data-score="2">☆</span>
+                        <span class="star" data-score="3">☆</span>
+                        <span class="star" data-score="4">☆</span>
+                        <span class="star" data-score="5">☆</span>
+                    </div>
+                    <input type="hidden" id="rating" value="5">
+                </div>
+                <div class="turquoise-review-write-content">
+                    <label for="content">评价内容：</label>
+                    <textarea class="turquoise-review-write-textarea" id="content" placeholder="请输入您的评价..."></textarea>
+                </div>
+                <button type="button" class="turquoise-review-write-submit" onclick="submitReview()">提交评价</button>
+            </form>
+        </div>
+    </div>
+    
     <!-- 这里使用的是 th:utext 标签，用 th:text 不会解析 html，用 th:utext 会解析 html -->
     <div id="goods-intro">
         <div class="intro-title">商品详情</div>
@@ -183,7 +269,7 @@
                         cancelButtonText: '留在当前页'
                     }).then((flag) => {
                             if (flag.value) {
-                                window.location.href = 'shop-cart';
+                                window.location.href = '/shop-cart';
                             }
                         }
                     );
@@ -251,6 +337,242 @@
             }
         });
     }
+
+/**
+ * 评价功能
+ */
+
+// 评分星级选择
+$(document).ready(function() {
+    // 初始化评价功能
+    initReview();
+    
+    // 写评价的星级选择
+    $('#writeStars .star').click(function() {
+        var score = $(this).data('score');
+        $('#rating').val(score);
+        $('#writeStars .star').removeClass('active');
+        for (var i = 0; i < score; i++) {
+            $('#writeStars .star').eq(i).addClass('active');
+        }
+    });
+    
+    // 评价筛选
+    $('.turquoise-review-filter-btn').click(function() {
+        $('.turquoise-review-filter-btn').removeClass('active');
+        $(this).addClass('active');
+        var type = $(this).data('type');
+        loadReviews(1, type);
+    });
+});
+
+// 初始化评价功能
+function initReview() {
+    loadReviewStats();
+    loadReviews(1, 'all');
+}
+
+// 加载评价统计
+function loadReviewStats() {
+    var goodsId = $('#goodsId').val();
+    $.ajax({
+        type: 'GET',
+        url: '/turquoise/review/stats/' + goodsId,
+        success: function(result) {
+            if (result.resultCode == 200) {
+                var stats = result.data;
+                $('#reviewScore').text(stats.averageScore.toFixed(1));
+                $('#reviewCount').text(stats.totalCount + ' 条评价');
+                
+                // 更新星级显示
+                var stars = $('#reviewStars span');
+                stars.removeClass('active');
+                var score = Math.round(stats.averageScore);
+                for (var i = 0; i < score; i++) {
+                    stars.eq(i).addClass('active').text('★');
+                }
+                for (var i = score; i < 5; i++) {
+                    stars.eq(i).text('☆');
+                }
+                
+                // 更新评分分布
+                $('#fiveStarCount').text(stats.fiveStarCount);
+                $('#fourStarCount').text(stats.fourStarCount);
+                $('#threeStarCount').text(stats.threeStarCount);
+                $('#twoStarCount').text(stats.twoStarCount);
+                $('#oneStarCount').text(stats.oneStarCount);
+                
+                $('#fiveStarPercent').text((stats.fiveStarPercent || 0) + '%');
+                $('#fourStarPercent').text((stats.fourStarPercent || 0) + '%');
+                $('#threeStarPercent').text((stats.threeStarPercent || 0) + '%');
+                $('#twoStarPercent').text((stats.twoStarPercent || 0) + '%');
+                $('#oneStarPercent').text((stats.oneStarPercent || 0) + '%');
+            }
+        },
+        error: function() {
+            console.error('加载评价统计失败');
+        }
+    });
+}
+
+// 加载评价列表
+function loadReviews(page, type) {
+    var goodsId = $('#goodsId').val();
+    $.ajax({
+        type: 'GET',
+        url: '/turquoise/review/list',
+        data: {
+            goodsId: goodsId,
+            page: page,
+            type: type
+        },
+        success: function(result) {
+            if (result.resultCode == 200) {
+                var reviews = result.data.list;
+                var html = '';
+                
+                if (reviews.length > 0) {
+                    reviews.forEach(function(review) {
+                        // 生成星级显示
+                        var starsHtml = '';
+                        for (var i = 0; i < 5; i++) {
+                            if (i < review.rating) {
+                                starsHtml += '<span>★</span>';
+                            } else {
+                                starsHtml += '<span>☆</span>';
+                            }
+                        }
+                        
+                        html += `
+                            <div class="turquoise-review-item">
+                                <div class="turquoise-review-header">
+                                    <div class="turquoise-review-avatar">
+                                        <img src="/mall/image/avatar.png" alt="用户头像">
+                                    </div>
+                                    <div class="turquoise-review-user">
+                                        <div class="turquoise-review-username">${review.username || '匿名用户'}</div>
+                                        <div class="turquoise-review-time">${review.createTime || ''}</div>
+                                    </div>
+                                    <div class="turquoise-review-rating">
+                                        ${starsHtml}
+                                    </div>
+                                </div>
+                                <div class="turquoise-review-content">
+                                    ${review.content || ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html = '<div style="text-align: center; padding: 40px; color: #999;">暂无评价</div>';
+                }
+                
+                $('#reviewList').html(html);
+                
+                // 生成分页
+                generatePagination(result.data.pageNum, result.data.pageSize, result.data.total, type);
+            }
+        },
+        error: function() {
+            console.error('加载评价列表失败');
+        }
+    });
+}
+
+// 生成分页
+function generatePagination(pageNum, pageSize, total, type) {
+    var totalPages = Math.ceil(total / pageSize);
+    var html = '';
+    
+    if (totalPages > 1) {
+        // 上一页
+        html += `<button class="turquoise-review-pagination-btn" onclick="loadReviews(${pageNum > 1 ? pageNum - 1 : 1}, '${type}')" ${pageNum == 1 ? 'disabled' : ''}>&lt;</button>`;
+        
+        // 页码
+        for (var i = 1; i <= totalPages; i++) {
+            if (i == pageNum) {
+                html += `<button class="turquoise-review-pagination-btn active">${i}</button>`;
+            } else {
+                html += `<button class="turquoise-review-pagination-btn" onclick="loadReviews(${i}, '${type}')">${i}</button>`;
+            }
+        }
+        
+        // 下一页
+        html += `<button class="turquoise-review-pagination-btn" onclick="loadReviews(${pageNum < totalPages ? pageNum + 1 : totalPages}, '${type}')" ${pageNum == totalPages ? 'disabled' : ''}>&gt;</button>`;
+    }
+    
+    $('#reviewPagination').html(html);
+}
+
+// 提交评价
+function submitReview() {
+    var goodsId = $('#goodsId').val();
+    var rating = $('#rating').val();
+    var content = $('#content').val();
+    
+    if (!content.trim()) {
+        Swal.fire({
+            text: "请输入评价内容",
+            icon: "warning",
+            iconColor: "#ff9800",
+        });
+        return;
+    }
+    
+    $.ajax({
+        type: 'POST',
+        url: '/turquoise/review/add',
+        data: {
+            goodsId: goodsId,
+            rating: rating,
+            content: content
+        },
+        success: function(result) {
+            if (result.resultCode == 200) {
+                Swal.fire({
+                    text: "评价提交成功",
+                    icon: "success",
+                    iconColor: "#1d953f",
+                });
+                
+                // 清空表单
+                $('#content').val('');
+                $('#rating').val('5');
+                $('#writeStars .star').removeClass('active');
+                $('#writeStars .star').eq(4).addClass('active');
+                
+                // 重新加载评价
+                initReview();
+            } else if (result.message === '用户未登录') {
+                Swal.fire({
+                    text: "请先登录",
+                    icon: "info",
+                    iconColor: "#3b82f6",
+                    showCancelButton: true,
+                    confirmButtonText: '去登录',
+                    cancelButtonText: '取消'
+                }).then((flag) => {
+                    if (flag.value) {
+                        window.location.href = '/login';
+                    }
+                });
+            } else {
+                Swal.fire({
+                    text: result.message || "评价提交失败",
+                    icon: "error",
+                    iconColor: "#f05b72",
+                });
+            }
+        },
+        error: function() {
+            Swal.fire({
+                text: "操作失败，请稍后重试",
+                icon: "error",
+                iconColor: "#f05b72",
+            });
+        }
+    });
+}
 </script>
 </body>
 </html>

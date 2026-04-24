@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ltd.newbee.mall.mapper.TurquoiseGoodsReviewMapper">
+    <resultMap id="TurquoiseGoodsReviewResult" type="ltd.newbee.mall.entity.TurquoiseGoodsReview">
+        <id property="id" column="id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="rating" column="rating"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="ltd.newbee.mall.entity.TurquoiseGoodsReview">
+        INSERT INTO tb_turquoise_goods_review (goods_id, user_id, username, rating, content, create_time)
+        VALUES (#{goodsId}, #{userId}, #{username}, #{rating}, #{content}, NOW())
+    </insert>
+
+    <select id="selectByGoodsIdAndUserId" resultMap="TurquoiseGoodsReviewResult">
+        SELECT * FROM tb_turquoise_goods_review
+        WHERE goods_id = #{goodsId} AND user_id = #{userId}
+    </select>
+
+    <select id="selectByGoodsId" resultMap="TurquoiseGoodsReviewResult">
+        SELECT * FROM tb_turquoise_goods_review
+        WHERE goods_id = #{goodsId}
+        <if test="type != 'all'">
+            <if test="type == '5'">
+                AND rating = 5
+            </if>
+            <if test="type == '3'">
+                AND rating >= 3 AND rating &lt; 5
+            </if>
+            <if test="type == '1'">
+                AND rating &lt; 3
+            </if>
+        </if>
+        ORDER BY create_time DESC
+        LIMIT #{start}, #{limit}
+    </select>
+
+    <select id="countByGoodsId" resultType="int">
+        SELECT COUNT(*) FROM tb_turquoise_goods_review
+        WHERE goods_id = #{goodsId}
+        <if test="type != 'all'">
+            <if test="type == '5'">
+                AND rating = 5
+            </if>
+            <if test="type == '4'">
+                AND rating = 4
+            </if>
+            <if test="type == '3'">
+                AND rating = 3
+            </if>
+            <if test="type == '2'">
+                AND rating = 2
+            </if>
+            <if test="type == '1'">
+                AND rating = 1
+            </if>
+        </if>
+    </select>
+
+    <select id="selectAverageRating" resultType="double">
+        SELECT AVG(rating) FROM tb_turquoise_goods_review
+        WHERE goods_id = #{goodsId}
+    </select>
+</mapper>

@@ -15,31 +15,17 @@
 </head>
 <nav id="nav" th:fragment="nav-fragment">
     <div class="banner_x center">
-        <a th:href="@{/index}" class="logo"><h1>十堰绿松石制品展销平台</h1></a>
-        <div class="fr">
-            <div class="search">
-                <input class="text" type="text" id="keyword" autocomplete="off">
-                <div class="search_hot">
-                </div>
-            </div>
-            <div class="button iconfont icon-search" onclick="search()"></div>
-        </div>
     </div>
 </nav>
 <header id="header" th:fragment="header-fragment">
     <div class="center">
-        <ul class="fl">
-            <li><a th:href="@{/index}">十堰绿松石制品展销平台</a></li>
+        <a th:href="@{/index}" class="logo"><img th:src="@{/mall/image/login-logo-2.png}" alt="十堰绿松石" /></a>
+        <ul class="nav-menu">
+            <li><a th:href="@{/index}">首页</a></li>
             <li><a th:href="@{/mall/culture}">文化展厅</a></li>
-<!--            <li><a th:href="@{/admin}">后台管理系统</a></li>-->
-<!--            <li><a href="https://edu.csdn.net/course/detail/26258">课程视频</a></li>-->
-<!--            <li><a href="https://juejin.cn/book/6844733814074245133?suid=3808363978174302&source=pc">课程文档</a></li>-->
-<!--            <li><a href="https://gitee.com/newbee-ltd/newbee-donate">捐赠</a></li>-->
-<!--            <li><a href="https://github.com/newbee-ltd/newbee-mall/issues">问题反馈</a></li>-->
-<!--            <li><a href="https://github.com/newbee-ltd/newbee-mall">GitHub 地址</a></li>-->
-<!--            <li><a href="https://gitee.com/newbee-ltd/newbee-mall">码云Gitee 地址</a></li>-->
+            <li><a th:href="@{/search}">商品分类</a></li>
         </ul>
-        <div class="fr">
+        <div class="header-right">
             <th:block th:unless="${session.newBeeMallUser==null}">
                 <div class="user">
                     <ul class="selector">
@@ -65,7 +51,7 @@
                     </a>
                 </div>
                 <div class="shopcart">
-                    <a th:href="@{/shop-cart}" style="color: white;"><i class="iconfont icon-cart"></i>
+                    <a th:href="@{/shop-cart}"><i class="iconfont icon-cart"></i>
                         购物车(
                         <th:block th:text="${session.newBeeMallUser.shopCartItemCount}"></th:block>
                         )</a>
@@ -77,10 +63,16 @@
                     <li><a th:href="@{/register}">注册</a></li>
                 </ul>
                 <div class="shopcart">
-                    <a href="##" style="color: white;"><i class="iconfont icon-cart"></i>
+                    <a th:href="@{/shop-cart}"><i class="iconfont icon-cart"></i>
                         购物车(0)</a>
                 </div>
             </th:block>
+            <div class="search">
+                <input class="text" type="text" id="keyword" autocomplete="off" placeholder="搜索绿松石制品...">
+                <div class="button iconfont icon-search" onclick="search()"></div>
+                <div class="search_hot">
+                </div>
+            </div>
         </div>
     </div>
 </header>

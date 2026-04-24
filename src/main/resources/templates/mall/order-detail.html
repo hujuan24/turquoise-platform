@@ -3,7 +3,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="mall/header::head-fragment('NewBee商城-订单详情','order-detail')">
 </head>
-<link rel="stylesheet" href="admin/plugins/sweetalert2/sweetalert2.min.css"/>
+<link rel="stylesheet" href="/admin/plugins/sweetalert2/sweetalert2.min.css"/>
 <body>
 <header th:replace="mall/header::header-fragment"></header>
 <!-- nav -->
@@ -37,7 +37,7 @@
                                 </th:block>
                                 <th:block th:if="${orderDetailVO.orderStatus==0}">
                                     <a onclick="payOrder()"
-                                       class="btn btn-small btn-primary" title="去支付">去支付</a>
+                                       class="btn btn-small btn-primary" title="去支付" href="javascript:void(0);">去支付</a>
                                 </th:block>
                                 <th:block th:if="${orderDetailVO.orderStatus==3}">
                                     <a onclick="finishOrder()"
@@ -213,8 +213,8 @@
 
 <div th:replace="mall/footer::footer-fragment"></div>
 <!-- jQuery -->
-<script src="admin/plugins/jquery/jquery.min.js"></script>
-<script src="admin/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="/admin/plugins/jquery/jquery.min.js"></script>
+<script src="/admin/plugins/sweetalert2/sweetalert2.all.min.js"></script>
 <script type="text/javascript">
 
     function cancelOrder() {
