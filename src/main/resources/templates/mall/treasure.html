@@ -1,0 +1,508 @@
+<!-- 绿松石主题珍宝馆页面 -->
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="mall/header::head-fragment('珍宝馆 - 松石雅集','treasure')">
+</head>
+<body class="turquoise-homepage">
+<header th:replace="mall/header::header-fragment"></header>
+
+  <!-- 页面标题区 -->
+  <header class="turquoise-page-header">
+    <h1 class="turquoise-page-title">珍宝馆</h1>
+    <p class="turquoise-page-subtitle">每一件绿松石，都值得被认真鉴赏</p>
+  </header>
+
+  <!-- 搜索筛选区 -->
+  <section class="turquoise-filter-section">
+    <div class="turquoise-search-box">
+      <div class="turquoise-search-input-wrapper">
+        <input type="text" class="turquoise-search-input" placeholder="搜索矿口、品类、工艺...">
+        <button class="turquoise-search-btn">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+    <div class="turquoise-filter-bar">
+      <div class="turquoise-filter-left">
+        <div class="turquoise-filter-tabs">
+          <button class="turquoise-filter-tab turquoise-active" onclick="switchFilter('category', this)">
+            <span>按品类</span>
+          </button>
+          <button class="turquoise-filter-tab" onclick="switchFilter('mine', this)">
+            <span>按矿口</span>
+          </button>
+          <button class="turquoise-filter-tab" onclick="switchFilter('color', this)">
+            <span>按颜色</span>
+          </button>
+          <button class="turquoise-filter-tab" onclick="switchFilter('porcelain', this)">
+            <span>按瓷度</span>
+          </button>
+        </div>
+        
+        <!-- 品类子选项 -->
+        <div class="turquoise-sub-tabs-container" id="categorySubTabs">
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('category', 'wulanhua', this)">乌兰花</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('category', 'gaocilan', this)">高瓷蓝</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('category', 'caizihuang', this)">菜籽黄</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('category', 'tangsancai', this)">唐三彩</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('category', 'ningmenghuang', this)">柠檬黄</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('category', 'ziluolan', this)">紫罗兰</button>
+        </div>
+        
+        <!-- 矿口子选项 -->
+        <div class="turquoise-sub-tabs-container" id="mineSubTabs">
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('mine', 'yungai', this)">云盖寺</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('mine', 'yajiao', this)">丫角山</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('mine', 'yunxi', this)">郧西</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('mine', 'qinggu', this)">秦古</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('mine', 'qita', this)">其他</button>
+        </div>
+        
+        <!-- 颜色子选项 -->
+        <div class="turquoise-sub-tabs-container" id="colorSubTabs">
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('color', 'tianlan', this)">天蓝</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('color', 'lanlv', this)">蓝绿</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('color', 'lvse', this)">绿色</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('color', 'huangse', this)">黄色</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('color', 'zise', this)">紫色</button>
+        </div>
+        
+        <!-- 瓷度子选项 -->
+        <div class="turquoise-sub-tabs-container" id="porcelainSubTabs">
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('porcelain', 'gaoci', this)">高瓷（瓷釉级）</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('porcelain', 'zhongci', this)">中瓷（硬松级）</button>
+          <button class="turquoise-sub-tab" onclick="switchSubFilter('porcelain', 'dici', this)">低瓷（泡松级）</button>
+        </div>
+      </div>
+      <div class="turquoise-filter-right">
+        <button class="turquoise-random-btn" onclick="randomRecommend()">
+          <i class="fas fa-dice"></i>
+          <span>帮我推荐</span>
+        </button>
+        <div class="turquoise-sort-dropdown">
+          <select class="turquoise-sort-select" onchange="sortProducts(this.value)">
+            <option value="recommend">默认推荐</option>
+            <option value="newest">最新上架</option>
+            <option value="hot">热度最高</option>
+            <option value="price-asc">价格升序</option>
+            <option value="price-desc">价格降序</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 矿口知识导购提示 -->
+  <div class="turquoise-mine-guide" id="mineGuide">
+    <div class="turquoise-mine-guide-text" id="mineGuideText"></div>
+  </div>
+
+  <!-- 商品列表 -->
+  <section class="turquoise-product-section">
+    <div class="turquoise-product-grid" id="productGrid">
+      <!-- 商品卡片 1 - 馆藏级 -->
+      <div class="turquoise-product-card" data-id="1" data-category="wulanhua" data-mine="yungai" data-color="tianlan" data-porcelain="gaoci" data-hot="true" data-collection="true">
+        <div class="turquoise-product-image">
+          <img src="https://images.unsplash.com/photo-1617038260897-41a1f14cd8cd?w=600&q=80" alt="高瓷蓝观音">
+          <span class="turquoise-product-badge turquoise-collection"><i class="fas fa-gem"></i> 馆藏</span>
+        </div>
+        <div class="turquoise-product-info">
+          <h3 class="turquoise-product-name">
+            <span class="turquoise-origin">云盖寺</span>
+            <span class="turquoise-divider">·</span>
+            <span>高瓷蓝观音挂件</span>
+          </h3>
+          <div class="turquoise-product-meta">
+            <div class="turquoise-product-specs">
+              <span>高瓷</span>
+              <span>天蓝</span>
+            </div>
+            <div class="turquoise-product-price">¥28,800</div>
+          </div>
+          <div class="turquoise-product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 2 - 热门 -->
+      <div class="turquoise-product-card" data-id="2" data-category="gaocilan" data-mine="yajiao" data-color="lvse" data-porcelain="zhongci" data-hot="true">
+        <div class="turquoise-product-image">
+          <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80" alt="果冻料弥勒">
+          <span class="turquoise-product-badge turquoise-hot"><i class="fas fa-fire"></i> 热门</span>
+        </div>
+        <div class="turquoise-product-info">
+          <h3 class="turquoise-product-name">
+            <span class="turquoise-origin">丫角山</span>
+            <span class="turquoise-divider">·</span>
+            <span>果冻料弥勒佛</span>
+          </h3>
+          <div class="turquoise-product-meta">
+            <div class="turquoise-product-specs">
+              <span>果冻</span>
+              <span>翠绿</span>
+            </div>
+            <div class="turquoise-product-price">¥15,600</div>
+          </div>
+          <div class="turquoise-product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 3 - 馆藏级+热门 -->
+      <div class="turquoise-product-card" data-id="3" data-category="wulanhua" data-mine="yungai" data-color="tianlan" data-porcelain="gaoci" data-hot="true" data-collection="true">
+        <div class="turquoise-product-image">
+          <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80" alt="乌兰花手串">
+          <span class="turquoise-product-badge turquoise-collection"><i class="fas fa-gem"></i> 馆藏</span>
+        </div>
+        <div class="turquoise-product-info">
+          <h3 class="turquoise-product-name">
+            <span class="turquoise-origin">云盖寺</span>
+            <span class="turquoise-divider">·</span>
+            <span>乌兰花108佛珠</span>
+          </h3>
+          <div class="turquoise-product-meta">
+            <div class="turquoise-product-specs">
+              <span>高瓷</span>
+              <span>深蓝</span>
+            </div>
+            <div class="turquoise-product-price">¥68,000</div>
+          </div>
+          <div class="turquoise-product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 4 -->
+      <div class="turquoise-product-card" data-id="4" data-category="caizihuang" data-mine="yunxi" data-color="huangse" data-porcelain="zhongci">
+        <div class="turquoise-product-image">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="菜籽黄平安扣">
+          <span class="turquoise-product-badge turquoise-normal">精品</span>
+        </div>
+        <div class="turquoise-product-info">
+          <h3 class="turquoise-product-name">
+            <span class="turquoise-origin">郧西</span>
+            <span class="turquoise-divider">·</span>
+            <span>菜籽黄平安扣</span>
+          </h3>
+          <div class="turquoise-product-meta">
+            <div class="turquoise-product-specs">
+              <span>中瓷</span>
+              <span>柠檬黄</span>
+            </div>
+            <div class="turquoise-product-price">¥8,800</div>
+          </div>
+          <div class="turquoise-product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 5 - 热门 -->
+      <div class="turquoise-product-card" data-id="5" data-category="tangsancai" data-mine="qinggu" data-color="lanlv" data-porcelain="gaoci" data-hot="true">
+        <div class="turquoise-product-image">
+          <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&q=80" alt="唐三彩山水">
+          <span class="turquoise-product-badge turquoise-hot"><i class="fas fa-fire"></i> 热门</span>
+        </div>
+        <div class="turquoise-product-info">
+          <h3 class="turquoise-product-name">
+            <span class="turquoise-origin">秦古</span>
+            <span class="turquoise-divider">·</span>
+            <span>唐三彩山水牌</span>
+          </h3>
+          <div class="turquoise-product-meta">
+            <div class="turquoise-product-specs">
+              <span>高瓷</span>
+              <span>多彩</span>
+            </div>
+            <div class="turquoise-product-price">¥32,000</div>
+          </div>
+          <div class="turquoise-product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 6 - 馆藏级 -->
+      <div class="turquoise-product-card" data-id="6" data-category="gaocilan" data-mine="yungai" data-color="lvse" data-porcelain="gaoci" data-collection="true">
+        <div class="turquoise-product-image">
+          <img src="https://images.unsplash.com/photo-1612817288484-6fbd1e8e5e5e?w=600&q=80" alt="老油绿把件">
+          <span class="turquoise-product-badge turquoise-collection"><i class="fas fa-gem"></i> 馆藏</span>
+        </div>
+        <div class="turquoise-product-info">
+          <h3 class="turquoise-product-name">
+            <span class="turquoise-origin">云盖寺</span>
+            <span class="turquoise-divider">·</span>
+            <span>老油绿手把件</span>
+          </h3>
+          <div class="turquoise-product-meta">
+            <div class="turquoise-product-specs">
+              <span>高瓷</span>
+              <span>墨绿</span>
+            </div>
+            <div class="turquoise-product-price">¥22,500</div>
+          </div>
+          <div class="turquoise-product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 7 - 热门 -->
+      <div class="turquoise-product-card" data-id="7" data-category="ningmenghuang" data-mine="yajiao" data-color="huangse" data-porcelain="zhongci" data-hot="true">
+        <div class="turquoise-product-image">
+          <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=600&q=80" alt="青皮籽貔貅">
+          <span class="turquoise-product-badge turquoise-hot"><i class="fas fa-fire"></i> 热门</span>
+        </div>
+        <div class="turquoise-product-info">
+          <h3 class="turquoise-product-name">
+            <span class="turquoise-origin">丫角山</span>
+            <span class="turquoise-divider">·</span>
+            <span>青皮籽貔貅</span>
+          </h3>
+          <div class="turquoise-product-meta">
+            <div class="turquoise-product-specs">
+              <span>果冻</span>
+              <span>青绿</span>
+            </div>
+            <div class="turquoise-product-price">¥18,800</div>
+          </div>
+          <div class="turquoise-product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 8 -->
+      <div class="turquoise-product-card" data-id="8" data-category="ziluolan" data-mine="qinggu" data-color="zise" data-porcelain="dici">
+        <div class="turquoise-product-image">
+          <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80" alt="水波纹吊坠">
+          <span class="turquoise-product-badge turquoise-normal">新品</span>
+        </div>
+        <div class="turquoise-product-info">
+          <h3 class="turquoise-product-name">
+            <span class="turquoise-origin">秦古</span>
+            <span class="turquoise-divider">·</span>
+            <span>紫罗兰水波纹吊坠</span>
+          </h3>
+          <div class="turquoise-product-meta">
+            <div class="turquoise-product-specs">
+              <span>低瓷</span>
+              <span>紫色</span>
+            </div>
+            <div class="turquoise-product-price">¥6,800</div>
+          </div>
+          <div class="turquoise-product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 分页器 -->
+  <div class="turquoise-pagination">
+    <button class="turquoise-page-btn turquoise-prev">
+      <i class="fas fa-chevron-left"></i>
+      <span>上一页</span>
+    </button>
+    <button class="turquoise-page-btn turquoise-active">1</button>
+    <button class="turquoise-page-btn">2</button>
+    <button class="turquoise-page-btn">3</button>
+    <span class="turquoise-page-dots">...</span>
+    <button class="turquoise-page-btn">8</button>
+    <button class="turquoise-page-btn turquoise-next">
+      <span>下一页</span>
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- 最近浏览 -->
+  <section class="turquoise-recent-view">
+    <h2 class="turquoise-recent-view-title">
+      <i class="fas fa-history"></i>
+      <span>最近浏览</span>
+    </h2>
+    <div class="turquoise-recent-view-slider" id="recentViewSlider">
+      <!-- 最近浏览卡片将通过JS动态渲染 -->
+    </div>
+  </section>
+
+<footer th:replace="mall/footer::footer"></footer>
+
+  <!-- 回到顶部按钮 -->
+  <div class="turquoise-back-to-top" id="backToTop">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <script>
+    // 筛选切换
+    function switchFilter(type, element) {
+      // 移除所有filter-tab的active类
+      document.querySelectorAll('.turquoise-filter-tab').forEach(tab => {
+        tab.classList.remove('turquoise-active');
+      });
+      // 给当前点击的tab添加active类
+      element.classList.add('turquoise-active');
+      
+      // 隐藏所有子选项容器
+      document.querySelectorAll('.turquoise-sub-tabs-container').forEach(container => {
+        container.style.display = 'none';
+      });
+      // 显示对应类型的子选项容器
+      const subTabsContainer = document.getElementById(type + 'SubTabs');
+      if (subTabsContainer) {
+        subTabsContainer.style.display = 'flex';
+        subTabsContainer.style.flexWrap = 'wrap';
+      }
+    }
+    
+    // 子筛选切换
+    function switchSubFilter(type, value, element) {
+      // 移除同类型下所有sub-tab的active类
+      const subTabs = element.parentElement.querySelectorAll('.turquoise-sub-tab');
+      subTabs.forEach(tab => {
+        tab.classList.remove('turquoise-active');
+      });
+      // 给当前点击的sub-tab添加active类
+      element.classList.add('turquoise-active');
+      
+      // 这里可以添加筛选逻辑
+      console.log('筛选类型:', type, '筛选值:', value);
+    }
+    
+    // 排序商品
+    function sortProducts(value) {
+      console.log('排序方式:', value);
+      // 这里可以添加排序逻辑
+    }
+    
+    // 随机推荐
+    function randomRecommend() {
+      const productCards = document.querySelectorAll('.turquoise-product-card');
+      const randomIndex = Math.floor(Math.random() * productCards.length);
+      const randomCard = productCards[randomIndex];
+      
+      // 添加闪烁效果
+      randomCard.classList.add('turquoise-flash-gold');
+      setTimeout(() => {
+        randomCard.classList.remove('turquoise-flash-gold');
+      }, 1500);
+      
+      // 滚动到该商品
+      randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    
+    // 回到顶部
+    const backToTopBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('turquoise-visible');
+      } else {
+        backToTopBtn.classList.remove('turquoise-visible');
+      }
+    });
+    
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    // 最近浏览功能
+    function loadRecentViewed() {
+      const recentItems = JSON.parse(localStorage.getItem('turquoiseRecentViewed') || '[]');
+      const recentSection = document.querySelector('.turquoise-recent-view');
+      const recentSlider = document.getElementById('recentViewSlider');
+      
+      if (recentItems.length === 0) {
+        if (recentSection) recentSection.style.display = 'none';
+      } else {
+        if (recentSection) recentSection.style.display = 'block';
+        // 清空现有内容
+        recentSlider.innerHTML = '';
+        // 渲染浏览记录
+        recentItems.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'turquoise-recent-card';
+          card.innerHTML = `
+            <div class="turquoise-recent-card-image">
+              <img src="${item.image}" alt="${item.name}">
+            </div>
+            <div class="turquoise-recent-card-info">
+              <h3 class="turquoise-recent-card-name">${item.name}</h3>
+              <div class="turquoise-recent-card-price">${item.price}</div>
+            </div>
+          `;
+          recentSlider.appendChild(card);
+        });
+      }
+    }
+    
+    function addToRecentViewed(product) {
+      const recentItems = JSON.parse(localStorage.getItem('turquoiseRecentViewed') || '[]');
+      // 移除已存在的相同商品
+      const filteredItems = recentItems.filter(item => item.id !== product.id);
+      // 添加到开头
+      filteredItems.unshift(product);
+      // 限制最多显示5个
+      const limitedItems = filteredItems.slice(0, 5);
+      localStorage.setItem('turquoiseRecentViewed', JSON.stringify(limitedItems));
+      // 重新加载最近浏览
+      loadRecentViewed();
+    }
+    
+    // 为商品卡片添加点击事件
+    function initProductClickEvents() {
+      const productCards = document.querySelectorAll('.turquoise-product-card');
+      productCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const id = card.dataset.id;
+          const name = card.querySelector('.turquoise-product-name').textContent.trim();
+          const price = card.querySelector('.turquoise-product-price').textContent.trim();
+          const image = card.querySelector('.turquoise-product-image img').src;
+          
+          const product = {
+            id: id,
+            name: name,
+            price: price,
+            image: image
+          };
+          
+          addToRecentViewed(product);
+        });
+      });
+    }
+    
+    // 初始化 - 默认显示品类子选项
+    document.addEventListener('DOMContentLoaded', () => {
+      const categorySubTabs = document.getElementById('categorySubTabs');
+      if (categorySubTabs) {
+        categorySubTabs.style.display = 'flex';
+        categorySubTabs.style.flexWrap = 'wrap';
+      }
+      
+      // 初始化最近浏览
+      loadRecentViewed();
+      // 初始化商品点击事件
+      initProductClickEvents();
+    });
+  </script>
+</body>
+</html>

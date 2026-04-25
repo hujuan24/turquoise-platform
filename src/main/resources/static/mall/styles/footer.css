@@ -1,0 +1,190 @@
+/* 页脚样式 */
+
+.turquoise-footer {
+  background: linear-gradient(180deg, #ddd8d0 0%, #d0cbc3 100%);
+  position: relative;
+  z-index: 1;
+}
+
+.turquoise-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.25), transparent);
+}
+
+.turquoise-footer-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 60px 40px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+}
+
+.turquoise-footer-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.turquoise-footer-logo {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0d5c5c;
+  letter-spacing: 6px;
+  margin-bottom: 25px;
+}
+
+.turquoise-footer-desc {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #5a5a5a;
+  margin-bottom: 30px;
+  max-width: 350px;
+}
+
+.turquoise-footer-social {
+  display: flex;
+  gap: 15px;
+}
+
+.turquoise-footer-social a {
+  width: 45px;
+  height: 45px;
+  border: 1px solid rgba(64, 224, 208, 0.25);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5a5a5a;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.turquoise-footer-social a:hover {
+  border-color: #40e0d0;
+  color: #1a7a7a;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 20px rgba(64, 224, 208, 0.12);
+}
+
+.turquoise-footer-column h4 {
+  font-size: 16px;
+  color: #0d5c5c;
+  letter-spacing: 3px;
+  margin-bottom: 25px;
+  font-weight: 400;
+}
+
+.turquoise-footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.turquoise-footer-links li {
+  margin-bottom: 15px;
+}
+
+.turquoise-footer-links a {
+  color: #5a5a5a;
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.turquoise-footer-links a::before {
+  content: '';
+  width: 0;
+  height: 1px;
+  background: #1a7a7a;
+  transition: width 0.3s ease;
+}
+
+.turquoise-footer-links a:hover {
+  color: #1a7a7a;
+  padding-left: 5px;
+}
+
+.turquoise-footer-links a:hover::before {
+  width: 10px;
+}
+
+.turquoise-footer-contact p {
+  font-size: 14px;
+  color: #5a5a5a;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px 0;
+  padding: 0;
+}
+
+.turquoise-footer-contact i {
+  color: #1a7a7a;
+  width: 20px;
+}
+
+.turquoise-footer-bottom {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 30px 60px;
+  text-align: center;
+}
+
+.turquoise-footer-slogan {
+  font-size: 16px;
+  color: #0d5c5c;
+  letter-spacing: 4px;
+  margin-bottom: 15px;
+  font-weight: 300;
+}
+
+.turquoise-footer-copy {
+  font-size: 12px;
+  color: #5a5a5a;
+  letter-spacing: 2px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .turquoise-footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .turquoise-footer-content {
+    grid-template-columns: 1fr;
+    padding: 60px 20px 40px;
+    gap: 30px;
+  }
+  
+  .turquoise-footer-bottom {
+    padding: 30px 20px;
+  }
+  
+  .turquoise-footer-logo {
+    font-size: 28px;
+    letter-spacing: 4px;
+  }
+  
+  .turquoise-footer-slogan {
+    font-size: 14px;
+    letter-spacing: 3px;
+  }
+  
+  .turquoise-footer-copy {
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+}

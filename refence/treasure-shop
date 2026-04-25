@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>珍宝馆 - 松石雅集</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --turquoise-dark: #0d5c5c;
+      --turquoise-main: #1a7a7a;
+      --turquoise-light: #2d9a9a;
+      --turquoise-bright: #40e0d0;
+      --gold: #c9a227;
+      --gold-light: #e8d5a3;
+      --warm-bg: #e8e4dc;
+      --warm-bg-light: #f0ece4;
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --text-dark: #2c2c2c;
+      --text-muted: #5a5a5a;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+      background: var(--warm-bg);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* 背景铁线纹理 */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(26, 122, 122, 0.015) 60px, rgba(26, 122, 122, 0.015) 62px),
+        repeating-linear-gradient(-45deg, transparent, transparent 80px, rgba(26, 122, 122, 0.012) 80px, rgba(26, 122, 122, 0.012) 82px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 导航栏 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0 60px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.5s ease;
+      background: rgba(232, 228, 220, 0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--turquoise-dark);
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(26, 122, 122, 0.15);
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-size: 15px;
+      letter-spacing: 2px;
+      position: relative;
+      padding: 8px 0;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--turquoise-bright), var(--gold));
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--turquoise-main);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-links a.secondary {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .nav-links a.secondary:hover {
+      color: var(--turquoise-main);
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .nav-icons a {
+      color: var(--text-dark);
+      font-size: 18px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-icons a:hover {
+      color: var(--gold);
+      transform: scale(1.1);
+    }
+
+    .nav-icons a .badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 18px;
+      height: 18px;
+      background: var(--turquoise-bright);
+      border-radius: 50%;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    /* 页面标题区 */
+    .page-header {
+      padding: 160px 60px 60px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-title {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: 16px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--turquoise-dark) 0%, var(--turquoise-main) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+    }
+
+    .page-subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      letter-spacing: 6px;
+      font-weight: 400;
+    }
+
+    /* 搜索筛选区 */
+    .filter-section {
+      max-width: 1400px;
+      margin: 0 auto 20px;
+      padding: 0 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .search-box {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      background: var(--card-bg);
+      border-radius: 50px;
+      padding: 5px 5px 5px 25px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(201, 162, 39, 0.15);
+      transition: all 0.3s ease;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .search-input-wrapper:focus-within {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      border-color: rgba(201, 162, 39, 0.3);
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--text-dark);
+      outline: none;
+      padding: 12px 0;
+      letter-spacing: 1px;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 20px rgba(26, 122, 122, 0.3);
+    }
+
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .filter-left {
+      flex: 1;
+    }
+
+    .filter-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 15px;
+    }
+
+    .filter-tab {
+      padding: 12px 28px;
+      background: transparent;
+      border: 1px solid rgba(201, 162, 39, 0.3);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 14px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border-radius: 30px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .filter-tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(64, 224, 208, 0.08));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .filter-tab:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .filter-tab.active {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201, 162, 39, 0.08);
+    }
+
+    .filter-tab.active::before {
+      opacity: 1;
+    }
+
+    .filter-tab span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 随机推荐按钮 */
+    .random-btn {
+      padding: 12px 24px;
+      background: transparent;
+      border: 1px dashed var(--gold);
+      color: var(--gold);
+      font-family: inherit;
+      font-size: 14px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border-radius: 30px;
+      transition: all 0.4s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .random-btn:hover {
+      background: rgba(201, 162, 39, 0.08);
+      border-style: solid;
+      transform: translateY(-2px);
+    }
+
+    .random-btn i {
+      font-size: 16px;
+    }
+
+    .sort-dropdown {
+      position: relative;
+    }
+
+    .sort-select {
+      padding: 12px 40px 12px 20px;
+      background: var(--card-bg);
+      border: 1px solid rgba(201, 162, 39, 0.2);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-dark);
+      cursor: pointer;
+      appearance: none;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .sort-select:hover {
+      border-color: var(--gold);
+    }
+
+    .sort-dropdown::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold);
+      pointer-events: none;
+    }
+
+    /* 子选项容器 */
+    .sub-tabs-container {
+      display: none;
+      gap: 10px;
+      margin-top: 15px;
+      padding-left: 5px;
+    }
+
+    .sub-tabs-container.visible {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .sub-tab {
+      padding: 8px 20px;
+      background: transparent;
+      border: 1px solid rgba(201, 162, 39, 0.2);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 13px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .sub-tab:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .sub-tab.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #fff;
+    }
+
+    /* 矿口知识导购提示 */
+    .mine-guide {
+      max-width: 1400px;
+      margin: 0 auto 20px;
+      padding: 0 60px;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.4s ease;
+    }
+
+    .mine-guide.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mine-guide-text {
+      font-size: 14px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      padding: 12px 24px;
+      background: rgba(201, 162, 39, 0.06);
+      border-left: 2px solid var(--gold);
+      border-radius: 0 4px 4px 0;
+      display: inline-block;
+    }
+
+    /* 商品列表 */
+    .product-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 60px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+    }
+
+    @media (max-width: 1200px) {
+      .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 标本展示盒样式卡片 */
+    .product-card {
+      position: relative;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      transition: all 0.5s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .product-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+      z-index: 10;
+    }
+
+    .product-card:hover::before {
+      border-color: rgba(201, 162, 39, 0.3);
+      box-shadow: inset 0 0 30px rgba(201, 162, 39, 0.1);
+    }
+
+    .product-card.flash-gold {
+      animation: flashGold 1.5s ease;
+    }
+
+    @keyframes flashGold {
+      0%, 100% {
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+      }
+      25%, 75% {
+        box-shadow: 0 0 40px rgba(201, 162, 39, 0.6), 0 0 80px rgba(201, 162, 39, 0.3);
+        border-color: var(--gold);
+      }
+      50% {
+        box-shadow: 0 0 60px rgba(201, 162, 39, 0.8), 0 0 120px rgba(201, 162, 39, 0.4);
+      }
+    }
+
+    .product-image {
+      width: 100%;
+      height: 260px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(26, 122, 122, 0.05), rgba(201, 162, 39, 0.03));
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: saturate(0.9) brightness(0.98);
+    }
+
+    .product-card:hover .product-image img {
+      filter: saturate(1.05) brightness(1);
+      transform: scale(1.08);
+    }
+
+    .product-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, transparent 70%, rgba(232, 228, 220, 0.9) 100%);
+      transition: opacity 0.5s ease;
+    }
+
+    .product-card:hover .product-image::after {
+      opacity: 0.6;
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 5px 12px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      border-radius: 3px;
+      font-weight: bold;
+      z-index: 10;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .product-badge.hot {
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      color: #fff;
+    }
+
+    .product-badge.collection {
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+      color: #fff;
+    }
+
+    .product-badge.normal {
+      background: linear-gradient(135deg, var(--gold), #d4af37);
+      color: #fff;
+    }
+
+    .product-info {
+      padding: 20px;
+      position: relative;
+      z-index: 3;
+      background: var(--card-bg);
+    }
+
+    .product-name {
+      font-size: 16px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      color: var(--turquoise-dark);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .product-name .origin {
+      color: var(--turquoise-main);
+    }
+
+    .product-name .divider {
+      color: var(--text-muted);
+      margin: 0 4px;
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .product-specs {
+      display: flex;
+      gap: 12px;
+    }
+
+    .product-specs span {
+      position: relative;
+    }
+
+    .product-specs span:not(:last-child)::after {
+      content: '/';
+      margin-left: 12px;
+      color: rgba(0, 0, 0, 0.2);
+    }
+
+    .product-price {
+      font-size: 18px;
+      color: var(--gold);
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    /* 保障标识 */
+    .product-guarantee {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      position: relative;
+    }
+
+    .product-guarantee i {
+      color: var(--turquoise-main);
+      font-size: 11px;
+    }
+
+    .guarantee-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, var(--turquoise-dark), var(--turquoise-main));
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      margin-bottom: 8px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(26, 122, 122, 0.3);
+    }
+
+    .guarantee-tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 20px;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid var(--turquoise-main);
+    }
+
+    .product-card:hover .guarantee-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* 分页器 */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 40px 0 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-btn {
+      min-width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--card-bg);
+      border: 1px solid rgba(201, 162, 39, 0.2);
+      border-radius: 8px;
+      color: var(--text-dark);
+      font-family: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+
+    .page-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .page-btn.active {
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .page-btn.prev,
+    .page-btn.next {
+      padding: 0 20px;
+    }
+
+    .page-btn.prev i,
+    .page-btn.next i {
+      font-size: 12px;
+    }
+
+    .page-dots {
+      color: var(--text-muted);
+      padding: 0 10px;
+    }
+
+    /* 最近浏览 */
+    .recent-view {
+      max-width: 1400px;
+      margin: 0 auto 60px;
+      padding: 0 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .recent-view.hidden {
+      display: none;
+    }
+
+    .recent-view-title {
+      font-size: 20px;
+      color: var(--turquoise-dark);
+      letter-spacing: 4px;
+      margin-bottom: 25px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .recent-view-title i {
+      color: var(--gold);
+      font-size: 16px;
+    }
+
+    .recent-view-slider {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(201, 162, 39, 0.3) transparent;
+    }
+
+    .recent-view-slider::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .recent-view-slider::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .recent-view-slider::-webkit-scrollbar-thumb {
+      background: rgba(201, 162, 39, 0.3);
+      border-radius: 2px;
+    }
+
+    /* 缩小版卡片 */
+    .recent-card {
+      flex: 0 0 280px;
+      position: relative;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .recent-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .recent-card-image {
+      width: 100%;
+      height: 180px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(26, 122, 122, 0.05), rgba(201, 162, 39, 0.03));
+    }
+
+    .recent-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.5s ease;
+    }
+
+    .recent-card:hover .recent-card-image img {
+      transform: scale(1.05);
+    }
+
+    .recent-card-info {
+      padding: 15px;
+    }
+
+    .recent-card-name {
+      font-size: 14px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      color: var(--turquoise-dark);
+      font-weight: 500;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .recent-card-price {
+      font-size: 16px;
+      color: var(--gold);
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    /* 页脚 */
+    .footer {
+      background: linear-gradient(180deg, #ddd8d0 0%, #d0cbc3 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.25), transparent);
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 60px 40px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer-logo {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--turquoise-dark);
+      letter-spacing: 6px;
+      margin-bottom: 25px;
+    }
+
+    .footer-desc {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      max-width: 350px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 15px;
+    }
+
+    .footer-social a {
+      width: 45px;
+      height: 45px;
+      border: 1px solid rgba(64, 224, 208, 0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .footer-social a:hover {
+      border-color: var(--turquoise-bright);
+      color: var(--turquoise-main);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(64, 224, 208, 0.12);
+    }
+
+    .footer-column h4 {
+      font-size: 16px;
+      color: var(--turquoise-dark);
+      letter-spacing: 3px;
+      margin-bottom: 25px;
+      font-weight: 400;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 15px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-links a::before {
+      content: '';
+      width: 0;
+      height: 1px;
+      background: var(--turquoise-main);
+      transition: width 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--turquoise-main);
+      padding-left: 5px;
+    }
+
+    .footer-links a:hover::before {
+      width: 10px;
+    }
+
+    .footer-contact p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-contact i {
+      color: var(--turquoise-main);
+      width: 20px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 30px 60px;
+      text-align: center;
+    }
+
+    .footer-slogan {
+      font-size: 16px;
+      color: var(--turquoise-dark);
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+      font-weight: 300;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    /* 回到顶部按钮 */
+    .back-to-top {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 25px rgba(26, 122, 122, 0.3);
+      z-index: 999;
+      border: 2px solid rgba(201, 162, 39, 0.3);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(26, 122, 122, 0.4);
+      border-color: var(--gold);
+    }
+
+    .back-to-top i {
+      font-size: 20px;
+      color: #fff;
+    }
+
+    /* 响应式 */
+    @media (max-width: 1200px) {
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+      .filter-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .filter-tabs {
+        flex-wrap: wrap;
+      }
+      .sub-tabs-container {
+        width: 100%;
+      }
+      .recent-card {
+        flex: 0 0 240px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 20px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .page-header {
+        padding: 140px 20px 40px;
+      }
+      .page-title {
+        font-size: 36px;
+        letter-spacing: 8px;
+      }
+      .page-subtitle {
+        font-size: 14px;
+        letter-spacing: 3px;
+      }
+      .filter-section,
+      .product-section,
+      .mine-guide,
+      .recent-view {
+        padding: 0 20px 40px;
+      }
+      .filter-tabs {
+        gap: 10px;
+      }
+      .filter-tab {
+        padding: 10px 20px;
+        font-size: 12px;
+      }
+      .sub-tab {
+        padding: 6px 14px;
+        font-size: 12px;
+      }
+      .random-btn {
+        padding: 10px 18px;
+        font-size: 12px;
+      }
+      .footer-content {
+        grid-template-columns: 1fr;
+        padding: 60px 20px 30px;
+      }
+      .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 48px;
+        height: 48px;
+      }
+      .recent-card {
+        flex: 0 0 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="logo" onclick="goHome()">松石雅集</div>
+    <ul class="nav-links">
+      <li><a href="松石雅集.html">首页</a></li>
+      <li><a href="珍宝馆.html" class="active">珍宝馆</a></li>
+      <li><a href="松石雅集.html#culture">文化论坛</a></li>
+      <li><a href="松石雅集.html#exhibition">文化展厅</a></li>
+      <li><a href="松石雅集.html#appraisal" class="secondary">鉴定服务</a></li>
+    </ul>
+    <div class="nav-icons">
+      <a href="#"><i class="fas fa-search"></i></a>
+      <a href="#"><i class="fas fa-heart"></i></a>
+      <a href="#">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="badge">3</span>
+      </a>
+      <a href="#"><i class="fas fa-user"></i></a>
+    </div>
+  </nav>
+
+  <!-- 页面标题区 -->
+  <header class="page-header">
+    <h1 class="page-title">珍宝馆</h1>
+    <p class="page-subtitle">每一件绿松石，都值得被认真鉴赏</p>
+  </header>
+
+  <!-- 搜索筛选区 -->
+  <section class="filter-section">
+    <div class="search-box">
+      <div class="search-input-wrapper">
+        <input type="text" class="search-input" placeholder="搜索矿口、品类、工艺...">
+        <button class="search-btn">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+    <div class="filter-bar">
+      <div class="filter-left">
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="switchFilter('category', this)">
+            <span>按品类</span>
+          </button>
+          <button class="filter-tab" onclick="switchFilter('mine', this)">
+            <span>按矿口</span>
+          </button>
+          <button class="filter-tab" onclick="switchFilter('color', this)">
+            <span>按颜色</span>
+          </button>
+          <button class="filter-tab" onclick="switchFilter('porcelain', this)">
+            <span>按瓷度</span>
+          </button>
+        </div>
+        
+        <!-- 品类子选项 -->
+        <div class="sub-tabs-container" id="categorySubTabs">
+          <button class="sub-tab" onclick="switchSubFilter('category', 'wulanhua', this)">乌兰花</button>
+          <button class="sub-tab" onclick="switchSubFilter('category', 'gaocilan', this)">高瓷蓝</button>
+          <button class="sub-tab" onclick="switchSubFilter('category', 'caizihuang', this)">菜籽黄</button>
+          <button class="sub-tab" onclick="switchSubFilter('category', 'tangsancai', this)">唐三彩</button>
+          <button class="sub-tab" onclick="switchSubFilter('category', 'ningmenghuang', this)">柠檬黄</button>
+          <button class="sub-tab" onclick="switchSubFilter('category', 'ziluolan', this)">紫罗兰</button>
+        </div>
+        
+        <!-- 矿口子选项 -->
+        <div class="sub-tabs-container" id="mineSubTabs">
+          <button class="sub-tab" onclick="switchSubFilter('mine', 'yungai', this)">云盖寺</button>
+          <button class="sub-tab" onclick="switchSubFilter('mine', 'yajiao', this)">丫角山</button>
+          <button class="sub-tab" onclick="switchSubFilter('mine', 'yunxi', this)">郧西</button>
+          <button class="sub-tab" onclick="switchSubFilter('mine', 'qinggu', this)">秦古</button>
+          <button class="sub-tab" onclick="switchSubFilter('mine', 'qita', this)">其他</button>
+        </div>
+        
+        <!-- 颜色子选项 -->
+        <div class="sub-tabs-container" id="colorSubTabs">
+          <button class="sub-tab" onclick="switchSubFilter('color', 'tianlan', this)">天蓝</button>
+          <button class="sub-tab" onclick="switchSubFilter('color', 'lanlv', this)">蓝绿</button>
+          <button class="sub-tab" onclick="switchSubFilter('color', 'lvse', this)">绿色</button>
+          <button class="sub-tab" onclick="switchSubFilter('color', 'huangse', this)">黄色</button>
+          <button class="sub-tab" onclick="switchSubFilter('color', 'zise', this)">紫色</button>
+        </div>
+        
+        <!-- 瓷度子选项 -->
+        <div class="sub-tabs-container" id="porcelainSubTabs">
+          <button class="sub-tab" onclick="switchSubFilter('porcelain', 'gaoci', this)">高瓷（瓷釉级）</button>
+          <button class="sub-tab" onclick="switchSubFilter('porcelain', 'zhongci', this)">中瓷（硬松级）</button>
+          <button class="sub-tab" onclick="switchSubFilter('porcelain', 'dici', this)">低瓷（泡松级）</button>
+        </div>
+      </div>
+      <div class="filter-right">
+        <button class="random-btn" onclick="randomRecommend()">
+          <i class="fas fa-dice"></i>
+          <span>帮我推荐</span>
+        </button>
+        <div class="sort-dropdown">
+          <select class="sort-select" onchange="sortProducts(this.value)">
+            <option value="recommend">默认推荐</option>
+            <option value="newest">最新上架</option>
+            <option value="hot">热度最高</option>
+            <option value="price-asc">价格升序</option>
+            <option value="price-desc">价格降序</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 矿口知识导购提示 -->
+  <div class="mine-guide" id="mineGuide">
+    <div class="mine-guide-text" id="mineGuideText"></div>
+  </div>
+
+  <!-- 商品列表 -->
+  <section class="product-section">
+    <div class="product-grid" id="productGrid">
+      <!-- 商品卡片 1 - 馆藏级 -->
+      <div class="product-card" data-id="1" data-category="wulanhua" data-mine="yungai" data-color="tianlan" data-porcelain="gaoci" data-hot="true" data-collection="true">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1617038260897-41a1f14cd8cd?w=600&q=80" alt="高瓷蓝观音">
+          <span class="product-badge collection"><i class="fas fa-gem"></i> 馆藏</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">云盖寺</span>
+            <span class="divider">·</span>
+            <span>高瓷蓝观音挂件</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>高瓷</span>
+              <span>天蓝</span>
+            </div>
+            <div class="product-price">¥28,800</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 2 - 热门 -->
+      <div class="product-card" data-id="2" data-category="gaocilan" data-mine="yajiao" data-color="lvse" data-porcelain="zhongci" data-hot="true">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80" alt="果冻料弥勒">
+          <span class="product-badge hot"><i class="fas fa-fire"></i> 热门</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">丫角山</span>
+            <span class="divider">·</span>
+            <span>果冻料弥勒佛</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>果冻</span>
+              <span>翠绿</span>
+            </div>
+            <div class="product-price">¥15,600</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 3 - 馆藏级+热门 -->
+      <div class="product-card" data-id="3" data-category="wulanhua" data-mine="yungai" data-color="tianlan" data-porcelain="gaoci" data-hot="true" data-collection="true">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80" alt="乌兰花手串">
+          <span class="product-badge collection"><i class="fas fa-gem"></i> 馆藏</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">云盖寺</span>
+            <span class="divider">·</span>
+            <span>乌兰花108佛珠</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>高瓷</span>
+              <span>深蓝</span>
+            </div>
+            <div class="product-price">¥68,000</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 4 -->
+      <div class="product-card" data-id="4" data-category="caizihuang" data-mine="yunxi" data-color="huangse" data-porcelain="zhongci">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="菜籽黄平安扣">
+          <span class="product-badge normal">精品</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">郧西</span>
+            <span class="divider">·</span>
+            <span>菜籽黄平安扣</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>中瓷</span>
+              <span>柠檬黄</span>
+            </div>
+            <div class="product-price">¥8,800</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 5 - 热门 -->
+      <div class="product-card" data-id="5" data-category="tangsancai" data-mine="qinggu" data-color="lanlv" data-porcelain="gaoci" data-hot="true">
+        <div class="product-image">
+          <img src="="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&q=80" alt="唐三彩山水">
+          <span class="product-badge hot"><i class="fas fa-fire"></i> 热门</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">秦古</span>
+            <span class="divider">·</span>
+            <span>唐三彩山水牌</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>高瓷</span>
+              <span>多彩</span>
+            </div>
+            <div class="product-price">¥32,000</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 6 - 馆藏级 -->
+      <div class="product-card" data-id="6" data-category="gaocilan" data-mine="yungai" data-color="lvse" data-porcelain="gaoci" data-collection="true">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1612817288484-6fbd1e8e5e5e?w=600&q=80" alt="老油绿把件">
+          <span class="product-badge collection"><i class="fas fa-gem"></i> 馆藏</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">云盖寺</span>
+            <span class="divider">·</span>
+            <span>老油绿手把件</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>高瓷</span>
+              <span>墨绿</span>
+            </div>
+            <div class="product-price">¥22,500</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 7 - 热门 -->
+      <div class="product-card" data-id="7" data-category="ningmenghuang" data-mine="yajiao" data-color="huangse" data-porcelain="zhongci" data-hot="true">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=600&q=80" alt="青皮籽貔貅">
+          <span class="product-badge hot"><i class="fas fa-fire"></i> 热门</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">丫角山</span>
+            <span class="divider">·</span>
+            <span>青皮籽貔貅</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>果冻</span>
+              <span>青绿</span>
+            </div>
+            <div class="product-price">¥18,800</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 8 -->
+      <div class="product-card" data-id="8" data-category="ziluolan" data-mine="qinggu" data-color="zise" data-porcelain="dici">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80" alt="水波纹吊坠">
+          <span class="product-badge normal">新品</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">秦古</span>
+            <span class="divider">·</span>
+            <span>紫罗兰水波纹吊坠</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>低瓷</span>
+              <span>紫色</span>
+            </div>
+            <div class="product-price">¥6,800</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 9 -->
+      <div class="product-card" data-id="9" data-category="gaocilan" data-mine="qinggu" data-color="lanlv" data-porcelain="gaoci">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1544531586-fde5298cdd40?w=600&q=80" alt="翠竹节">
+          <span class="product-badge normal">新品</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">秦古</span>
+            <span class="divider">·</span>
+            <span>蓝绿翠竹节挂件</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>高瓷</span>
+              <span>蓝绿</span>
+            </div>
+            <div class="product-price">¥12,600</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 10 - 热门 -->
+      <div class="product-card" data-id="10" data-category="caizihuang" data-mine="yunxi" data-color="huangse" data-porcelain="gaoci" data-hot="true">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="莲花观音">
+          <span class="product-badge hot"><i class="fas fa-fire"></i> 热门</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">郧西</span>
+            <span class="divider">·</span>
+            <span>菜籽黄莲花观音牌</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>高瓷</span>
+              <span>金黄</span>
+            </div>
+            <div class="product-price">¥9,800</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 11 - 馆藏级 -->
+      <div class="product-card" data-id="11" data-category="tangsancai" data-mine="qinggu" data-color="lanlv" data-porcelain="gaoci" data-collection="true">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1617038260897-41a1f14cd8cd?w=600&q=80" alt="菜籽黄如意">
+          <span class="product-badge collection"><i class="fas fa-gem"></i> 馆藏</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">秦古</span>
+            <span class="divider">·</span>
+            <span>唐三彩如意</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>高瓷</span>
+              <span>多彩</span>
+            </div>
+            <div class="product-price">¥45,000</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品卡片 12 -->
+      <div class="product-card" data-id="12" data-category="wulanhua" data-mine="yungai" data-color="tianlan" data-porcelain="gaoci">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80" alt="高瓷蓝手串">
+          <span class="product-badge normal">孤品</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">
+            <span class="origin">云盖寺</span>
+            <span class="divider">·</span>
+            <span>高瓷蓝单圈手串</span>
+          </h3>
+          <div class="product-meta">
+            <div class="product-specs">
+              <span>高瓷</span>
+              <span>天蓝</span>
+            </div>
+            <div class="product-price">¥16,800</div>
+          </div>
+          <div class="product-guarantee">
+            <i class="fas fa-shield-alt"></i>
+            <span>一物一证</span>
+            <div class="guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 分页器 -->
+  <div class="pagination">
+    <button class="page-btn prev" onclick="changePage('prev')">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="page-btn active" onclick="changePage(1)">1</button>
+    <button class="page-btn" onclick="changePage(2)">2</button>
+    <button class="page-btn" onclick="changePage(3)">3</button>
+    <span class="page-dots">...</span>
+    <button class="page-btn" onclick="changePage(8)">8</button>
+    <button class="page-btn next" onclick="changePage('next')">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- 最近浏览 -->
+  <section class="recent-view hidden" id="recentView">
+    <h3 class="recent-view-title">
+      <i class="fas fa-history"></i>
+      您最近看过
+    </h3>
+    <div class="recent-view-slider" id="recentViewSlider"></div>
+  </section>
+
+  <!-- 回到顶部按钮 -->
+  <div class="back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo">松石雅集</div>
+        <p class="footer-desc">传承东方矿物美学，汇聚天下松石珍品。我们致力于为每一位藏家提供最优质的绿松石藏品与最专业的鉴赏服务，让千年瑰宝在当代焕发新的光彩。</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-weixin"></i></a>
+          <a href="#"><i class="fab fa-weibo"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4>快速导航</h4>
+        <ul class="footer-links">
+          <li><a href="松石雅集.html">首页</a></li>
+          <li><a href="珍宝馆.html">珍宝馆</a></li>
+          <li><a href="松石雅集.html#culture">文化论坛</a></li>
+          <li><a href="松石雅集.html#exhibition">文化展厅</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>藏品分类</h4>
+        <ul class="footer-links">
+          <li><a href="#">高瓷蓝</a></li>
+          <li><a href="#">乌兰花</a></li>
+          <li><a href="#">菜籽黄</a></li>
+          <li><a href="#">唐三彩</a></li>
+        </ul>
+      </div>
+      <div class="footer-column footer-contact">
+        <h4>联系我们</h4>
+        <p><i class="fas fa-phone"></i> 400-888-9999</p>
+        <p><i class="fas fa-envelope"></i> contact@songshiyaji.com</p>
+        <p><i class="fas fa-map-marker-alt"></i> 湖北省十堰市绿松石文化产业园</p>
+        <p><i class="fas fa-clock"></i> 周一至周日 9:00-21:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-slogan">传承东方美学 · 每一块绿松石都值得被认真对待</p>
+      <p class="footer-copy">© 2024 松石雅集 版权所有 | 鄂ICP备XXXXXXXX号</p>
+    </div>
+  </footer>
+
+  <script>
+    // 矿口知识数据
+    const mineGuides = {
+      yungai: '云盖寺料：以高瓷高蓝闻名，收藏级绿松石的代表矿口',
+      yajiao: '丫角山料：以果冻料著称，质地温润细腻',
+      yunxi: '郧西料：高品质菜籽黄的主要产地',
+      qinggu: '秦古料：产量丰富，品质稳定，性价比高',
+      qita: '其他矿口：包含喇叭山、洞子沟、白河、马鞍山等优质矿口'
+    };
+
+    // 回到顶部
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 回到顶部按钮显示/隐藏
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    // 返回首页
+    function goHome() {
+      window.location.href = '松石雅集.html';
+    }
+
+    // 筛选状态
+    let currentFilter = 'category';
+    let currentSubFilter = null;
+    
+    // 主筛选切换
+    function switchFilter(filterType, btn) {
+      currentFilter = filterType;
+      currentSubFilter = null;
+      
+      // 更新主标签样式
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      btn.classList.add('active');
+      
+      // 隐藏所有子选项
+      document.querySelectorAll('.sub-tabs-container').forEach(container => {
+        container.classList.remove('visible');
+      });
+      
+      // 隐藏导购提示
+      const mineGuide = document.getElementById('mineGuide');
+      mineGuide.classList.remove('visible');
+      
+      // 显示对应子选项
+      const subTabsId = filterType + 'SubTabs';
+      const subTabs = document.getElementById(subTabsId);
+      if (subTabs) {
+        subTabs.classList.add('visible');
+        // 重置子选项选中状态
+        subTabs.querySelectorAll('.sub-tab').forEach(tab => {
+          tab.classList.remove('active');
+        });
+      }
+      
+      // 刷新商品列表
+      filterProducts();
+    }
+
+    // 子选项筛选
+    function switchSubFilter(filterType, value, btn) {
+      currentSubFilter = { type: filterType, value: value };
+      
+      // 更新子选项样式
+      const container = btn.parentElement;
+      container.querySelectorAll('.sub-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      btn.classList.add('active');
+      
+      // 矿口维度显示导购文案
+      const mineGuide = document.getElementById('mineGuide');
+      const mineGuideText = document.getElementById('mineGuideText');
+      
+      if (filterType === 'mine' && mineGuides[value]) {
+        mineGuide.classList.remove('visible');
+        setTimeout(() => {
+          mineGuideText.textContent = mineGuides[value];
+          mineGuide.classList.add('visible');
+        }, 150);
+      } else {
+        mineGuide.classList.remove('visible');
+      }
+      
+      // 刷新商品列表
+      filterProducts();
+    }
+
+    // 筛选商品列表
+    function filterProducts() {
+      const cards = document.querySelectorAll('.product-card');
+      
+      cards.forEach(card => {
+        let shouldShow = true;
+        
+        if (currentSubFilter) {
+          const cardValue = card.dataset[currentSubFilter.type];
+          shouldShow = cardValue === currentSubFilter.value;
+        }
+        
+        if (shouldShow) {
+          card.style.display = 'block';
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            card.style.transition = 'all 0.4s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 50);
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // 排序
+    let currentSort = 'recommend';
+    function sortProducts(sortType) {
+      currentSort = sortType;
+      const cards = Array.from(document.querySelectorAll('.product-card'));
+      const grid = document.getElementById('productGrid');
+      
+      cards.sort((a, b) => {
+        if (sortType === 'hot') {
+          const aHot = a.dataset.hot === 'true' ? 1 : 0;
+          const bHot = b.dataset.hot === 'true' ? 1 : 0;
+          return bHot - aHot;
+        } else if (sortType === 'price-asc') {
+          const aPrice = parseInt(a.querySelector('.product-price').textContent.replace(/[^0-9]/g, ''));
+          const bPrice = parseInt(b.querySelector('.product-price').textContent.replace(/[^0-9]/g, ''));
+          return aPrice - bPrice;
+        } else if (sortType === 'price-desc') {
+          const aPrice = parseInt(a.querySelector('.product-price').textContent.replace(/[^0-9]/g, ''));
+          const bPrice = parseInt(b.querySelector('.product-price').textContent.replace(/[^0-9]/g, ''));
+          return bPrice - aPrice;
+        }
+        return 0;
+      });
+      
+      cards.forEach(card => {
+        grid.appendChild(card);
+      });
+      
+      cards.forEach(card => {
+        const badge = card.querySelector('.product-badge');
+        const isHot = card.dataset.hot === 'true';
+        const isCollection = card.dataset.collection === 'true';
+        
+        if (sortType === 'hot') {
+          if (isHot) {
+            badge.className = 'product-badge hot';
+            badge.innerHTML = '<i class="fas fa-fire"></i> 热门';
+          } else if (isCollection) {
+            badge.className = 'product-badge collection';
+            badge.innerHTML = '<i class="fas fa-gem"></i> 馆藏';
+          }
+        } else {
+          if (isCollection) {
+            badge.className = 'product-badge collection';
+            badge.innerHTML = '<i class="fas fa-gem"></i> 馆藏';
+          } else if (isHot) {
+            badge.className = 'product-badge hot';
+            badge.innerHTML = '<i class="fas fa-fire"></i> 热门';
+          } else {
+            badge.className = 'product-badge normal';
+            badge.textContent = '精品';
+          }
+        }
+      });
+    }
+
+    // 分页
+    let currentPage = 1;
+    function changePage(page) {
+      if (page === 'prev') {
+        if (currentPage > 1) currentPage--;
+      } else if (page === 'next') {
+        if (currentPage < 8) currentPage++;
+      } else {
+        currentPage = page;
+      }
+      
+      document.querySelectorAll('.page-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent === String(currentPage)) {
+          btn.classList.add('active');
+        }
+      });
+      
+      const cards = document.querySelectorAll('.product-card');
+      cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          card.style.transition = 'all 0.4s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, index * 50);
+      });
+    }
+
+    // 随机推荐
+    function randomRecommend() {
+      const visibleCards = Array.from(document.querySelectorAll('.product-card')).filter(card => 
+        card.style.display !== 'none'
+      );
+      
+      if (visibleCards.length === 0) return;
+      
+      const randomCard = visibleCards[Math.floor(Math.random() * visibleCards.length)];
+      
+      // 平滑滚动到卡片
+      randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      
+      // 闪烁金光效果
+      setTimeout(() => {
+        randomCard.classList.add('flash-gold');
+        setTimeout(() => {
+          randomCard.classList.remove('flash-gold');
+        }, 1500);
+      }, 500);
+    }
+
+    // 浏览足迹功能
+    const BROWSE_HISTORY_KEY = 'songshi_browse_history';
+    const MAX_HISTORY = 10;
+
+    // 保存浏览记录
+    function saveBrowseHistory(productData) {
+      let history = JSON.parse(localStorage.getItem(BROWSE_HISTORY_KEY) || '[]');
+      
+      // 去重：如果已存在则移除旧的
+      history = history.filter(item => item.id !== productData.id);
+      
+      // 添加到开头
+      history.unshift(productData);
+      
+      // 限制数量
+      if (history.length > MAX_HISTORY) {
+        history = history.slice(0, MAX_HISTORY);
+      }
+      
+      localStorage.setItem(BROWSE_HISTORY_KEY, JSON.stringify(history));
+    }
+
+    // 渲染浏览足迹
+    function renderBrowseHistory() {
+      const history = JSON.parse(localStorage.getItem(BROWSE_HISTORY_KEY) || '[]');
+      const recentView = document.getElementById('recentView');
+      const slider = document.getElementById('recentViewSlider');
+      
+      if (history.length === 0) {
+        recentView.classList.add('hidden');
+        return;
+      }
+      
+      recentView.classList.remove('hidden');
+      slider.innerHTML = '';
+      
+      history.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'recent-card';
+        card.innerHTML = `
+          <div class="recent-card-image">
+            <img src="${item.image}" alt="${item.name}">
+          </div>
+          <div class="recent-card-info">
+            <h4 class="recent-card-name">${item.name}</h4>
+            <div class="recent-card-price">${item.price}</div>
+          </div>
+        `;
+        card.addEventListener('click', () => {
+          // 找到对应商品并滚动
+          const productCard = document.querySelector(`.product-card[data-id="${item.id}"]`);
+          if (productCard) {
+            productCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+        slider.appendChild(card);
+      });
+    }
+
+    // 商品卡片点击 - 记录浏览历史
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const productData = {
+          id: card.dataset.id,
+          name: card.querySelector('.product-name').textContent.replace(/\s+/g, ' ').trim(),
+          price: card.querySelector('.product-price').textContent,
+          image: card.querySelector('.product-image img').src
+        };
+        saveBrowseHistory(productData);
+        renderBrowseHistory();
+      });
+    });
+
+    // 页面加载时渲染浏览足迹
+    document.addEventListener('DOMContentLoaded', () => {
+      renderBrowseHistory();
+    });
+  </script>
+</body>
+</html>

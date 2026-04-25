@@ -72,4 +72,24 @@ public class IndexController {
         request.setAttribute("recommendGoodses", recommendGoodses);//推荐商品
         return "mall/index";
     }
+
+    @GetMapping("/treasure")
+    public String treasurePage() {
+        return "mall/treasure";
+    }
+
+    @GetMapping("/forum")
+    public String forumPage() {
+        return "mall/forum";
+    }
+
+    @GetMapping("/exhibition")
+    public String exhibitionPage() {
+        return "mall/exhibition";
+    }
+
+    @GetMapping("/appraisal")
+    public String appraisalPage() {
+        return "mall/appraisal";
+    }
 }

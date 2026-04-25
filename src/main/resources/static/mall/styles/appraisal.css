@@ -1,0 +1,487 @@
+/* 鉴定服务页面样式 */
+
+/* 页面标题区 */
+.turquoise-page-header {
+  height: 40vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(180deg, #e8e4dc 0%, #f0ece4 100%);
+  padding-top: 80px;
+}
+
+.turquoise-page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://images.unsplash.com/photo-1515488764276-beab7607c1e6?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.05;
+}
+
+.turquoise-page-header-content {
+  text-align: center;
+  z-index: 10;
+  padding: 0 20px;
+}
+
+.turquoise-page-title {
+  font-size: 52px;
+  font-weight: 900;
+  letter-spacing: 10px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #0d5c5c 0%, #1a7a7a 50%, #c9a227 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+}
+
+.turquoise-page-subtitle {
+  font-size: 17px;
+  color: #5a5a5a;
+  letter-spacing: 4px;
+  font-weight: 400;
+}
+
+/* 鉴定流程 */
+.turquoise-process-section {
+  padding: 60px;
+  background: #f0ece4;
+}
+
+.turquoise-process-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.turquoise-process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.turquoise-process-card {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  padding: 50px 40px;
+  text-align: center;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.turquoise-process-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+.turquoise-process-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -40px;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #40e0d0, transparent);
+  transform: translateY(-50%);
+}
+
+.turquoise-process-card:last-child::after {
+  display: none;
+}
+
+.turquoise-process-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(64, 224, 208, 0.1));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+  font-size: 32px;
+  color: #1a7a7a;
+  border: 2px solid rgba(64, 224, 208, 0.3);
+  transition: all 0.4s ease;
+}
+
+.turquoise-process-card:hover .turquoise-process-icon {
+  background: linear-gradient(135deg, #1a7a7a, #2d9a9a);
+  color: #fff;
+  border-color: #1a7a7a;
+  transform: scale(1.1);
+}
+
+.turquoise-process-card h3 {
+  font-size: 20px;
+  color: #0d5c5c;
+  margin-bottom: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.turquoise-process-card p {
+  font-size: 14px;
+  color: #5a5a5a;
+  line-height: 1.6;
+}
+
+.turquoise-process-step-number {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 30px;
+  height: 30px;
+  background: #c9a227;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 鉴定申请表单 */
+.turquoise-form-section {
+  padding: 80px 60px;
+  background: #e8e4dc;
+}
+
+.turquoise-form-container {
+  background: #fff;
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+}
+
+.turquoise-form-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  color: #0d5c5c;
+  margin-bottom: 40px;
+  letter-spacing: 4px;
+}
+
+.turquoise-form-group {
+  margin-bottom: 30px;
+}
+
+.turquoise-form-label {
+  display: block;
+  font-size: 15px;
+  color: #2c2c2c;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.turquoise-form-label span {
+  color: #1a7a7a;
+  margin-left: 4px;
+}
+
+.turquoise-form-input,
+.turquoise-form-textarea,
+.turquoise-form-select {
+  border: 1px solid #e0dcd4;
+  border-radius: 4px;
+  background: #fff;
+  width: 100%;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 15px;
+  color: #2c2c2c;
+  transition: all 0.3s ease;
+}
+
+.turquoise-form-input:focus,
+.turquoise-form-textarea:focus,
+.turquoise-form-select:focus {
+  border-color: #1a7a7a;
+  outline: none;
+}
+
+.turquoise-form-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.turquoise-upload-area {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px dashed #e0dcd4;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  background: #fff;
+}
+
+.turquoise-upload-area:hover {
+  border-color: #40e0d0;
+  background: rgba(64, 224, 208, 0.05);
+}
+
+.turquoise-upload-icon {
+  font-size: 48px;
+  color: #1a7a7a;
+  margin-bottom: 15px;
+  opacity: 0.6;
+}
+
+.turquoise-upload-text {
+  font-size: 15px;
+  color: #5a5a5a;
+  margin-bottom: 8px;
+}
+
+.turquoise-upload-hint {
+  font-size: 13px;
+  color: #5a5a5a;
+  opacity: 0.7;
+}
+
+.turquoise-submit-btn {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #1a7a7a 0%, #2d9a9a 100%);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  letter-spacing: 4px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  margin-top: 20px;
+}
+
+.turquoise-submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(26, 122, 122, 0.3);
+}
+
+/* 鉴定记录 */
+.turquoise-records-section {
+  padding: 60px;
+  background: #f0ece4;
+}
+
+.turquoise-records-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.turquoise-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.turquoise-section-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #0d5c5c;
+  letter-spacing: 3px;
+}
+
+.turquoise-records-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.turquoise-record-card {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  padding: 25px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.turquoise-record-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.turquoise-record-info {
+  flex: 1;
+}
+
+.turquoise-record-name {
+  font-size: 18px;
+  color: #2c2c2c;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.turquoise-record-meta {
+  font-size: 13px;
+  color: #5a5a5a;
+}
+
+.turquoise-record-status {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  margin-right: 20px;
+}
+
+.turquoise-status-pending {
+  background: rgba(201, 162, 39, 0.1);
+  color: #c9a227;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+}
+
+.turquoise-status-processing {
+  background: rgba(64, 224, 208, 0.1);
+  color: #1a7a7a;
+  border: 1px solid rgba(64, 224, 208, 0.3);
+}
+
+.turquoise-status-completed {
+  background: rgba(26, 122, 122, 0.1);
+  color: #0d5c5c;
+  border: 1px solid rgba(26, 122, 122, 0.3);
+}
+
+.turquoise-view-report-btn {
+  padding: 10px 25px;
+  background: transparent;
+  border: 1px solid #40e0d0;
+  color: #1a7a7a;
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.turquoise-view-report-btn:hover {
+  background: #1a7a7a;
+  border-color: #1a7a7a;
+  color: #fff;
+}
+
+.turquoise-empty-state {
+  text-align: center;
+  padding: 60px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.turquoise-empty-icon {
+  font-size: 48px;
+  color: #5a5a5a;
+  opacity: 0.3;
+  margin-bottom: 20px;
+}
+
+.turquoise-empty-text {
+  font-size: 15px;
+  color: #5a5a5a;
+  letter-spacing: 2px;
+}
+
+/* 免责声明 */
+.turquoise-disclaimer {
+  padding: 30px 60px;
+  background: #e8e4dc;
+  text-align: center;
+}
+
+.turquoise-disclaimer p {
+  font-size: 13px;
+  color: #5a5a5a;
+  opacity: 0.7;
+  letter-spacing: 1px;
+}
+
+/* 返回顶部按钮 */
+.turquoise-back-to-top {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #1a7a7a, #2d9a9a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 25px rgba(26, 122, 122, 0.4);
+  z-index: 999;
+}
+
+.turquoise-back-to-top.turquoise-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.turquoise-back-to-top:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(26, 122, 122, 0.5);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .turquoise-page-title {
+    font-size: 36px;
+    letter-spacing: 6px;
+  }
+  
+  .turquoise-process-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .turquoise-process-card::after {
+    display: none;
+  }
+  
+  .turquoise-form-container {
+    padding: 30px;
+  }
+  
+  .turquoise-record-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .turquoise-record-status {
+    margin-right: 0;
+  }
+  
+  .turquoise-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

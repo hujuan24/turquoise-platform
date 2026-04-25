@@ -1,88 +1,58 @@
-<!-- Copyright (c) 2019-2020 十三 all rights reserved. -->
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<div class="site-footer" th:fragment="footer-fragment">
-    <div class="footer-related">
-        <div class="footer-article w1100">
-            <dl class="contact clearfix">
-                <dt class="fl">
-                    <i class="iconfont"></i>
-                </dt>
-                <dd class="fl">
-                    <p class="text">人工客服</p>
-                    <p class="tel">400-xxx-xx13</p>
-                    <a href="##">在线咨询</a>
-                </dd>
-            </dl>
-            <dl class="col-article">
-                <dt>帮助中心</dt>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">账户管理</a></dd>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">购物指南</a></dd>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">订单操作</a></dd>
-            </dl>
-            <dl class="col-article">
-                <dt>关注我们</dt>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">新浪微博</a></dd>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">官方微信</a></dd>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">联系我们</a></dd>
-            </dl>
-            <dl class="col-article">
-                <dt>线下门店</dt>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">NEWBEE TOWN</a>
-                </dd>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">服务网点</a></dd>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">授权体验店</a></dd>
-            </dl>
-            <dl class="col-article">
-                <dt>关于新蜂</dt>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">了解新蜂</a>
-                </dd>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">加入新蜂</a>
-                </dd>
-                <dd><a rel="nofollow" href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">捐赠维护</a>
-                </dd>
-            </dl>
-            <dl class="wx">
-                <dt>newbee-mall</dt>
-                <dd>
-                    <img th:src="@{/mall/image/pay/wxpay_qrcode.png}">
-                </dd>
-                <dd class="other">
-                    <span>分公司：</span>
-                    <a href="##">北京</a>
-                    <a href="##">上海</a>
-                    <a href="##">广州</a>
-                    <a href="##">深圳</a>
-                    <a href="##">杭州</a>
-                </dd>
-            </dl>
-        </div>
-        <div class="footer-links w1100">
-            <p>友情链接：</p>
-            <div class="clearfix">
-                <a th:href="@{/index}">新蜂商城</a>
-                <a th:href="@{/admin}">后台管理系统</a>
-                <a href="https://edu.csdn.net/course/detail/26258">课程视频</a>
-                <a href="https://juejin.im/book/5da2f9d4f265da5b81794d48?referrer=59199e22a22b9d0058279886">课程文档</a>
-                <a href="https://gitee.com/newbee-ltd/newbee-donate">捐赠</a>
-                <a href="https://github.com/newbee-ltd/newbee-mall/issues">问题反馈</a>
-                <a href="https://github.com/newbee-ltd/newbee-mall">GitHub 地址</a>
-                <a href="https://gitee.com/newbee-ltd/newbee-mall">码云Gitee 地址</a>
-            </div>
-        </div>
-        <div class="footer-info w1100">
-            <div class="info-text w1100">
-                <p><a href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">新蜂商城 &nbsp; | &nbsp;
-                    Powered by 十三&nbsp;
-                    | &nbsp;</a>
-                    &nbsp;QQ交流群：796794009
-                </p>
-                <p><a href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">Copyright © 2019-2020 十三  All
-                    Rights
-                    Reserved.&nbsp; | &nbsp; 浙ICP备17008806号-5 </a></p>
-            </div>
-        </div>
-
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- 页脚 -->
+<footer class="turquoise-footer" th:fragment="footer">
+  <div class="turquoise-footer-content">
+    <!-- 左侧：Logo + 简介 + 社交媒体 -->
+    <div class="turquoise-footer-brand">
+      <div class="turquoise-footer-logo">松石雅集</div>
+      <p class="turquoise-footer-desc">传承东方矿物美学，汇聚天下松石珍品。我们致力于为每一位藏家提供最优质的绿松石藏品与最专业的鉴赏服务，让千年瑰宝在当代焕发新的光彩。</p>
+      <div class="turquoise-footer-social">
+        <a href="#" title="微信"><i class="fab fa-weixin"></i></a>
+        <a href="#" title="微博"><i class="fab fa-weibo"></i></a>
+        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" title="邮箱"><i class="fas fa-envelope"></i></a>
+      </div>
     </div>
-</div>
+    
+    <!-- 快速导航 -->
+    <div class="turquoise-footer-column">
+      <h4>快速导航</h4>
+      <ul class="turquoise-footer-links">
+        <li><a th:href="@{/}">首页</a></li>
+        <li><a th:href="@{/treasure}">珍宝馆</a></li>
+        <li><a th:href="@{/forum}">文化论坛</a></li>
+        <li><a th:href="@{/exhibition}">文化展厅</a></li>
+      </ul>
+    </div>
+    
+    <!-- 藏品分类 -->
+    <div class="turquoise-footer-column">
+      <h4>藏品分类</h4>
+      <ul class="turquoise-footer-links">
+        <li><a href="#">高瓷蓝</a></li>
+        <li><a href="#">乌兰花</a></li>
+        <li><a href="#">菜籽黄</a></li>
+        <li><a href="#">唐三彩</a></li>
+      </ul>
+    </div>
+    
+    <!-- 联系我们 -->
+    <div class="turquoise-footer-column">
+      <h4>联系我们</h4>
+      <div class="turquoise-footer-contact">
+        <p><i class="fas fa-map-marker-alt"></i> 湖北省十堰市绿松石文化产业园</p>
+        <p><i class="fas fa-phone"></i> 400-888-9999</p>
+        <p><i class="fas fa-envelope"></i> contact@songshiyaji.com</p>
+        <p><i class="fas fa-clock"></i> 周一至周日 9:00-21:00</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 底部版权信息 -->
+  <div class="turquoise-footer-bottom">
+    <div class="turquoise-footer-slogan">传承东方美学 · 每一块绿松石都值得被认真对待</div>
+    <div class="turquoise-footer-copy">© 2024 松石雅集 版权所有 | 鄂ICP备XXXXXXXX号</div>
+  </div>
+</footer>
 </html>

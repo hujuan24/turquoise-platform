@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鉴定服务 - 松石雅集</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --turquoise-dark: #0d5c5c;
+      --turquoise-main: #1a7a7a;
+      --turquoise-light: #2d9a9a;
+      --turquoise-bright: #40e0d0;
+      --gold: #c9a227;
+      --gold-light: #e8d5a3;
+      --warm-bg: #e8e4dc;
+      --warm-bg-light: #f0ece4;
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --text-dark: #2c2c2c;
+      --text-muted: #5a5a5a;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+      background: var(--warm-bg);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(26, 122, 122, 0.015) 60px, rgba(26, 122, 122, 0.015) 62px),
+        repeating-linear-gradient(-45deg, transparent, transparent 80px, rgba(26, 122, 122, 0.012) 80px, rgba(26, 122, 122, 0.012) 82px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 导航栏 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0 60px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.5s ease;
+      background: transparent;
+    }
+
+    .navbar.scrolled {
+      background: rgba(232, 228, 220, 0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--turquoise-dark);
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(26, 122, 122, 0.15);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-size: 15px;
+      letter-spacing: 2px;
+      position: relative;
+      padding: 8px 0;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--turquoise-bright), var(--gold));
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--turquoise-main);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: var(--turquoise-main);
+    }
+
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .nav-icons a {
+      color: var(--text-dark);
+      font-size: 18px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-icons a:hover {
+      color: var(--gold);
+      transform: scale(1.1);
+    }
+
+    /* 页面标题区 */
+    .page-header {
+      height: 40vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--warm-bg) 0%, var(--warm-bg-light) 100%);
+      padding-top: 80px;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://images.unsplash.com/photo-1515488764276-beab7607c1e6?w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.05;
+    }
+
+    .page-header-content {
+      text-align: center;
+      z-index: 10;
+      padding: 0 20px;
+    }
+
+    .page-title {
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: 10px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--turquoise-dark) 0%, var(--turquoise-main) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+    }
+
+    .page-subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      letter-spacing: 4px;
+      font-weight: 400;
+    }
+
+    /* 鉴定流程 */
+    .process-section {
+      padding: 60px;
+      background: var(--warm-bg-light);
+    }
+
+    .process-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .process-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 50px 40px;
+      text-align: center;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+
+    .process-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .process-card::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -40px;
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--turquoise-bright), transparent);
+      transform: translateY(-50%);
+    }
+
+    .process-card:last-child::after {
+      display: none;
+    }
+
+    .process-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(64, 224, 208, 0.1));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      font-size: 32px;
+      color: var(--turquoise-main);
+      border: 2px solid rgba(64, 224, 208, 0.3);
+      transition: all 0.4s ease;
+    }
+
+    .process-card:hover .process-icon {
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-light));
+      color: #fff;
+      border-color: var(--turquoise-main);
+      transform: scale(1.1);
+    }
+
+    .process-card h3 {
+      font-size: 20px;
+      color: var(--turquoise-dark);
+      margin-bottom: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    .process-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .process-step-number {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 30px;
+      height: 30px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* 鉴定申请表单 */
+    .form-section {
+      padding: 80px 60px;
+      background: var(--warm-bg);
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 50px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
+    }
+
+    .form-title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--turquoise-dark);
+      margin-bottom: 40px;
+      letter-spacing: 4px;
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 15px;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .form-label span {
+      color: var(--turquoise-main);
+      margin-left: 4px;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: 15px 20px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--text-dark);
+      background: rgba(255, 255, 255, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--turquoise-bright);
+      box-shadow: 0 0 0 3px rgba(64, 224, 208, 0.1);
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .upload-area {
+      width: 100%;
+      padding: 40px;
+      border: 2px dashed rgba(64, 224, 208, 0.3);
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .upload-area:hover {
+      border-color: var(--turquoise-bright);
+      background: rgba(64, 224, 208, 0.05);
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      color: var(--turquoise-main);
+      margin-bottom: 15px;
+      opacity: 0.6;
+    }
+
+    .upload-text {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .upload-hint {
+      font-size: 13px;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--turquoise-main) 0%, var(--turquoise-light) 100%);
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 16px;
+      letter-spacing: 4px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      margin-top: 20px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(26, 122, 122, 0.3);
+    }
+
+    /* 鉴定记录 */
+    .records-section {
+      padding: 60px;
+      background: var(--warm-bg-light);
+    }
+
+    .records-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--turquoise-dark);
+      letter-spacing: 3px;
+    }
+
+    .records-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .record-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 25px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .record-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .record-info {
+      flex: 1;
+    }
+
+    .record-name {
+      font-size: 18px;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .record-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .record-status {
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      letter-spacing: 1px;
+      margin-right: 20px;
+    }
+
+    .status-pending {
+      background: rgba(201, 162, 39, 0.1);
+      color: var(--gold);
+      border: 1px solid rgba(201, 162, 39, 0.3);
+    }
+
+    .status-processing {
+      background: rgba(64, 224, 208, 0.1);
+      color: var(--turquoise-main);
+      border: 1px solid rgba(64, 224, 208, 0.3);
+    }
+
+    .status-completed {
+      background: rgba(26, 122, 122, 0.1);
+      color: var(--turquoise-dark);
+      border: 1px solid rgba(26, 122, 122, 0.3);
+    }
+
+    .view-report-btn {
+      padding: 10px 25px;
+      background: transparent;
+      border: 1px solid var(--turquoise-bright);
+      color: var(--turquoise-main);
+      font-family: inherit;
+      font-size: 13px;
+      letter-spacing: 2px;
+      cursor cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .view-report-btn:hover {
+      background: var(--turquoise-main);
+      border-color: var(--turquoise-main);
+      color: #fff;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      color: var(--text-muted);
+      opacity: 0.3;
+      margin-bottom: 20px;
+    }
+
+    .empty-text {
+      font-size: 15px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    /* 免责声明 */
+    .disclaimer {
+      padding: 30px 60px;
+      background: var(--warm-bg);
+      text-align: center;
+    }
+
+    .disclaimer p {
+      font-size: 13px;
+      color: var(--text-muted);
+      opacity: 0.7;
+      letter-spacing: 1px;
+    }
+
+    /* 页脚 */
+    .footer {
+      background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+      color: #fff;
+      padding: 80px 60px 40px;
+      position: relative;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--turquoise-dark), var(--turquoise-bright), var(--gold));
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+    }
+
+    .footer-brand h3 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-bottom: 20px;
+      color: var(--turquoise-bright);
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 15px;
+    }
+
+    .footer-social a {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.7);
+      transition: all 0.3s ease;
+    }
+
+    .footer-social a:hover {
+      background: var(--turquoise-main);
+      border-color: var(--turquoise-main);
+      color: #fff;
+      transform: translateY(-3px);
+    }
+
+    .footer-column h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: 12px;
+    }
+
+    .footer-column a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .footer-column a:hover {
+      color: var(--turquoise-bright);
+      padding-left: 5px;
+    }
+
+    .footer-bottom {
+      max-width: 1400px;
+      margin: 60px auto 0;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bottom p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* 返回顶部按钮 */
+    .back-to-top {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-light));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 25px rgba(26, 122, 122, 0.4);
+      z-index: 999;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(26, 122, 122, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="logo">松石雅集</div>
+    <ul class="nav-links">
+      <li><a href="./松石雅集.html">首页</a></li>
+      <li><a href="./珍宝馆.html">珍宝馆</a></li>
+      <li><a href="./文化论坛.html">文化论坛</a></li>
+      <li><a href="./文化展厅.html">文化展厅</a></li>
+      <li><a href="./鉴定服务.html" class="active">鉴定服务</a></li>
+    </ul>
+    <div class="nav-icons">
+      <a href="#"><i class="fas fa-search"></i></a>
+      <a href="#"><i class="fas fa-user"></i></a>
+      <a href="#"><i class="fas fa-shopping-bag"></i></a>
+    </div>
+  </nav>
+
+  <!-- 页面标题区 -->
+  <section class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-title">鉴定服务</h1>
+      <p class="page-subtitle">平台专家为您鉴定每一件绿松石的真伪与品质</p>
+    </div>
+  </section>
+
+  <!-- 鉴定流程 -->
+  <section class="process-section">
+    <div class="process-container">
+      <div class="process-grid">
+        <div class="process-card">
+          <div class="process-step-number">1</div>
+          <div class="process-icon">
+            <i class="fas fa-edit"></i>
+          </div>
+          <h3>提交申请</h3>
+          <p>填写藏品信息，上传清晰图片，选择鉴定目的</p>
+        </div>
+        <div class="process-card">
+          <div class="process-step-number">2</div>
+          <div class="process-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3>专家鉴定</h3>
+          <p>资深鉴定师团队专业评估，确保结果准确可靠</p>
+        </div>
+        <div class="process-card">
+          <div class="process-step-number">3</div>
+          <div class="process-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3>查看结果</h3>
+          <p>获取详细鉴定报告，了解藏品真伪与价值评估</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 鉴定申请表单 -->
+  <section class="form-section">
+    <div class="form-container">
+      <h2 class="form-title">提交鉴定申请</h2>
+      <form id="appraisalForm">
+        <div class="form-group">
+          <label class="form-label">藏品名称 <span>*</span></label>
+          <input type="text" class="form-input" placeholder="请输入藏品名称" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">藏品描述</label>
+          <textarea class="form-textarea" placeholder="请描述藏品的尺寸、重量、来源等信息"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">图片上传 <span>*</span></label>
+          <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">
+              <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <p class="upload-text">点击或拖拽上传图片</p>
+            <p class="upload-hint">支持 JPG、PNG 格式，单张不超过 10MB</p>
+          </div>
+          <input type="file" id="fileInput" hidden accept="image/*" multiple>
+        </div>
+        <div class="form-group">
+          <label class="form-label">鉴定目的 <span>*</span></label>
+          <select class="form-select" required>
+            <option value="">请选择鉴定目的</option>
+            <option value="authenticity">鉴定真伪</option>
+            <option value="quality">评估品质</option>
+            <option value="comprehensive">综合鉴定</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">联系方式 <span>*</span></label>
+          <input type="text" class="form-input" placeholder="请输入手机号或邮箱" required>
+        </div>
+        <button type="submit" class="submit-btn">提交鉴定申请</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 鉴定记录 -->
+  <section class="records-section">
+    <div class="records-container">
+      <div class="section-header">
+        <h2 class="section-title">我的鉴定记录</h2>
+      </div>
+      <div class="records-list" id="recordsList">
+        <!-- 示例记录，实际应由后端数据渲染 -->
+        <div class="record-card">
+          <div class="record-info">
+            <div class="record-name">高瓷蓝绿松石圆珠手串</div>
+            <div class="record-meta">提交时间：2024-01-15 14:30</div>
+          </div>
+          <div class="record-status status-completed">已完成</div>
+          <button class="view-report-btn">查看报告</button>
+        </div>
+        <div class="record-card">
+          <div class="record-info">
+            <div class="record-name">乌兰花绿松石雕件</div>
+            <div class="record-meta">提交时间：2024-01-10 09:15</div>
+          </div>
+          <div class="record-status status-processing">鉴定中</div>
+          <button class="view-report-btn">查看进度</button>
+        </div>
+        <div class="record-card">
+          <div class="record-info">
+            <div class="record-name">丫角山果冻料吊坠</div>
+            <div class="record-meta">提交时间：2024-01-05 16:45</div>
+          </div>
+          <div class="record-status status-pending">待鉴定</div>
+          <button class="view-report-btn">查看详情</button>
+        </div>
+      </div>
+      <!-- 无记录时的空状态 -->
+      <!--
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-clipboard-list"></i>
+        </div>
+        <p class="empty-text">暂无鉴定记录</p>
+      </div>
+      -->
+    </div>
+  </section>
+
+  <!-- 免责声明 -->
+  <section class="disclaimer">
+    <p>平台合作鉴定师均具备专业资质，鉴定结果仅供参考</p>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>松石雅集</h3>
+        <p>传承东方矿物艺术之美，<br>打造专业绿松石文化交流平台。</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-weixin"></i></a>
+          <a href="#"><i class="fab fa-weibo"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4>探索</h4>
+        <ul>
+          <li><a href="./珍宝馆.html">珍宝馆</a></li>
+          <li><a href="./文化展厅.html">文化展厅</a></li>
+          <li><a href="./文化论坛.html">藏家论坛</a></li>
+          <li><a href="./鉴定服务.html">鉴定服务</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>服务</h4>
+        <ul>
+          <li><a href="#">会员权益</a></li>
+          <li><a href="#">售后保障</a></li>
+          <li><a href="#">物流配送</a></li>
+          <li><a href="#">联系我们</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>关于</h4>
+        <ul>
+          <li><a href="#">品牌故事</a></li>
+          <li><a href="#">加入我们</a></li>
+          <li><a href="#">隐私政策</a></li>
+          <li><a href="#">使用条款</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>2024 松石雅集 版权所有</p>
+      <p>东方矿物艺术传承者</p>
+    </div>
+  </footer>
+
+  <!-- 返回顶部 -->
+  <div class="back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <script>
+    // 导航栏滚动效果
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+
+      // 返回顶部按钮显示/隐藏
+      const backToTop = document.getElementById('backToTop');
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    // 返回顶部
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // 表单提交
+    document.getElementById('appraisalForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('鉴定申请已提交，我们会尽快联系您！');
+    });
+  </script>
+</body>
+</html>

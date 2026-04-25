@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>藏家论坛 - 松石雅集</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --turquoise-dark: #0d5c5c;
+      --turquoise-main: #1a7a7a;
+      --turquoise-light: #2d9a9a;
+      --turquoise-bright: #40e0d0;
+      --gold: #c9a227;
+      --gold-light: #e8d5a3;
+      --warm-bg: #e8e4dc;
+      --warm-bg-light: #f0ece4;
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --text-dark: #2c2c2c;
+      --text-muted: #5a5a5a;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+      background: var(--warm-bg);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* 背景铁线纹理 */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(26, 122, 122, 0.015) 60px, rgba(26, 122, 122, 0.015) 62px),
+        repeating-linear-gradient(-45deg, transparent, transparent 80px, rgba(26, 122, 122, 0.012) 80px, rgba(26, 122, 122, 0.012) 82px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 导航栏 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0 60px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.5s ease;
+      background: rgba(232, 228, 220, 0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--turquoise-dark);
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(26, 122, 122, 0.15);
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-size: 15px;
+      letter-spacing: 2px;
+      position: relative;
+      padding: 8px 0;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--turquoise-bright), var(--gold));
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--turquoise-main);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-links a.secondary {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .nav-links a.secondary:hover {
+      color: var(--turquoise-main);
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .nav-icons a {
+      color: var(--text-dark);
+      font-size: 18px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-icons a:hover {
+      color: var(--gold);
+      transform: scale(1.1);
+    }
+
+    .nav-icons a .badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 18px;
+      height: 18px;
+      background: var(--turquoise-bright);
+      border-radius: 50%;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    /* 页面标题区 */
+    .page-header {
+      padding: 160px 60px 60px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-title {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: 16px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--turquoise-dark) 0%, var(--turquoise-main) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+    }
+
+    .page-subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      letter-spacing: 6px;
+      font-weight: 400;
+    }
+
+    /* 标签栏 + 发帖入口 */
+    .tag-bar {
+      max-width: 1400px;
+      margin: 0 auto 40px;
+      padding: 0 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tag-list {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .tag-item {
+      padding: 10px 24px;
+      background: transparent;
+      border: 1px solid rgba(201, 162, 39, 0.3);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 14px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border-radius: 25px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tag-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(64, 224, 208, 0.08));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .tag-item:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .tag-item.active {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201, 162, 39, 0.08);
+    }
+
+    .tag-item.active::before {
+      opacity: 1;
+    }
+
+    .tag-item span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .new-post-btn {
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+      border: none;
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border-radius: 30px;
+      transition: all 0.4s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 6px 20px rgba(26, 122, 122, 0.3);
+    }
+
+    .new-post-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(26, 122, 122, 0.4);
+    }
+
+    .new-post-btn i {
+      font-size: 16px;
+    }
+
+    /* 主内容区 */
+    .main-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 60px 80px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 帖子列表 */
+    .post-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .post-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 24px 28px;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      border: 1px solid transparent;
+      position: relative;
+    }
+
+    .post-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      transition: all 0.5s ease;
+      pointer-events: none;
+    }
+
+    .post-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .post-card:hover::before {
+      border-color: rgba(201, 162, 39, 0.2);
+    }
+
+    /* 置顶帖 */
+    .post-card.pinned {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.85));
+      border-left: 3px solid var(--gold);
+    }
+
+    .post-card.pinned::after {
+      content: '置顶';
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 4px 10px;
+      background: linear-gradient(135deg, var(--gold), #d4af37);
+      color: #fff;
+      font-size: 11px;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .post-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 12px;
+    }
+
+    .post-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--turquoise-dark);
+      letter-spacing: 1px;
+      line-height: 1.5;
+      flex: 1;
+      transition: color 0.3s ease;
+    }
+
+    .post-card:hover .post-title {
+      color: var(--turquoise-main);
+    }
+
+    /* 精华徽章 */
+    .essence-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 4px;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+
+    /* 悬赏标签 */
+    .reward-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      color: #fff;
+      font-size: 12px;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+
+    .reward-badge i {
+      font-size: 11px;
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .post-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .author-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(201, 162, 39, 0.2);
+    }
+
+    .author-name {
+      font-size: 14px;
+      color: var(--text-dark);
+      letter-spacing: 1px;
+    }
+
+    .post-tag {
+      padding: 4px 12px;
+      background: rgba(26, 122, 122, 0.08);
+      color: var(--turquoise-main);
+      font-size: 12px;
+      letter-spacing: 1px;
+      border-radius: 12px;
+    }
+
+    .post-stats {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-left: auto;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .stat-item i {
+      font-size: 14px;
+      color: var(--gold);
+    }
+
+    .post-time {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    /* 侧边栏 */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .sidebar-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      border: 1px solid transparent;
+      transition: all 0.4s ease;
+    }
+
+    .sidebar-card:hover {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      border-color: rgba(201, 162, 39, 0.15);
+    }
+
+    .sidebar-title {
+      font-size: 16px;
+      color: var(--turquoise-dark);
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-title i {
+      color: var(--gold);
+      font-size: 18px;
+    }
+
+    /* 平台鉴定师 */
+    .appraiser-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .appraiser-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .appraiser-item:hover {
+      background: rgba(201, 162, 39, 0.06);
+    }
+
+    .appraiser-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(201, 162, 39, 0.3);
+    }
+
+    .appraiser-info {
+      flex: 1;
+    }
+
+    .appraiser-name {
+      font-size: 15px;
+      color: var(--text-dark);
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .appraiser-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      background: linear-gradient(135deg, var(--gold), #d4af37);
+      color: #fff;
+      font-size: 11px;
+      letter-spacing: 1px;
+      border-radius: 10px;
+    }
+
+    .appraiser-badge i {
+      font-size: 10px;
+    }
+
+    /* 本周热议 */
+    .hot-topics {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .hot-topic-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .hot-topic-item:last-child {
+      border-bottom: none;
+    }
+
+    .hot-topic-item:hover {
+      padding-left: 5px;
+    }
+
+    .hot-rank {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      color: #fff;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .hot-rank.second {
+      background: linear-gradient(135deg, var(--gold), #d4af37);
+    }
+
+    .hot-rank.third {
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+    }
+
+    .hot-topic-title {
+      flex: 1;
+      font-size: 14px;
+      color: var(--text-dark);
+      line-height: 1.5;
+      letter-spacing: 1px;
+      transition: color 0.3s ease;
+    }
+
+    .hot-topic-item:hover .hot-topic-title {
+      color: var(--turquoise-main);
+    }
+
+    .hot-icon {
+      color: #ff6b35;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    /* 论坛公告 */
+    .notice-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .notice-item {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .notice-item:last-child {
+      border-bottom: none;
+    }
+
+    .notice-item:hover {
+      color: var(--turquoise-main);
+      padding-left: 5px;
+    }
+
+    .notice-date {
+      font-size: 12px;
+      color: var(--gold);
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+
+    /* 分页器 */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 40px 0 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-btn {
+      min-width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--card-bg);
+      border: 1px solid rgba(201, 162, 39, 0.2);
+      border-radius: 8px;
+      color: var(--text-dark);
+      font-family: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+
+    .page-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .page-btn.active {
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .page-btn.prev,
+    .page-btn.next {
+      padding: 0 20px;
+    }
+
+    .page-btn.prev i,
+    .page-btn.next i {
+      font-size: 12px;
+    }
+
+    .page-dots {
+      color: var(--text-muted);
+      padding: 0 10px;
+    }
+
+    /* 页脚 */
+    .footer {
+      background: linear-gradient(180deg, #ddd8d0 0%, #d0cbc3 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.25), transparent);
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 60px 40px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer-logo {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--turquoise-dark);
+      letter-spacing: 6px;
+      margin-bottom: 25px;
+    }
+
+    .footer-desc {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      max-width: 350px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 15px;
+    }
+
+    .footer-social a {
+      width: 45px;
+      height: 45px;
+      border: 1px solid rgba(64, 224, 208, 0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .footer-social a:hover {
+      border-color: var(--turquoise-bright);
+      color: var(--turquoise-main);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(64, 224, 208, 0.12);
+    }
+
+    .footer-column h4 {
+      font-size: 16px;
+      color: var(--turquoise-dark);
+      letter-spacing: 3px;
+      margin-bottom: 25px;
+      font-weight: 400;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 15px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-links a::before {
+      content: '';
+      width: 0;
+      height: 1px;
+      background: var(--turquoise-main);
+      transition: width 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--turquoise-main);
+      padding-left: 5px;
+    }
+
+    .footer-links a:hover::before {
+      width: 10px;
+    }
+
+    .footer-contact p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-contact i {
+      color: var(--turquoise-main);
+      width: 20px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 30px 60px;
+      text-align: center;
+    }
+
+    .footer-slogan {
+      font-size: 16px;
+      color: var(--turquoise-dark);
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+      font-weight: 300;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    /* 回到顶部按钮 */
+    .back-to-top {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 25px rgba(26, 122, 122, 0.3);
+      z-index: 999;
+      border: 2px solid rgba(201, 162, 39, 0.3);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(26, 122, 122, 0.4);
+      border-color: var(--gold);
+    }
+
+    .back-to-top i {
+      font-size: 20px;
+      color: #fff;
+    }
+
+    /* 响应式 */
+    @media (max-width: 1200px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 20px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .page-header {
+        padding: 140px 20px 40px;
+      }
+      .page-title {
+        font-size: 36px;
+        letter-spacing: 8px;
+      }
+      .page-subtitle {
+        font-size: 14px;
+        letter-spacing: 3px;
+      }
+      .tag-bar {
+        padding: 0 20px;
+        flex-direction: column;
+        gap: 20px;
+        align-items: stretch;
+      }
+      .tag-list {
+        justify-content: center;
+      }
+      .new-post-btn {
+        width: 100%;
+        justify-content: center;
+      }
+      .main-content {
+        padding: 0 20px 60px;
+      }
+      .post-card {
+        padding: 20px;
+      }
+      .post-title {
+        font-size: 16px;
+      }
+      .post-meta {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      .post-stats {
+        margin-left: 0;
+      }
+      .footer-content {
+        grid-template-columns: 1fr;
+        padding: 60px 20px 30px;
+      }
+      .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 48px;
+        height: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="logo" onclick="goHome()">松石雅集</div>
+    <ul class="nav-links">
+      <li><a href="松石雅集.html">首页</a></li>
+      <li><a href="珍宝馆.html">珍宝馆</a></li>
+      <li><a href="文化论坛.html" class="active">文化论坛</a></li>
+      <li><a href="松石雅集.html#exhibition">文化展厅</a></li>
+      <li><a href="松石雅集.html#appraisal" class="secondary">鉴定服务</a></li>
+    </ul>
+    <div class="nav-icons">
+      <a href="#"><i class="fas fa-search"></i></a>
+      <a href="#"><i class="fas fa-heart"></i></a>
+      <a href="#">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="badge">3</span>
+      </a>
+      <a href="#"><i class="fas fa-user"></i></a>
+    </div>
+  </nav>
+
+  <!-- 页面标题区 -->
+  <header class="page-header">
+    <h1 class="page-title">藏家论坛</h1>
+    <p class="page-subtitle">以石会友，共话绿松石的千年之美</p>
+  </header>
+
+  <!-- 标签栏 + 发帖入口 -->
+  <section class="tag-bar">
+    <div class="tag-list">
+      <button class="tag-item active" onclick="filterByTag('all', this)">
+        <span>全部</span>
+      </button>
+      <button class="tag-item" onclick="filterByTag('wulanhua', this)">
+        <span>#乌兰花</span>
+      </button>
+      <button class="tag-item" onclick="filterByTag('gaocilan', this)">
+        <span>#高瓷蓝</span>
+      </button>
+      <button class="tag-item" onclick="filterByTag('jianding', this)">
+        <span>#鉴定科普</span>
+      </button>
+      <button class="tag-item" onclick="filterByTag('kengkou', this)">
+        <span>#矿口漫谈</span>
+      </button>
+      <button class="tag-item" onclick="filterByTag('shaibao', this)">
+        <span>#晒宝</span>
+      </button>
+    </div>
+    <button class="new-post-btn" onclick="newPost()">
+      <i class="fas fa-pen"></i>
+      <span>发布新帖</span>
+    </button>
+  </section>
+
+  <!-- 主内容区 -->
+  <main class="main-content">
+    <!-- 帖子列表 -->
+    <div class="post-list" id="postList">
+      <!-- 置顶帖 1 - 悬赏问答 -->
+      <div class="post-card pinned" data-tag="jianding" onclick="goToPost('#post-1')">
+        <div class="post-header">
+          <h3 class="post-title">【悬赏中】刚入手的云盖寺料，请老师们帮忙鉴定真假和瓷度</h3>
+          <span class="reward-badge"><i class="fas fa-coins"></i>悬赏中</span>
+        </div>
+        <div class="post-meta">
+          <div class="post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=newbie" alt="用户" class="author-avatar">
+            <span class="author-name">松石小白</span>
+          </div>
+          <span class="post-tag">鉴定科普</span>
+          <div class="post-stats">
+            <span class="stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>56</span>
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-eye"></i>
+              <span>2.3k</span>
+            </span>
+          </div>
+          <span class="post-time">最后回复：5分钟前</span>
+        </div>
+      </div>
+
+      <!-- 置顶帖 2 -->
+      <div class="post-card pinned" data-tag="jianding" onclick="goToPost('#post-2')">
+        <div class="post-header">
+          <h3 class="post-title">新手必读：绿松石鉴别完全指南，从入门到精通</h3>
+          <span class="essence-badge">精</span>
+        </div>
+        <div class="post-meta">
+          <div class="post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin" alt="管理员" class="author-avatar">
+            <span class="author-name">松石雅集官方</span>
+          </div>
+          <span class="post-tag">鉴定科普</span>
+          <div class="post-stats">
+            <span class="stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>328</span>
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-eye"></i>
+              <span>12.5k</span>
+            </span>
+          </div>
+          <span class="post-time">最后回复：2小时前</span>
+        </div>
+      </div>
+
+      <!-- 置顶帖 3 -->
+      <div class="post-card pinned" data-tag="kengkou" onclick="goToPost('#post-3')">
+        <div class="post-header">
+          <h3 class="post-title">云盖寺、丫角山、秦古...各大矿口特点全解析</h3>
+          <span class="essence-badge">精</span>
+        </div>
+        <div class="post-meta">
+          <div class="post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=expert" alt="专家" class="author-avatar">
+            <span class="author-name">松石老玩家</span>
+          </div>
+          <span class="post-tag">矿口漫谈</span>
+          <div class="post-stats">
+            <span class="stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>256</span>
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-eye"></i>
+              <span>8.9k</span>
+            </span>
+          </div>
+          <span class="post-time">最后回复：5小时前</span>
+        </div>
+      </div>
+
+      <!-- 普通帖子 -->
+      <div class="post-card" data-tag="shaibao" onclick="goToPost('#post-4')">
+        <div class="post-header">
+          <h3 class="post-title">入手一枚云盖寺高瓷蓝，请各位老师帮忙掌眼</h3>
+          <span class="essence-badge">精</span>
+        </div>
+        <div class="post-meta">
+          <div class="post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user1" alt="用户" class="author-avatar">
+            <span class="author-name">松石新人</span>
+          </div>
+          <span class="post-tag">晒宝</span>
+          <div class="post-stats">
+            <span class="stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>45</span>
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-eye"></i>
+              <span>1.2k</span>
+            </span>
+          </div>
+          <span class="post-time">最后回复：10分钟前</span>
+        </div>
+      </div>
+
+      <div class="post-card" data-tag="wulanhua" onclick="goToPost('#post-5')">
+        <div class="post-header">
+          <h3 class="post-title">乌兰花盘玩三个月的变化记录，从哑光到玻璃光泽</h3>
+        </div>
+        <div class="post-meta">
+          <div class="post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user2" alt="用户" class="author-avatar">
+            <span class="author-name">盘串达人</span>
+          </div>
+          <span class="post-tag">乌兰花</span>
+          <div class="post-stats">
+            <span class="stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>89</span>
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-eye"></i>
+              <span>3.5k</span>
+            </span>
+          </div>
+          <span class="post-time">最后回复：1小时前</span>
+        </div>
+      </div>
+
+      <div class="post-card" data-tag="gaocilan" onclick="goToPost('#post-6')">
+        <div class="post-header">
+          <h3 class="post-title">高瓷蓝和果冻料的区别，新手最容易混淆的两种料质</h3>
+          <span class="essence-badge">精</span>
+        </div>
+        <div class="post-meta">
+          <div class="post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user3" alt="用户" class="author-avatar">
+            <span class="author-name">松石鉴定师</span>
+          </div>
+          <span class="post-tag">高瓷蓝</span>
+          <div class="post-stats">
+            <span class="stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>156</span>
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-eye"></i>
+              <span>5.8k</span>
+            </span>
+          </div>
+          <span class="post-time">最后回复：3小时前</span>
+        </div>
+      </div>
+
+      <div class="post-card" data-tag="kengkou" onclick="goToPost('#post-7')">
+        <div class="post-header">
+          <h3 class="post-title">丫角山料为什么被称为"果冻料"？实地探访矿口实录</h3>
+        </div>
+        <div class="post-meta">
+          <div class="post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user4" alt="用户" class="author-avatar">
+            <span class="author-name">矿区行者</span>
+          </div>
+          <span class="post-tag">矿口漫谈</span>
+          <div class="post-stats">
+            <span class="stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>67</span>
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-eye"></i>
+              <span>2.1k</span>
+            </span>
+          </div>
+          <span class="post-time">最后回复：6小时前</span>
+        </div>
+      </div>
+
+      <div class="post-card" data-tag="jianding" onclick="goToPost('#post-8')">
+        <div class="post-header">
+          <h3 class="post-title">【科普】绿松石优化处理全解析：注胶、染色、电解</h3>
+          <span class="essence-badge">精</span>
+        </div>
+        <div class="post-meta">
+          <div class="post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user5" alt="用户" class="author-avatar">
+            <span class="author-name">宝石学博士</span>
+          </div>
+          <span class="post-tag">鉴定科普</span>
+          <div class="post-stats">
+            <span class="stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>234</span>
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-eye"></i>
+              <span>9.6k</span>
+            </span>
+          </div>
+          <span class="post-time">最后回复：昨天</span>
+        </div>
+      </div>
+
+      <div class="post-card" data-tag="shaibao" onclick="goToPost('#post-9')">
+        <div class="post-header">
+          <h3 class="post-title">收藏三年的秦古唐三彩，终于等到它包浆完美</h3>
+        </div>
+        <div class="post-meta">
+          <div class="post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user6" alt="用户" class="author-avatar">
+            <span class="author-name">松石收藏家</span>
+          </div>
+          <span class="post-tag">晒宝</span>
+          <div class="post-stats">
+            <span class="stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>112</span>
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-eye"></i>
+              <span>4.3k</span>
+            </span>
+          </div>
+          <span class="post-time">最后回复：昨天</span>
+        </div>
+      </div>
+
+      <div class="post-card" data-tag="wulanhua" onclick="goToPost('#post-10')">
+        <div class="post-header">
+          <h3 class="post-title">乌兰花108佛珠搭配心得，从选料到配饰的完整攻略</h3>
+        </div>
+        <div class="post-meta">
+          <div class="post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user7" alt="用户" class="author-avatar">
+            <span class="author-name">文玩搭配师</span>
+          </div>
+          <span class="post-tag">乌兰花</span>
+          <div class="post-stats">
+            <span class="stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>78</span>
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-eye"></i>
+              <span>2.8k</span>
+            </span>
+          </div>
+          <span class="post-time">最后回复：2天前</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 侧边栏 -->
+    <aside class="sidebar">
+      <!-- 平台鉴定师 -->
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">
+          <i class="fas fa-user-check"></i>
+          平台鉴定师
+        </h3>
+        <div class="appraiser-list">
+          <div class="appraiser-item">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=expert" alt="鉴定师" class="appraiser-avatar">
+            <div class="appraiser-info">
+              <div class="appraiser-name">松石老玩家</div>
+              <span class="appraiser-badge"><i class="fas fa-certificate"></i>官方鉴定师</span>
+            </div>
+          </div>
+          <div class="appraiser-item">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user3" alt="鉴定师" class="appraiser-avatar">
+            <div class="appraiser-info">
+              <div class="appraiser-name">松石鉴定师</div>
+              <span class="appraiser-badge"><i class="fas fa-certificate"></i>官方鉴定师</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 本周热议 -->
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">
+          <i class="fas fa-fire-alt"></i>
+          本周热议
+        </h3>
+        <div class="hot-topics">
+          <div class="hot-topic-item" onclick="goToPost('#post-2')">
+            <span class="hot-rank">1</span>
+            <span class="hot-topic-title">新手必读：绿松石鉴别完全指南，从入门到精通</span>
+            <i class="fas fa-fire hot-icon"></i>
+          </div>
+          <div class="hot-topic-item" onclick="goToPost('#post-8')">
+            <span class="hot-rank second">2</span>
+            <span class="hot-topic-title">【科普】绿松石优化处理全解析：注胶、染色、电解</span>
+            <i class="fas fa-fire hot-icon"></i>
+          </div>
+          <div class="hot-topic-item" onclick="goToPost('#post-6')">
+            <span class="hot-rank third">3</span>
+            <span class="hot-topic-title">高瓷蓝和果冻料的区别，新手最容易混淆的两种料质</span>
+            <i class="fas fa-fire hot-icon"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- 论坛公告 -->
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">
+          <i class="fas fa-bullhorn"></i>
+          论坛公告
+        </h3>
+        <div class="notice-list">
+          <div class="notice-item">
+            <div>关于规范晒宝区发帖的说明</div>
+            <div class="notice-date">2024-01-15</div>
+          </div>
+          <div class="notice-item">
+            <div>论坛积分规则调整通知</div>
+            <div class="notice-date">2024-01-10</div>
+          </div>
+          <div class="notice-item">
+            <div>新增"矿口漫谈"板块</div>
+            <div class="notice-date">2024-01-05</div>
+          </div>
+          <div class="notice-item">
+            <div>春节放假期间版务安排</div>
+            <div class="notice-date">2024-01-01</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 分页器 -->
+  <div class="pagination">
+    <button class="page-btn prev" onclick="changePage('prev')">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="page-btn active" onclick="changePage(1)">1</button>
+    <button class="page-btn" onclick="changePage(2)">2</button>
+    <button class="page-btn" onclick="changePage(3)">3</button>
+    <span class="page-dots">...</span>
+    <button class="page-btn" onclick="changePage(10)">10</button>
+    <button class="page-btn next" onclick="changePage('next')">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- 回到顶部按钮 -->
+  <div class="back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo">松石雅集</div>
+        <p class="footer-desc">传承东方矿物美学，汇聚天下松石珍品。我们致力于为每一位藏家提供最优质的绿松石藏品与最专业的鉴赏服务，让千年瑰宝在当代焕发新的光彩。</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-weixin"></i></a>
+          <a href="#"><i class="fab fa-weibo"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4>快速导航</h4>
+        <ul class="footer-links">
+          <li><a href="松石雅集.html">首页</a></li>
+          <li><a href="珍宝馆.html">珍宝馆</a></li>
+          <li><a href="文化论坛.html">文化论坛</a></li>
+          <li><a href="松石雅集.html#exhibition">文化展厅</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>藏品分类</h4>
+        <ul class="footer-links">
+          <li><a href="#">高瓷蓝</a></li>
+          <li><a href="#">乌兰花</a></li>
+          <li><a href="#">菜籽黄</a></li>
+          <li><a href="#">唐三彩</a></li>
+        </ul>
+      </div>
+      <div class="footer-column footer-contact">
+        <h4>联系我们</h4>
+        <p><i class="fas fa-phone"></i> 400-888-9999</p>
+        <p><i class="fas fa-envelope"></i> contact@songshiyaji.com</p>
+        <p><i class="fas fa-map-marker-alt"></i> 湖北省十堰市绿松石文化产业园</p>
+        <p><i class="fas fa-clock"></i> 周一至周日 9:00-21:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-slogan">传承东方美学 · 每一块绿松石都值得被认真对待</p>
+      <p class="footer-copy">© 2024 松石雅集 版权所有 | 鄂ICP备XXXXXXXX号</p>
+    </div>
+  </footer>
+
+  <script>
+    // 回到顶部
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 回到顶部按钮显示/隐藏
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    // 返回首页
+    function goHome() {
+      window.location.href = '松石雅集.html';
+    }
+
+    // 标签筛选
+    function filterByTag(tag, btn) {
+      // 更新标签样式
+      document.querySelectorAll('.tag-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      btn.classList.add('active');
+
+      // 筛选帖子
+      const posts = document.querySelectorAll('.post-card');
+      posts.forEach(post => {
+        if (tag === 'all' || post.dataset.tag === tag) {
+          post.style.display = 'block';
+          post.style.opacity = '0';
+          post.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            post.style.transition = 'all 0.4s ease';
+            post.style.opacity = '1';
+            post.style.transform = 'translateY(0)';
+          }, 50);
+        } else {
+          post.style.display = 'none';
+        }
+      });
+    }
+
+    // 发布新帖
+    function newPost() {
+      alert('发布新帖功能即将上线，敬请期待！');
+    }
+
+    // 跳转到帖子详情
+    function goToPost(anchor) {
+      window.location.href = anchor;
+    }
+
+    // 分页
+    let currentPage = 1;
+    function changePage(page) {
+      if (page === 'prev') {
+        if (currentPage > 1) currentPage--;
+      } else if (page === 'next') {
+        if (currentPage < 10) currentPage++;
+      } else {
+        currentPage = page;
+      }
+
+      // 更新分页按钮状态
+      document.querySelectorAll('.page-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent === String(currentPage)) {
+          btn.classList.add('active');
+        }
+      });
+
+      // 模拟页面切换效果
+      const posts = document.querySelectorAll('.post-card');
+      posts.forEach((post, index) => {
+        post.style.opacity = '0';
+        post.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          post.style.transition = 'all 0.4s ease';
+          post.style.opacity = '1';
+          post.style.transform = 'translateY(0)';
+        }, index * 50);
+      });
+    }
+  </script>
+</body>
+</html>

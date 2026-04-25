@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文化展厅 - 松石雅集</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --turquoise-dark: #0d5c5c;
+      --turquoise-main: #1a7a7a;
+      --turquoise-light: #2d9a9a;
+      --turquoise-bright: #40e0d0;
+      --gold: #c9a227;
+      --gold-light: #e8d5a3;
+      --warm-bg: #e8e4dc;
+      --warm-bg-light: #f0ece4;
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --text-dark: #2c2c2c;
+      --text-muted: #5a5a5a;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+      background: var(--warm-bg);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(26, 122, 122, 0.015) 60px, rgba(26, 122, 122, 0.015) 62px),
+        repeating-linear-gradient(-45deg, transparent, transparent 80px, rgba(26, 122, 122, 0.012) 80px, rgba(26, 122, 122, 0.012) 82px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 导航栏 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0 60px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.5s ease;
+      background: transparent;
+    }
+
+    .navbar.scrolled {
+      background: rgba(232, 228, 220, 0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--turquoise-dark);
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(26, 122, 122, 0.15);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-size: 15px;
+      letter-spacing: 2px;
+      position: relative;
+      padding: 8px 0;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--turquoise-bright), var(--gold));
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--turquoise-main);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: var(--turquoise-main);
+    }
+
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .nav-icons a {
+      color: var(--text-dark);
+      font-size: 18px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-icons a:hover {
+      color: var(--gold);
+      transform: scale(1.1);
+    }
+
+    /* 页面标题区 */
+    .page-header {
+      height: 50vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--warm-bg) 0%, var(--warm-bg-light) 100%);
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://images.unsplash.com/photo-1544967082-d9d25d867d66?w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.08;
+    }
+
+    .page-header-content {
+      text-align: center;
+      z-index: 10;
+      padding: 0 20px;
+    }
+
+    .page-title {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: 12px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--turquoise-dark) 0%, var(--turquoise-main) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+    }
+
+    .page-subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      letter-spacing: 6px;
+      font-weight: 400;
+    }
+
+    /* 板块导航标签 */
+    .section-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 40px 60px;
+      background: var(--warm-bg-light);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .section-tab {
+      padding: 14px 32px;
+      background: transparent;
+      border: 1px solid rgba(64, 224, 208, 0.3);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 15px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section-tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(64, 224, 208, 0.08));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .section-tab:hover {
+      border-color: var(--turquoise-bright);
+      color: var(--turquoise-main);
+      transform: translateY(-2px);
+    }
+
+    .section-tab:hover::before {
+      opacity: 1;
+    }
+
+    .section-tab.active {
+      background: linear-gradient(135deg, var(--turquoise-main) 0%, var(--turquoise-light) 100%);
+      border-color: var(--turquoise-main);
+      color: #fff;
+      box-shadow: 0 8px 25px rgba(26, 122, 122, 0.3);
+    }
+
+    /* 内容区 */
+    .content-area {
+      padding: 60px;
+      min-height: 600px;
+      background: var(--warm-bg);
+    }
+
+    .content-section {
+      display: none;
+      max-width: 1400px;
+      margin: 0 auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 历史溯源 */
+    .history-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+
+    .history-image {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+    }
+
+    .history-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+
+    .history-image:hover img {
+      transform: scale(1.05);
+    }
+
+    .history-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 25px;
+      padding: 25px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      border-left: 3px solid var(--turquoise-bright);
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .timeline-item:hover {
+      transform: translateX(10px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .timeline-period {
+      font-size: 14px;
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: 2px;
+      min-width: 80px;
+    }
+
+    .timeline-content h4 {
+      font-size: 18px;
+      color: var(--turquoise-dark);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .timeline-content p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .timeline-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 40px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      position: relative;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .timeline-bar::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 40px;
+      right: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--turquoise-dark), var(--turquoise-bright), var(--gold));
+      transform: translateY(-50%);
+    }
+
+    .timeline-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--turquoise-bright);
+      border: 3px solid var(--gold);
+      box-shadow: 0 0 15px rgba(64, 224, 208, 0.4);
+    }
+
+    .timeline-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    /* 矿脉地理 */
+    .mine-map-section {
+      margin-bottom: 60px;
+    }
+
+    .mine-map {
+      width: 100%;
+      height: 450px;
+      background: linear-gradient(135deg, #f5f3ef 0%, #e8e4dc 100%);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
+    }
+
+    .mine-map img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.6;
+    }
+
+    .mine-marker {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: var(--turquoise-bright);
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 15px rgba(64, 224, 208, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .mine-marker:hover {
+      transform: scale(1.3);
+      box-shadow: 0 6px 20px rgba(64, 224, 208, 0.7);
+    }
+
+    .mine-marker::after {
+      content: attr(data-name);
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: var(--turquoise-dark);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px 10px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .mine-marker:hover::after {
+      opacity: 1;
+    }
+
+    .mine-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 25px;
+    }
+
+    .mine-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      border-top: 3px solid var(--turquoise-bright);
+    }
+
+    .mine-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .mine-card h4 {
+      font-size: 20px;
+      color: var(--turquoise-dark);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .mine-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* 工艺传承 */
+    .craft-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+
+    .craft-image {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+    }
+
+    .craft-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+
+    .craft-image:hover img {
+      transform: scale(1.05);
+    }
+
+    .craft-process {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .process-step:hover {
+      transform: translateX(10px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-light));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 600;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 16px;
+      color: var(--turquoise-dark);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .step-content p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .craft-showcase {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .showcase-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .showcase-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .showcase-image {
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .showcase-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .showcase-card:hover .showcase-image img {
+      transform: scale(1.1);
+    }
+
+    .showcase-info {
+      padding: 20px;
+    }
+
+    .showcase-info h4 {
+      font-size: 16px;
+      color: var(--turquoise-dark);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .showcase-info p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* 鉴赏指南 */
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .guide-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .guide-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .guide-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(64, 224, 208, 0.1));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 24px;
+      color: var(--turquoise-main);
+    }
+
+    .guide-card h4 {
+      font-size: 18px;
+      color: var(--turquoise-dark);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .guide-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .guide-image {
+      width: 100%;
+      height: 120px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .guide-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .guide-footer {
+      text-align: center;
+      padding: 30px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .guide-footer p {
+      font-size: 15px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    .guide-footer a {
+      color: var(--turquoise-main);
+      text-decoration: none;
+      border-bottom: 1px solid var(--turquoise-bright);
+      transition: all 0.3s ease;
+    }
+
+    .guide-footer a:hover {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* 养护之道 */
+    .care-section {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 50px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .care-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 30px;
+    }
+
+    .care-item {
+      text-align: center;
+      padding: 30px 20px;
+      transition: all 0.4s ease;
+      border-radius: 8px;
+    }
+
+    .care-item:hover {
+      background: rgba(64, 224, 208, 0.05);
+      transform: translateY(-5px);
+    }
+
+    .care-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-light));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 28px;
+      color: #fff;
+      box-shadow: 0 8px 25px rgba(26, 122, 122, 0.3);
+      transition: all 0.4s ease;
+    }
+
+    .care-item:hover .care-icon {
+      transform: scale(1.1);
+      box-shadow: 0 12px 35px rgba(26, 122, 122, 0.4);
+    }
+
+    .care-item h4 {
+      font-size: 16px;
+      color: var(--turquoise-dark);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .care-item p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* 页脚 */
+    .footer {
+      background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+      color: #fff;
+      padding: 80px 60px 40px;
+      position: relative;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--turquoise-dark), var(--turquoise-bright), var(--gold));
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+    }
+
+    .footer-brand h3 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-bottom: 20px;
+      color: var(--turquoise-bright);
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 15px;
+    }
+
+    .footer-social a {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.7);
+      transition: all 0.3s ease;
+    }
+
+    .footer-social a:hover {
+      background: var(--turquoise-main);
+      border-color: var(--turquoise-main);
+      color: #fff;
+      transform: translateY(-3px);
+    }
+
+    .footer-column h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: 12px;
+    }
+
+    .footer-column a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .footer-column a:hover {
+      color: var(--turquoise-bright);
+      padding-left: 5px;
+    }
+
+    .footer-bottom {
+      max-width: 1400px;
+      margin: 60px auto 0;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bottom p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* 返回顶部按钮 */
+    .back-to-top {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-light));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 25px rgba(26, 122, 122, 0.4);
+      z-index: 999;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(26, 122, 122, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="logo">松石雅集</div>
+    <ul class="nav-links">
+      <li><a href="./松石雅集.html">首页</a></li>
+      <li><a href="./珍宝馆.html">珍宝馆</a></li>
+      <li><a href="./文化论坛.html">文化论坛</a></li>
+      <li><a href="./文化展厅.html" class="active">文化展厅</a></li>
+      <li><a href="#" class="secondary">鉴定服务</a></li>
+    </ul>
+    <div class="nav-icons">
+      <a href="#"><i class="fas fa-search"></i></a>
+      <a href="#"><i class="fas fa-user"></i></a>
+      <a href="#"><i class="fas fa-shopping-bag"></i></a>
+    </div>
+  </nav>
+
+  <!-- 页面标题区 -->
+  <section class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-title">文化展厅</h1>
+      <p class="page-subtitle">从远古图腾到东方美学，探寻绿松石的千年文脉</p>
+    </div>
+  </section>
+
+  <!-- 板块导航标签 -->
+  <section class="section-tabs">
+    <button class="section-tab active" onclick="switchSection('history', this)">
+      <span>历史溯源</span>
+    </button>
+    <button class="section-tab" onclick="switchSection('mine', this)">
+      <span>矿脉地理</span>
+    </button>
+    <button class="section-tab" onclick="switchSection('craft', this)">
+      <span>工艺传承</span>
+    </button>
+    <button class="section-tab" onclick="switchSection('guide', this)">
+      <span>鉴赏指南</span>
+    </button>
+    <button class="section-tab" onclick="switchSection('care', this)">
+      <span>养护之道</span>
+    </button>
+  </section>
+
+  <!-- 内容区 -->
+  <section class="content-area">
+    <!-- 历史溯源 -->
+    <div class="content-section active" id="history">
+      <div class="history-layout">
+        <div class="history-image">
+          <img src="https://images.unsplash.com/photo-1608371945643-2807b5b1d2f3?w=800&q=80" alt="古代绿松石文物">
+        </div>
+        <div class="history-timeline">
+          <div class="timeline-item">
+            <div class="timeline-period">新石器时代</div>
+            <div class="timeline-content">
+              <h4>文明初现</h4>
+              <p>距今约7000年前，绿松石已被先民视为神物，用于祭祀和装饰，是最早被人类开发利用的宝石之一。</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-period">商周时期</div>
+            <div class="timeline-content">
+              <h4>礼器时代</h4>
+              <p>商代将绿松石镶嵌于青铜器上，形成独特的"金镶玉"工艺，成为王权与神权的象征。</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-period">春秋战国</div>
+            <div class="timeline-content">
+              <h4>工艺巅峰</h4>
+              <p>镶嵌工艺达到顶峰，出现"越王勾践剑"等传世珍品，绿松石与青铜完美结合。</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-period">唐宋时期</div>
+            <div class="timeline-content">
+              <h4>文人雅趣</h4>
+              <p>绿松石进入文人雅士视野，成为书房清供、佩饰珍玩，与诗词书画相得益彰。</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-period">明清时期</div>
+            <div class="timeline-content">
+              <h4>宫廷珍藏</h4>
+              <p>成为皇家御用宝石，用于朝珠、冠饰、器皿，象征尊贵与祥瑞，工艺臻于至善。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-bar">
+        <div class="timeline-node">
+          <div class="timeline-dot"></div>
+          <span class="timeline-label">新石器</span>
+        </div>
+        <div class="timeline-node">
+          <div class="timeline-dot"></div>
+          <span class="timeline-label">商周</span>
+        </div>
+        <div class="timeline-node">
+          <div class="timeline-dot"></div>
+          <span class="timeline-label">春秋战国</span>
+        </div>
+        <div class="timeline-node">
+          <div class="timeline-dot"></div>
+          <span class="timeline-label">唐宋</span>
+        </div>
+        <div class="timeline-node">
+          <div class="timeline-dot"></div>
+          <span class="timeline-label">明清</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 矿脉地理 -->
+    <div class="content-section" id="mine">
+      <div class="mine-map-section">
+        <div class="mine-map">
+          <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&q=80" alt="中国地图">
+          <div class="mine-marker" style="top: 55%; left: 48%;" data-name="云盖寺"></div>
+          <div class="mine-marker" style="top: 50%; left: 50%;" data-name="丫角山"></div>
+          <div class="mine-marker" style="top: 58%; left: 52%;" data-name="郧西"></div>
+          <div class="mine-marker" style="top: 52%; left: 46%;" data-name="秦古"></div>
+        </div>
+      </div>
+      <div class="mine-cards">
+        <div class="mine-card">
+          <h4>云盖寺</h4>
+          <p>湖北十堰郧阳区，历史最悠久的绿松石矿口，以高瓷蓝料闻名，质地细腻，色泽纯正。</p>
+        </div>
+        <div class="mine-card">
+          <h4>丫角山</h4>
+          <p>湖北竹山县，以出产果冻料、油绿料著称，料质温润，铁线细腻，深受藏家喜爱。</p>
+        </div>
+        <div class="mine-card">
+          <h4>郧西</h4>
+          <p>湖北郧西县，矿脉丰富，产出多种颜色绿松石，从蓝绿到翠绿，品质上乘。</p>
+        </div>
+        <div class="mine-card">
+          <h4>秦古</h4>
+          <p>湖北竹山县秦古镇，以出产高瓷高蓝料闻名，料质坚硬，色泽浓郁，极具收藏价值。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 工艺传承 -->
+    <div class="content-section" id="craft">
+      <div class="craft-layout">
+        <div class="craft-image">
+          <img src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=800&q=80" alt="工匠雕刻">
+        </div>
+        <div class="craft-process">
+          <div class="process-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>选料</h4>
+              <p>根据颜色、瓷度、纹理精挑细选，去杂存精，为后续工艺奠定基础。</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>切割</h4>
+              <p>依料设计，合理切割，最大限度保留原石精华，展现天然之美。</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>粗雕</h4>
+              <p>确定整体造型，去除多余部分，勾勒出作品的基本轮廓与神韵。</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>精雕</h4>
+              <p>细入毫微，刻画细节，赋予作品生命力与艺术灵魂，展现匠人之心。</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h4>抛光</h4>
+              <p>由粗到细，层层打磨，使表面光洁如镜，呈现温润如玉的质感。</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">6</div>
+            <div class="step-content">
+              <h4>镶嵌</h4>
+              <p>与金银、宝石完美结合，提升艺术价值，成就传世珍品。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="craft-showcase">
+        <div class="showcase-card">
+          <div class="showcase-image">
+            <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80" alt="雕件">
+          </div>
+          <div class="showcase-info">
+            <h4>精雕件</h4>
+            <p>传统题材与现代审美融合，刀法细腻，意境深远。</p>
+          </div>
+        </div>
+        <div class="showcase-card">
+          <div class="showcase-image">
+            <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab79008?w=400&q=80" alt="首饰">
+          </div>
+          <div class="showcase-info">
+            <h4>珠宝首饰</h4>
+            <p>镶嵌工艺精湛，设计典雅大方，佩戴尽显东方韵味。</p>
+          </div>
+        </div>
+        <div class="showcase-card">
+          <div class="showcase-image">
+            <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&q=80" alt="文玩">
+          </div>
+          <div class="showcase-info">
+            <h4>文玩珠串</h4>
+            <p>珠圆玉润，盘玩生趣，岁月沉淀更显温润光泽。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 鉴赏指南 -->
+    <div class="content-section" id="guide">
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-icon">
+            <i class="fas fa-gem"></i>
+          </div>
+          <h4>瓷度</h4>
+          <p>瓷度是绿松石品质的核心指标，高瓷料质地致密，光泽如瓷，敲击声清脆悦耳。</p>
+          <div class="guide-image">
+            <img src="https://images.unsplash.com/photo-1576153192396-180ecef5a715?w=300&q=80" alt="瓷度示意">
+          </div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-icon">
+            <i class="fas fa-palette"></i>
+          </div>
+          <h4>颜色</h4>
+          <p>以高瓷蓝最为珍贵，蓝绿、翠绿次之，颜色越纯正、饱和度越高，价值越高。</p>
+          <div class="guide-image">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80" alt="颜色示意">
+          </div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-icon">
+            <i class="fas fa-stream"></i>
+          </div>
+          <h4>铁线</h4>
+          <p>天然铁线是绿松石的特征，细密均匀者为佳，乌兰花、水草纹等别具韵味。</p>
+          <div class="guide-image">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=300&q=80" alt="铁线示意">
+          </div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-icon">
+            <i class="fas fa-mountain"></i>
+          </div>
+          <h4>矿口特征</h4>
+          <p>不同矿口产出特征各异，云盖寺蓝、丫角山绿、秦古瓷，各具特色。</p>
+          <div class="guide-image">
+            <img src="https://images.unsplash.com/photo-1608371945643-2807b5b1d2f3?w=300&q=80" alt="矿口示意">
+          </div>
+        </div>
+      </div>
+      <div class="guide-footer">
+        <p>了解更多，欢迎前往<a href="./文化论坛.html">藏家论坛</a>与资深藏友交流</p>
+      </div>
+    </div>
+
+    <!-- 养护之道 -->
+    <div class="content-section" id="care">
+      <div class="care-section">
+        <div class="care-grid">
+          <div class="care-item">
+            <div class="care-icon">
+              <i class="fas fa-flask"></i>
+            </div>
+            <h4>避酸碱</h4>
+            <p>远离化妆品、香水、清洁剂等化学物品，避免腐蚀损伤。</p>
+          </div>
+          <div class="care-item">
+            <div class="care-icon">
+              <i class="fas fa-temperature-high"></i>
+            </div>
+            <h4>避高温</h4>
+            <p>避免暴晒和高温环境，防止失水变色，保持温润光泽。</p>
+          </div>
+          <div class="care-item">
+            <div class="care-icon">
+              <i class="fas fa-tint"></i>
+            </div>
+            <h4>定期补水</h4>
+            <p>定期用清水浸泡或擦拭，补充水分，保持玉石活性。</p>
+          </div>
+          <div class="care-item">
+            <div class="care-icon">
+              <i class="fas fa-hand-sparkles"></i>
+            </div>
+            <h4>软布擦拭</h4>
+            <p>用柔软棉布轻轻擦拭，去除汗渍污垢，保持光洁如新。</p>
+          </div>
+          <div class="care-item">
+            <div class="care-icon">
+              <i class="fas fa-box"></i>
+            </div>
+            <h4>单独存放</h4>
+            <p>单独收纳避免磕碰，用软布包裹，置于阴凉干燥处。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>松石雅集</h3>
+        <p>传承东方矿物艺术之美，<br>打造专业绿松石文化交流平台。</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-weixin"></i></a>
+          <a href="#"><i class="fab fa-weibo"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4>探索</h4>
+        <ul>
+          <li><a href="./珍宝馆.html">珍宝馆</a></li>
+          <li><a href="./文化展厅.html">文化展厅</a></li>
+          <li><a href="./文化论坛.html">藏家论坛</a></li>
+          <li><a href="#">鉴定服务</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>服务</h4>
+        <ul>
+          <li><a href="#">会员权益</a></li>
+          <li><a href="#">售后保障</a></li>
+          <li><a href="#">物流配送</a></li>
+          <li><a href="#">联系我们</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>关于</h4>
+        <ul>
+          <li><a href="#">品牌故事</a></li>
+          <li><a href="#">加入我们</a></li>
+          <li><a href="#">隐私政策</a></li>
+          <li><a href="#">使用条款</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>2024 松石雅集 版权所有</p>
+      <p>东方矿物艺术传承者</p>
+    </div>
+  </footer>
+
+  <!-- 返回顶部 -->
+  <div class="back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <script>
+    // 导航栏滚动效果
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+
+      // 返回顶部按钮显示/隐藏
+      const backToTop = document.getElementById('backToTop');
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    // 板块切换
+    function switchSection(sectionId, btn) {
+      // 移除所有标签的active状态
+      document.querySelectorAll('.section-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      // 添加当前标签的active状态
+      btn.classList.add('active');
+
+      // 隐藏所有内容区
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      // 显示目标内容区
+      document.getElementById(sectionId).classList.add('active');
+    }
+
+    // 返回顶部
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  </script>
+</body>
+</html>

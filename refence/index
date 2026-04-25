@@ -1,0 +1,2891 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>松石雅集 - 东方矿物艺术馆</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --turquoise-dark: #0d5c5c;
+      --turquoise-main: #1a7a7a;
+      --turquoise-light: #2d9a9a;
+      --turquoise-bright: #40e0d0;
+      --gold: #c9a227;
+      --gold-light: #e8d5a3;
+      --warm-bg: #e8e4dc;
+      --warm-bg-light: #f0ece4;
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --text-dark: #2c2c2c;
+      --text-muted: #5a5a5a;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+      background: var(--warm-bg);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* 背景铁线纹理 */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(26, 122, 122, 0.015) 60px, rgba(26, 122, 122, 0.015) 62px),
+        repeating-linear-gradient(-45deg, transparent, transparent 80px, rgba(26, 122, 122, 0.012) 80px, rgba(26, 122, 122, 0.012) 82px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 导航栏 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0 60px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.5s ease;
+      background: transparent;
+    }
+
+    .navbar.scrolled {
+      background: rgba(232, 228, 220, 0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--turquoise-dark);
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(26, 122, 122, 0.15);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-size: 15px;
+      letter-spacing: 2px;
+      position: relative;
+      padding: 8px 0;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--turquoise-bright), var(--gold));
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--turquoise-main);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a.secondary {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .nav-links a.secondary:hover {
+      color: var(--turquoise-main);
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .nav-icons a {
+      color: var(--text-dark);
+      font-size: 18px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-icons a:hover {
+      color: var(--gold);
+      transform: scale(1.1);
+    }
+
+    .nav-icons a .badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 18px;
+      height: 18px;
+      background: var(--turquoise-bright);
+      border-radius: 50%;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    /* 第一屏 - 全屏文化主题区 */
+    .hero {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1920&q=85');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(232, 228, 220, 0.3) 0%, rgba(232, 228, 220, 0.5) 50%, rgba(232, 228, 220, 0.7) 100%);
+    }
+
+    .hero-texture {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0.15;
+      background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(64, 224, 208, 0.02) 35px, rgba(64, 224, 208, 0.02) 70px),
+        repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(201, 162, 39, 0.015) 35px, rgba(201, 162, 39, 0.015) 70px);
+      animation: textureMove 20s linear infinite;
+    }
+
+    @keyframes textureMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    .hero-content {
+      text-align: center;
+      z-index: 10;
+      padding: 0 20px;
+    }
+
+    .hero-title {
+      font-size: 68px;
+      font-weight: 900;
+      letter-spacing: 16px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--turquoise-dark) 0%, var(--turquoise-main) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: titleGlow 3s ease-in-out infinite alternate;
+      font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+    }
+
+    @keyframes titleGlow {
+      0% { filter: drop-shadow(0 0 30px rgba(64, 224, 208, 0.3)); }
+      100% { filter: drop-shadow(0 0 50px rgba(201, 162, 39, 0.3)); }
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      color: var(--text-muted);
+      letter-spacing: 8px;
+      margin-bottom: 60px;
+      font-weight: 400;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+    }
+
+    .gate-btn {
+      position: relative;
+      padding: 20px 50px;
+      background: rgba(15, 12, 8, 0.7);
+      border: 1px solid rgba(201, 162, 39, 0.5);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 16px;
+      letter-spacing: 4px;
+      color: var(--turquoise-bright);
+      overflow: hidden;
+      transition: all 0.5s ease;
+      border-radius: 4px;
+    }
+
+    .gate-btn:hover {
+      background: rgba(15, 12, 8, 0.85);
+      border-color: var(--gold);
+      color: var(--turquoise-bright);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .gate-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 珍宝馆区域 */
+    .treasure-section {
+      padding: 100px 60px;
+      background: linear-gradient(180deg, var(--warm-bg) 0%, var(--warm-bg-light) 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 42px;
+      font-weight: 300;
+      letter-spacing: 12px;
+      margin-bottom: 15px;
+      color: var(--turquoise-dark);
+    }
+
+    .section-subtitle {
+      text-align: center;
+      font-size: 16px;
+      color: var(--text-muted);
+      letter-spacing: 4px;
+      margin-bottom: 60px;
+    }
+
+    /* 馆藏轮播区 */
+    .carousel-container {
+      max-width: 1400px;
+      margin: 0 auto 100px;
+      position: relative;
+    }
+
+    .carousel {
+      display: flex;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
+    }
+
+    .carousel-image {
+      flex: 1;
+      height: 500px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+
+    .carousel:hover .carousel-image img {
+      transform: scale(1.05);
+    }
+
+    .carousel-info {
+      flex: 1;
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .carousel-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      background: rgba(201, 162, 39, 0.12);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-bottom: 25px;
+      border-radius: 4px;
+    }
+
+    .carousel-title {
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      letter-spacing: 4px;
+      color: var(--text-dark);
+    }
+
+    .carousel-desc {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+
+    .carousel-meta {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meta-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+
+    .meta-value {
+      font-size: 18px;
+      color: var(--turquoise-main);
+    }
+
+    .btn-primary {
+      padding: 15px 40px;
+      background: linear-gradient(135deg, var(--turquoise-main) 0%, var(--turquoise-light) 100%);
+      border: none;
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(64, 224, 208, 0.25);
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .dot.active {
+      background: var(--turquoise-bright);
+      border-color: var(--gold);
+      transform: scale(1.2);
+    }
+
+    .dot:hover {
+      background: var(--gold);
+    }
+
+    /* 快捷筛选栏 */
+    .filter-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 50px;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .filter-tab {
+      padding: 12px 30px;
+      background: transparent;
+      border: 1px solid rgba(64, 224, 208, 0.25);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 14px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      border-radius: 30px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .filter-tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(64, 224, 208, 0.08));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .filter-tab:hover {
+      border-color: var(--turquoise-bright);
+      color: var(--turquoise-main);
+      transform: translateY(-2px);
+    }
+
+    .filter-tab.active {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201, 162, 39, 0.08);
+    }
+
+    .filter-tab.active::before {
+      opacity: 1;
+    }
+
+    .filter-tab span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 分类卡片区 - 自适应网格布局 */
+    .category-section {
+      margin-bottom: 100px;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-auto-rows: 320px;
+      gap: 25px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .category-card {
+      position: relative;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-card.featured {
+      grid-column: span 2;
+      grid-row: span 1;
+    }
+
+    @media (max-width: 768px) {
+      .category-card.featured {
+        grid-column: span 1;
+      }
+    }
+
+    .category-card.rare {
+      box-shadow: 0 6px 30px rgba(201, 162, 39, 0.2);
+    }
+
+    .category-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      transition: all 0.5s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .category-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+      z-index: 10;
+    }
+
+    .category-card:hover::before {
+      border-color: rgba(201, 162, 39, 0.3);
+      box-shadow: inset 0 0 30px rgba(201, 162, 39, 0.1);
+    }
+
+    .category-card .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(64, 224, 208, 0.25);
+      transform: scale(0);
+      animation: ripple-effect 0.6s linear;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    @keyframes ripple-effect {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    .category-image {
+      width: 100%;
+      height: 75%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: saturate(0.85) brightness(0.95);
+    }
+
+    .category-card:hover .category-image img {
+      filter: saturate(1.05) brightness(1);
+      transform: scale(1.08);
+    }
+
+    .category-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, transparent 60%, rgba(232, 228, 220, 0.95) 100%);
+      transition: opacity 0.5s ease;
+    }
+
+    .category-card:hover .category-image::after {
+      opacity: 0.7;
+    }
+
+    .category-info {
+      padding: 15px 20px;
+      text-align: center;
+      position: relative;
+      z-index: 3;
+      background: var(--card-bg);
+    }
+
+    .category-name {
+      font-size: 17px;
+      letter-spacing: 3px;
+      margin-bottom: 6px;
+      color: var(--turquoise-dark);
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .category-card:hover .category-name {
+      color: var(--turquoise-main);
+    }
+
+    .category-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .rare-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 5px 12px;
+      background: linear-gradient(135deg, var(--gold), #d4af37);
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: 2px;
+      border-radius: 3px;
+      font-weight: bold;
+      z-index: 10;
+      box-shadow: 0 3px 12px rgba(201, 162, 39, 0.3);
+    }
+
+    .view-only-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 5px 12px;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: 2px;
+      border-radius: 3px;
+      font-weight: bold;
+      z-index: 10;
+      box-shadow: 0 3px 12px rgba(26, 122, 122, 0.3);
+    }
+
+    /* 新入馆藏区 */
+    .new-arrivals {
+      margin-bottom: 80px;
+    }
+
+    .new-arrivals-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .scroll-container {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .scroll-track {
+      display: flex;
+      gap: 25px;
+      animation: scroll 30s linear infinite;
+    }
+
+    .scroll-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .arrival-card {
+      flex: 0 0 320px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .arrival-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .arrival-image {
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .arrival-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .arrival-card:hover .arrival-image img {
+      transform: scale(1.05);
+    }
+
+    .arrival-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      padding: 5px 12px;
+      background: var(--gold);
+      color: #fff;
+      font-size: 11px;
+      letter-spacing: 1px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+
+    .arrival-info {
+      padding: 25px;
+    }
+
+    .arrival-origin {
+      font-size: 13px;
+      color: var(--turquoise-main);
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .arrival-title {
+      font-size: 18px;
+      margin-bottom: 15px;
+      letter-spacing: 2px;
+      color: var(--text-dark);
+    }
+
+    .arrival-specs {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+
+    .spec {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .spec span {
+      color: var(--text-dark);
+    }
+
+    .arrival-price {
+      font-size: 20px;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .arrival-price span {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* 馆藏精选 - 独立区域 */
+    #section-collection {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      max-width: 1400px;
+      margin: 0 auto 100px;
+      padding: 0;
+    }
+
+    .featured-collection-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    @media (max-width: 1200px) {
+      .featured-collection-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .featured-collection-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .featured-collection-card {
+      position: relative;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .featured-collection-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      transition: all 0.5s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .featured-collection-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+      z-index: 10;
+    }
+
+    .featured-collection-card:hover::before {
+      border-color: rgba(201, 162, 39, 0.3);
+      box-shadow: inset 0 0 30px rgba(201, 162, 39, 0.1);
+    }
+
+    .featured-collection-image {
+      width: 100%;
+      height: 240px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-collection-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: saturate(0.85) brightness(0.95);
+    }
+
+    .featured-collection-card:hover .featured-collection-image img {
+      filter: saturate(1.05) brightness(1);
+      transform: scale(1.08);
+    }
+
+    .featured-collection-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, transparent 60%, rgba(232, 228, 220, 0.95) 100%);
+      transition: opacity 0.5s ease;
+    }
+
+    .featured-collection-card:hover .featured-collection-image::after {
+      opacity: 0.7;
+    }
+
+    .featured-collection-info {
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 3;
+      background: var(--card-bg);
+    }
+
+    .featured-collection-title {
+      font-size: 18px;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+      color: var(--turquoise-dark);
+      font-weight: 500;
+    }
+
+    .featured-collection-card:hover .featured-collection-title {
+      color: var(--turquoise-main);
+    }
+
+    .featured-collection-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* 文化渊源区域 */
+    .culture-section {
+      padding: 100px 60px;
+      background: linear-gradient(180deg, #e0dcd4 0%, var(--warm-bg) 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .culture-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.25), transparent);
+    }
+
+    /* 文化展厅入口卡片 - 混合排版 */
+    .culture-showcase {
+      max-width: 1400px;
+      margin: 0 auto 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+    }
+
+    .magazine-card {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 0;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    }
+
+    .magazine-card.reverse {
+      grid-template-columns: 1fr 1.2fr;
+    }
+
+    .magazine-card.reverse .magazine-image {
+      order: 2;
+    }
+
+    .magazine-card.reverse .magazine-content {
+      order: 1;
+    }
+
+    .magazine-image {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .magazine-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .magazine-card:hover .magazine-image img {
+      transform: scale(1.05);
+    }
+
+    .steles-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      background: 
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(201, 162, 39, 0.03) 40px, rgba(201, 162, 39, 0.03) 41px),
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(201, 162, 39, 0.03) 40px, rgba(201, 162, 39, 0.03) 41px);
+    }
+
+    .magazine-card:hover .steles-pattern {
+      opacity: 1;
+    }
+
+    .magazine-content {
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .magazine-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(201, 162, 39, 0.1);
+      border: 1px solid rgba(201, 162, 39, 0.2);
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 2px;
+      border-radius: 4px;
+      margin-bottom: 25px;
+      width: fit-content;
+    }
+
+    .magazine-tag i {
+      font-size: 14px;
+    }
+
+    .magazine-title {
+      font-size: 32px;
+      margin-bottom: 20px;
+      letter-spacing: 6px;
+      color: var(--turquoise-dark);
+      position: relative;
+    }
+
+    .magazine-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--turquoise-bright), var(--gold));
+    }
+
+    .magazine-desc {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+
+    .magazine-link {
+      color: var(--turquoise-main);
+      text-decoration: none;
+      font-size: 14px;
+      letter-spacing: 3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .magazine-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--turquoise-main);
+      transition: width 0.4s ease;
+    }
+
+    .magazine-link:hover {
+      color: var(--gold);
+      gap: 18px;
+    }
+
+    .magazine-link:hover::after {
+      width: 100%;
+      background: var(--gold);
+    }
+
+    .stacked-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .stacked-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 35px;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .stacked-card::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: -8px;
+      bottom: -8px;
+      background: rgba(64, 224, 208, 0.05);
+      border-radius: 8px;
+      z-index: -1;
+      transition: all 0.4s ease;
+    }
+
+    .stacked-card::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: -16px;
+      bottom: -16px;
+      background: rgba(201, 162, 39, 0.03);
+      border-radius: 8px;
+      z-index: -2;
+      transition: all 0.4s ease;
+    }
+
+    .stacked-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+    }
+
+    .stacked-card:hover::before {
+      transform: translate(4px, 4px);
+    }
+
+    .stacked-card:hover::after {
+      transform: translate(8px, 8px);
+    }
+
+    .stacked-card:active {
+      transform: translateY(-5px) scale(0.98);
+    }
+
+    .stacked-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(64, 224, 208, 0.12), rgba(201, 162, 39, 0.06));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 25px;
+      transition: all 0.4s ease;
+    }
+
+    .stacked-card:hover .stacked-icon {
+      background: linear-gradient(135deg, rgba(64, 224, 208, 0.25), rgba(201, 162, 39, 0.12));
+      transform: scale(1.1);
+    }
+
+    .stacked-icon i {
+      font-size: 24px;
+      color: var(--turquoise-main);
+      transition: all 0.4s ease;
+    }
+
+    .stacked-card:hover .stacked-icon i {
+      color: var(--gold);
+    }
+
+    .stacked-title {
+      font-size: 20px;
+      margin-bottom: 15px;
+      letter-spacing: 3px;
+      color: var(--turquoise-dark);
+    }
+
+    .stacked-desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* 论坛热议区 */
+    .forum-section {
+      max-width: 1000px;
+      margin: 0 auto 60px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 40px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .forum-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .forum-title {
+      font-size: 24px;
+      letter-spacing: 4px;
+      color: var(--turquoise-dark);
+    }
+
+    .forum-tags {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .forum-tag {
+      padding: 6px 14px;
+      background: rgba(64, 224, 208, 0.1);
+      border: 1px solid rgba(64, 224, 208, 0.2);
+      color: var(--turquoise-main);
+      font-size: 12px;
+      letter-spacing: 1px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .forum-tag:hover {
+      background: rgba(64, 224, 208, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .forum-enter {
+      color: var(--turquoise-main);
+      text-decoration: none;
+      font-size: 14px;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .forum-enter:hover {
+      color: var(--gold);
+      gap: 12px;
+    }
+
+    .forum-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .forum-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .forum-item:hover {
+      background: rgba(64, 224, 208, 0.04);
+      transform: translateX(10px);
+    }
+
+    .forum-item.pinned {
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.08), rgba(64, 224, 208, 0.05));
+      border: 1px solid rgba(201, 162, 39, 0.15);
+    }
+
+    .forum-item.pinned::before {
+      content: '精华';
+      position: absolute;
+      top: -5px;
+      left: 20px;
+      padding: 3px 10px;
+      background: linear-gradient(135deg, var(--gold), #d4af37);
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: 1px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+
+    .forum-item.hot::before {
+      content: '热';
+      position: absolute;
+      top: -5px;
+      right: 20px;
+      padding: 3px 10px;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: 1px;
+      border-radius: 3px;
+      font-weight: bold;
+      animation: flame 1.5s ease-in-out infinite;
+    }
+
+    @keyframes flame {
+      0%, 100% { 
+        box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+        transform: translateY(0);
+      }
+      50% { 
+        box-shadow: 0 0 20px rgba(255, 107, 53, 0.5), 0 0 30px rgba(247, 147, 30, 0.2);
+        transform: translateY(-2px);
+      }
+    }
+
+    .forum-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .forum-content {
+      flex: 1;
+    }
+
+    .forum-item-title {
+      font-size: 16px;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+      color: var(--text-dark);
+    }
+
+    .forum-meta {
+      display: flex;
+      gap: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .forum-stats {
+      display: flex;
+      gap: 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .forum-stats span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* 每日一栏 */
+    .daily-tips {
+      max-width: 1000px;
+      margin: 0 auto 60px;
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.06), rgba(64, 224, 208, 0.04));
+      border: 1px solid rgba(201, 162, 39, 0.12);
+      border-radius: 8px;
+      padding: 30px 40px;
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .tips-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(201, 162, 39, 0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--gold);
+    }
+
+    .tips-content {
+      flex: 1;
+    }
+
+    .tips-label {
+      font-size: 12px;
+      color: var(--gold);
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+
+    .tips-text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .tips-btn {
+      padding: 10px 25px;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: inherit;
+      font-size: 13px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .tips-btn:hover {
+      background: var(--gold);
+      color: #fff;
+    }
+
+    /* 平台数据展示 */
+    .platform-stats {
+      max-width: 1000px;
+      margin: 0 auto 60px;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .stats-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 60px;
+      font-size: 16px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--turquoise-dark);
+      letter-spacing: 1px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .stat-divider {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(180deg, transparent, rgba(201, 162, 39, 0.3), transparent);
+    }
+
+    /* 平台保障 */
+    .platform-guarantee {
+      max-width: 1200px;
+      margin: 0 auto 60px;
+      padding: 40px 60px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .guarantee-items {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .guarantee-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+    }
+
+    .guarantee-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(64, 224, 208, 0.1), rgba(201, 162, 39, 0.08));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--turquoise-main);
+      transition: all 0.3s ease;
+    }
+
+    .guarantee-item:hover .guarantee-icon {
+      background: linear-gradient(135deg, rgba(64, 224, 208, 0.2), rgba(201, 162, 39, 0.15));
+      transform: scale(1.1);
+    }
+
+    .guarantee-text {
+      font-size: 14px;
+      color: var(--text-dark);
+      letter-spacing: 2px;
+    }
+
+    /* 鉴定服务引导卡片 */
+    .appraisal-cta {
+      max-width: 1000px;
+      margin: 0 auto 80px;
+      background: linear-gradient(135deg, rgba(26, 122, 122, 0.08), rgba(201, 162, 39, 0.06));
+      border: 1px solid rgba(26, 122, 122, 0.15);
+      border-radius: 8px;
+      padding: 40px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    .appraisal-cta-content {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .appraisal-cta-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #fff;
+      box-shadow: 0 8px 25px rgba(26, 122, 122, 0.3);
+    }
+
+    .appraisal-cta-text h4 {
+      font-size: 22px;
+      color: var(--turquoise-dark);
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    .appraisal-cta-text p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .appraisal-cta-link {
+      color: var(--turquoise-main);
+      text-decoration: none;
+      font-size: 15px;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      padding: 12px 24px;
+      border: 1px solid var(--turquoise-main);
+      border-radius: 4px;
+    }
+
+    .appraisal-cta-link:hover {
+      background: var(--turquoise-main);
+      color: #fff;
+      gap: 15px;
+    }
+
+    /* 回到顶部按钮 */
+    .back-to-top {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--turquoise-main), var(--turquoise-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 25px rgba(26, 122, 122, 0.3);
+      z-index: 999;
+      border: 2px solid rgba(201, 162, 39, 0.3);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(26, 122, 122, 0.4);
+      border-color: var(--gold);
+    }
+
+    .back-to-top i {
+      font-size: 20px;
+      color: #fff;
+    }
+
+    /* 页脚 */
+    .footer {
+      background: linear-gradient(180deg, #ddd8d0 0%, #d0cbc3 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.25), transparent);
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 60px 40px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer-logo {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--turquoise-dark);
+      letter-spacing: 6px;
+      margin-bottom: 25px;
+    }
+
+    .footer-desc {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      max-width: 350px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 15px;
+    }
+
+    .footer-social a {
+      width: 45px;
+      height: 45px;
+      border: 1px solid rgba(64, 224, 208, 0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .footer-social a:hover {
+      border-color: var(--turquoise-bright);
+      color: var(--turquoise-main);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(64, 224, 208, 0.12);
+    }
+
+    .footer-column h4 {
+      font-size: 16px;
+      color: var(--turquoise-dark);
+      letter-spacing: 3px;
+      margin-bottom: 25px;
+      font-weight: 400;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 15px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-links a::before {
+      content: '';
+      width: 0;
+      height: 1px;
+      background: var(--turquoise-main);
+      transition: width 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--turquoise-main);
+      padding-left: 5px;
+    }
+
+    .footer-links a:hover::before {
+      width: 10px;
+    }
+
+    .footer-contact p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-contact i {
+      color: var(--turquoise-main);
+      width: 20px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 30px 60px;
+      text-align: center;
+    }
+
+    .footer-slogan {
+      font-size: 16px;
+      color: var(--turquoise-dark);
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+      font-weight: 300;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    /* 响应式 */
+    @media (max-width: 1200px) {
+      .category-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      }
+      .category-card.featured {
+        grid-column: span 2;
+      }
+      .stacked-cards {
+        grid-template-columns: 1fr;
+      }
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+      .stats-content {
+        flex-direction: column;
+        gap: 30px;
+      }
+      .stat-divider {
+        display: none;
+      }
+      .guarantee-items {
+        flex-wrap: wrap;
+        gap: 30px;
+      }
+      .appraisal-cta {
+        flex-direction: column;
+        gap: 25px;
+        text-align: center;
+      }
+      .featured-collection-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 20px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero-title {
+        font-size: 42px;
+        letter-spacing: 8px;
+      }
+      .hero-buttons {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .carousel {
+        flex-direction: column;
+      }
+      .carousel-image {
+        height: 300px;
+      }
+      .filter-tabs {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .filter-tab {
+        padding: 10px 20px;
+        font-size: 12px;
+      }
+      .category-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        grid-auto-rows: 260px;
+      }
+      .category-card.featured {
+        grid-column: span 1;
+      }
+      .magazine-card,
+      .magazine-card.reverse {
+        grid-template-columns: 1fr;
+      }
+      .magazine-image {
+        height: 250px;
+      }
+      .magazine-card.reverse .magazine-image,
+      .magazine-card.reverse .magazine-content {
+        order: unset;
+      }
+      .treasure-section,
+      .culture-section {
+        padding: 60px 20px;
+      }
+      .footer-content {
+        grid-template-columns: 1fr;
+        padding: 60px 20px 30px;
+      }
+      .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 48px;
+        height: 48px;
+      }
+      .platform-guarantee {
+        padding: 30px 20px;
+      }
+      .guarantee-items {
+        flex-direction: column;
+        gap: 25px;
+      }
+      .featured-collection-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar" id="navbar">
+    <div class="logo">松石雅集</div>
+    <ul class="nav-links">
+      <li><a href="#home">首页</a></li>
+      <li><a href="#treasure">珍宝馆</a></li>
+      <li><a href="#culture">文化论坛</a></li>
+      <li><a href="#exhibition">文化展厅</a></li>
+      <li><a href="#appraisal" class="secondary">鉴定服务</a></li>
+    </ul>
+    <div class="nav-icons">
+      <a href="#"><i class="fas fa-search"></i></a>
+      <a href="#"><i class="fas fa-heart"></i></a>
+      <a href="#">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="badge">3</span>
+      </a>
+      <a href="#"><i class="fas fa-user"></i></a>
+    </div>
+  </nav>
+
+  <!-- 第一屏 -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-texture"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">东方美学 · 千年瑰宝</h1>
+      <p class="hero-subtitle">探寻东方矿物之美，感受绿松石的文化底蕴</p>
+      <div class="hero-buttons">
+        <button class="gate-btn" onclick="scrollToSection('culture')">
+          <span>探索文化渊源</span>
+        </button>
+        <button class="gate-btn" onclick="scrollToSection('treasure')">
+          <span>进入珍宝馆</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 珍宝馆区域 -->
+  <section class="treasure-section" id="treasure">
+    <!-- 馆藏轮播区 - 镇馆之宝 -->
+    <div class="carousel-container">
+      <div class="carousel" id="carousel">
+        <div class="carousel-image">
+          <img src="https://images.unsplash.com/photo-1617038260897-41a1f14cd8cd?w=800&q=80" alt="绿松石观音像">
+        </div>
+        <div class="carousel-info">
+          <span class="carousel-badge">镇馆之宝 · 可收藏</span>
+          <h3 class="carousel-title">天青冻玉 · 观音像</h3>
+          <p class="carousel-desc">此件作品选用顶级高瓷蓝料，色泽如雨后初晴的天空，质地细腻温润。雕刻工艺精湛，观音面容慈祥，衣袂飘逸，是当代绿松石雕刻艺术的巅峰之作。</p>
+          <div class="carousel-meta">
+            <div class="meta-item">
+              <span class="meta-label">质地</span>
+              <span class="meta-value">高瓷蓝</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">产地</span>
+              <span class="meta-value">云盖寺</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">重量</span>
+              <span class="meta-value">286g</span>
+            </div>
+          </div>
+          <button class="btn-primary">鉴赏此藏品</button>
+        </div>
+      </div>
+      <div class="carousel-dots">
+        <span class="dot active" onclick="goToSlide(0)"></span>
+        <span class="dot" onclick="goToSlide(1)"></span>
+        <span class="dot" onclick="goToSlide(2)"></span>
+      </div>
+    </div>
+
+    <!-- 分类卡片区 -->
+    <div class="category-section">
+      <h2 class="section-title">按品类鉴赏</h2>
+      <p class="section-subtitle">探索不同品类绿松石的独特魅力</p>
+      
+      <!-- 快捷筛选栏 -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="switchFilter('category', this)">
+          <span>按品类</span>
+        </button>
+        <button class="filter-tab" onclick="switchFilter('mine', this)">
+          <span>按矿口</span>
+        </button>
+        <button class="filter-tab" onclick="switchFilter('color', this)">
+          <span>按颜色</span>
+        </button>
+        <button class="filter-tab" onclick="switchFilter('porcelain', this)">
+          <span>按瓷度</span>
+        </button>
+      </div>
+      
+      <div class="category-grid" id="categoryGrid">
+        <!-- 按品类 -->
+        <div class="category-card featured rare" data-filter="category">
+          <span class="rare-badge">稀世珍品</span>
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80" alt="乌兰花">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">乌兰花</h4>
+            <span class="category-count">128件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="category">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1617038260897-41a1f14cd8cd?w=600&q=80" alt="高瓷蓝">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">高瓷蓝</h4>
+            <span class="category-count">256件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="category">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="菜籽黄">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">菜籽黄</h4>
+            <span class="category-count">89件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="category">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&q=80" alt="唐三彩">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">唐三彩</h4>
+            <span class="category-count">67件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="category">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80" alt="果冻料">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">果冻料</h4>
+            <span class="category-count">156件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="category">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1612817288484-6fbd1e8e5e5e?w=600&q=80" alt="老油绿">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">老油绿</h4>
+            <span class="category-count">94件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="category">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=600&q=80" alt="青皮籽">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">青皮籽</h4>
+            <span class="category-count">72件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="category">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80" alt="水波纹">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">水波纹</h4>
+            <span class="category-count">45件藏品</span>
+          </div>
+        </div>
+        
+        <!-- 按矿口 -->
+        <div class="category-card featured" data-filter="mine" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80" alt="云盖寺">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">云盖寺高蓝料</h4>
+            <span class="category-count">186件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="mine" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1617038260897-41a1f14cd8cd?w=600&q=80" alt="丫角山">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">丫角山果冻料</h4>
+            <span class="category-count">142件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="mine" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="郧西">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">郧西菜籽黄</h4>
+            <span class="category-count">68件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="mine" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&q=80" alt="秦古">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">秦古矿口料</h4>
+            <span class="category-count">215件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="mine" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80" alt="喇叭山">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">喇叭山料</h4>
+            <span class="category-count">94件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="mine" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1612817288484-6fbd1e8e5e5e?w=600&q=80" alt="洞子沟">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">洞子沟料</h4>
+            <span class="category-count">76件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="mine" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=600&q=80" alt="白河">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">白河料</h4>
+            <span class="category-count">52件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="mine" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80" alt="马鞍山">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">马鞍山料</h4>
+            <span class="category-count">38件藏品</span>
+          </div>
+        </div>
+        
+        <!-- 按颜色 -->
+        <div class="category-card featured" data-filter="color" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1617038260897-41a1f14cd8cd?w=600&q=80" alt="天蓝色系">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">天蓝色系</h4>
+            <span class="category-count">328件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="color" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80" alt="蓝绿色系">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">蓝绿色系</h4>
+            <span class="category-count">186件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="color" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="柠檬黄">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">柠檬黄</h4>
+            <span class="category-count">89件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="color" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80" alt="紫罗兰">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">紫罗兰</h4>
+            <span class="category-count">56件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="color" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&q=80" alt="多彩渐变">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">多彩渐变</h4>
+            <span class="category-count">67件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="color" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1612817288484-6fbd1e8e5e5e?w=600&q=80" alt="墨绿色">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">墨绿色</h4>
+            <span class="category-count">43件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="color" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=600&q=80" alt="青绿色">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">青绿色</h4>
+            <span class="category-count">78件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="color" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80" alt="翠绿色">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">翠绿色</h4>
+            <span class="category-count">62件藏品</span>
+          </div>
+        </div>
+        
+        <!-- 按瓷度 -->
+        <div class="category-card featured rare" data-filter="porcelain" style="display: none;">
+          <span class="rare-badge">顶级</span>
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1617038260897-41a1f14cd8cd?w=600&q=80" alt="瓷松">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">瓷松</h4>
+            <span class="category-count">98件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="porcelain" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80" alt="硬松">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">硬松</h4>
+            <span class="category-count">186件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="porcelain" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80" alt="面松">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">面松</h4>
+            <span class="category-count">245件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="porcelain" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1612817288484-6fbd1e8e5e5e?w=600&q=80" alt="泡松">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">泡松</h4>
+            <span class="category-count">312件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="porcelain" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=600&q=80" alt="铁线松">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">铁线松</h4>
+            <span class="category-count">128件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="porcelain" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80" alt="素料">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">素料</h4>
+            <span class="category-count">167件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="porcelain" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&q=80" alt="乌兰花">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">乌兰花</h4>
+            <span class="category-count">85件藏品</span>
+          </div>
+        </div>
+        <div class="category-card" data-filter="porcelain" style="display: none;">
+          <div class="category-image">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="菜籽黄">
+          </div>
+          <div class="category-info">
+            <h4 class="category-name">菜籽黄</h4>
+            <span class="category-count">54件藏品</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新入馆藏 -->
+    <div class="new-arrivals">
+      <div class="new-arrivals-container">
+        <h2 class="section-title" style="font-size: 28px; margin-bottom: 30px;">新入馆藏</h2>
+        <div class="scroll-container">
+          <div class="scroll-track" id="scrollTrack">
+            <div class="arrival-card">
+              <div class="arrival-image">
+                <img src="https://images.unsplash.com/photo-1617038260897-41a1f14cd8cd?w=400&q=80" alt="山水意境牌">
+                <span class="arrival-badge">新品</span>
+              </div>
+              <div class="arrival-info">
+                <div class="arrival-origin">秦古矿口 · 高瓷果冻料</div>
+                <h4 class="arrival-title">山水意境牌</h4>
+                <div class="arrival-specs">
+                  <span class="spec">尺寸: <span>45×32mm</span></span>
+                  <span class="spec">克重: <span>28g</span></span>
+                </div>
+                <div class="arrival-price">¥12,800 <span>起</span></div>
+              </div>
+            </div>
+            <div class="arrival-card">
+              <div class="arrival-image">
+                <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&q=80" alt="弥勒佛挂件">
+                <span class="arrival-badge">精品</span>
+              </div>
+              <div class="arrival-info">
+                <div class="arrival-origin">丫角山 · 高瓷蓝</div>
+                <h4 class="arrival-title">弥勒佛挂件</h4>
+                <div class="arrival-specs">
+                  <span class="spec">尺寸: <span>38×28mm</span></span>
+                  <span class="spec">克重: <span>22g</span></span>
+                </div>
+                <div class="arrival-price">¥8,600 <span>起</span></div>
+              </div>
+            </div>
+            <div class="arrival-card">
+              <div class="arrival-image">
+                <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80" alt="108颗佛珠">
+                <span class="arrival-badge">孤品</span>
+              </div>
+              <div class="arrival-info">
+                <div class="arrival-origin">云盖寺 · 乌兰花</div>
+                <h4 class="arrival-title">108颗佛珠</h4>
+                <div class="arrival-specs">
+                  <span class="spec">珠径: <span>8mm</span></span>
+                  <span class="spec">克重: <span>86g</span></span>
+                </div>
+                <div class="arrival-price">¥68,000 <span>起</span></div>
+              </div>
+            </div>
+            <div class="arrival-card">
+              <div class="arrival-image">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="平安扣">
+                <span class="arrival-badge">新品</span>
+              </div>
+              <div class="arrival-info">
+                <div class="arrival-origin">喇叭山 · 菜籽黄</div>
+                <h4 class="arrival-title">平安扣</h4>
+                <div class="arrival-specs">
+                  <span class="spec">尺寸: <span>35×12mm</span></span>
+                  <span class="spec">克重: <span>18g</span></span>
+                </div>
+                <div class="arrival-price">¥5,200 <span>起</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 馆藏精选 - 独立区域 -->
+  <section id="section-collection">
+    <h2 class="section-title" style="font-size: 28px; margin-bottom: 30px;">馆藏精选</h2>
+    <p class="section-subtitle" style="margin-bottom: 40px;">仅供鉴赏的顶级绿松石藏品</p>
+    <div class="featured-collection-grid">
+      <div class="featured-collection-card">
+        <div class="featured-collection-image">
+          <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80" alt="天青冻玉">
+          <span class="view-only-badge">仅供鉴赏</span>
+        </div>
+        <div class="featured-collection-info">
+          <h4 class="featured-collection-title">天青冻玉 · 山子</h4>
+          <p class="featured-collection-desc">清代宫廷旧藏，色泽如雨后初晴，质地细腻温润，为传世孤品。</p>
+        </div>
+      </div>
+      <div class="featured-collection-card">
+        <div class="featured-collection-image">
+          <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&q=80" alt="唐三彩">
+          <span class="view-only-badge">仅供鉴赏</span>
+        </div>
+        <div class="featured-collection-info">
+          <h4 class="featured-collection-title">唐三彩 · 瑞兽</h4>
+          <p class="featured-collection-desc">罕见三色渐变，工艺精湛，为博物馆级藏品。</p>
+        </div>
+      </div>
+      <div class="featured-collection-card">
+        <div class="featured-collection-image">
+          <img src="https://images.unsplash.com/photo-1612817288484-6fbd1e8e5e5e?w=600&q=80" alt="乌兰花">
+          <span class="view-only-badge">仅供鉴赏</span>
+        </div>
+        <div class="featured-collection-info">
+          <h4 class="featured-collection-title">乌兰花 · 如意</h4>
+          <p class="featured-collection-desc">铁线分布如墨线勾勒，与深邃蓝绿形成绝美对比。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 文化渊源区域 -->
+  <section class="culture-section" id="culture">
+    <h2 class="section-title">文化渊源</h2>
+    <p class="section-subtitle">从远古图腾到东方美学，探寻绿松石的千年文脉</p>
+
+    <!-- 文化展厅入口卡片 - 混合排版 -->
+    <div class="culture-showcase" id="exhibition">
+      <!-- 杂志风格 - 错位图文 -->
+      <div class="magazine-card">
+        <div class="magazine-image">
+          <img src="https://images.unsplash.com/photo-1544531586-fde5298cdd40?w=800&q=80" alt="历史溯源">
+          <div class="steles-pattern"></div>
+        </div>
+        <div class="magazine-content">
+          <div class="magazine-tag">
+            <i class="fas fa-scroll"></i>
+            <span>历史长河</span>
+          </div>
+          <h3 class="magazine-title">历史溯源</h3>
+          <p class="magazine-desc">从新石器时代的礼器，到商周时期的镶嵌工艺，再到明清文人的案头清供，绿松石见证了中华文明八千年的辉煌历程。每一件藏品都承载着一段历史，每一道纹理都诉说着一个故事。</p>
+          <a href="#" class="magazine-link">
+            探索历史 <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+      
+      <!-- 杂志风格 - 反向错位 -->
+      <div class="magazine-card reverse">
+        <div class="magazine-image">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80" alt="矿脉地理">
+        </div>
+        <div class="magazine-content">
+          <div class="magazine-tag">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>矿脉探秘</span>
+          </div>
+          <h3 class="magazine-title">矿脉地理</h3>
+          <p class="magazine-desc">探秘中国绿松石主要矿口：湖北十堰、安徽马鞍山、陕西白河等地，了解不同矿口的独特地质特征与品质差异。每一块绿松石都源自大地的馈赠，蕴含着独特的地域印记。</p>
+          <a href="#" class="magazine-link">
+            查看矿口 <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+      
+      <!-- 层叠式卡片 -->
+      <div class="stacked-cards">
+        <div class="stacked-card">
+          <div class="stacked-icon">
+            <i class="fas fa-hammer"></i>
+          </div>
+          <h4 class="stacked-title">工艺传承</h4>
+          <p class="stacked-desc">从原石开采到精雕细琢，每一道工序都凝聚着匠人的心血。了解传统雕刻技艺与现代工艺的完美结合。</p>
+        </div>
+        <div class="stacked-card">
+          <div class="stacked-icon">
+            <i class="fas fa-gem"></i>
+          </div>
+          <h4 class="stacked-title">鉴赏指南</h4>
+          <p class="stacked-desc">学习如何辨别真伪、评估品质、欣赏工艺，成为绿松石鉴赏的行家里手。</p>
+        </div>
+        <div class="stacked-card">
+          <div class="stacked-icon">
+            <i class="fas fa-hand-holding-heart"></i>
+          </div>
+          <h4 class="stacked-title">养护之道</h4>
+          <p class="stacked-desc">掌握正确的盘玩方法与保养技巧，让您的绿松石藏品愈发光彩照人。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 论坛热议区 -->
+    <div class="forum-section">
+      <div class="forum-header">
+        <h3 class="forum-title">藏家论坛 · 热门讨论</h3>
+        <a href="#" class="forum-enter">
+          进入论坛 <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+      <div class="forum-tags">
+        <span class="forum-tag">#乌兰花</span>
+        <span class="forum-tag">#鉴定科普</span>
+        <span class="forum-tag">#高瓷蓝</span>
+        <span class="forum-tag">#盘玩心得</span>
+        <span class="forum-tag">#市场行情</span>
+      </div>
+      <div class="forum-list">
+        <div class="forum-item pinned">
+          <div class="forum-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="forum-content">
+            <h4 class="forum-item-title">【精华】绿松石鉴定完全指南：从入门到精通</h4>
+            <div class="forum-meta">
+              <span>平台官方</span>
+              <span>置顶</span>
+            </div>
+          </div>
+          <div class="forum-stats">
+            <span><i class="fas fa-comment"></i> 1.2k</span>
+            <span><i class="fas fa-eye"></i> 58k</span>
+          </div>
+        </div>
+        <div class="forum-item hot">
+          <div class="forum-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="forum-content">
+            <h4 class="forum-item-title">新手入门：如何辨别高瓷蓝与注胶优化？</h4>
+            <div class="forum-meta">
+              <span>收藏新手</span>
+              <span>2小时前</span>
+            </div>
+          </div>
+          <div class="forum-stats">
+            <span><i class="fas fa-comment"></i> 48</span>
+            <span><i class="fas fa-eye"></i> 1.2k</span>
+          </div>
+        </div>
+        <div class="forum-item hot">
+          <div class="forum-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="forum-content">
+            <h4 class="forum-item-title">晒晒刚入手的云盖寺乌兰花，大家帮忙掌掌眼</h4>
+            <div class="forum-meta">
+              <span>松石爱好者</span>
+              <span>5小时前</span>
+            </div>
+          </div>
+          <div class="forum-stats">
+            <span><i class="fas fa-comment"></i> 86</span>
+            <span><i class="fas fa-eye"></i> 2.8k</span>
+          </div>
+        </div>
+        <div class="forum-item">
+          <div class="forum-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="forum-content">
+            <h4 class="forum-item-title">绿松石盘玩心得分享：从青涩到温润的蜕变</h4>
+            <div class="forum-meta">
+              <span>资深藏家</span>
+              <span>1天前</span>
+            </div>
+          </div>
+          <div class="forum-stats">
+            <span><i class="fas fa-comment"></i> 156</span>
+            <span><i class="fas fa-eye"></i> 5.6k</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 每日一栏 -->
+    <div class="daily-tips">
+      <div class="tips-icon">
+        <i class="fas fa-lightbulb"></i>
+      </div>
+      <div class="tips-content">
+        <div class="tips-label">每日一栏</div>
+        <p class="tips-text" id="tipsText">绿松石的颜色来源于铜和铁元素，含铜量高则呈现蓝色，含铁量高则呈现绿色。优质的绿松石颜色均匀、质地细腻，具有瓷器般的光泽。</p>
+      </div>
+      <button class="tips-btn" onclick="changeTip()">换一条</button>
+    </div>
+  </section>
+
+  <!-- 平台数据展示 -->
+  <div class="platform-stats">
+    <div class="stats-content">
+      <div class="stat-item">
+        <span class="stat-number">10,000+</span>
+        <span class="stat-label">累计服务藏家</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number">5,000+</span>
+        <span class="stat-label">鉴定藏品</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number">20+</span>
+        <span class="stat-label">合作矿口</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 平台保障 -->
+  <div class="platform-guarantee">
+    <div class="guarantee-items">
+      <div class="guarantee-item">
+        <div class="guarantee-icon">
+          <i class="fas fa-certificate"></i>
+        </div>
+        <span class="guarantee-text">一物一证</span>
+      </div>
+      <div class="guarantee-item">
+        <div class="guarantee-icon">
+          <i class="fas fa-user-tie"></i>
+        </div>
+        <span class="guarantee-text">专家鉴定</span>
+      </div>
+      <div class="guarantee-item">
+        <div class="guarantee-icon">
+          <i class="fas fa-undo-alt"></i>
+        </div>
+        <span class="guarantee-text">7天退换</span>
+      </div>
+      <div class="guarantee-item">
+        <div class="guarantee-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <span class="guarantee-text">安全支付</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 鉴定服务引导卡片 -->
+  <div class="appraisal-cta" id="appraisal">
+    <div class="appraisal-cta-content">
+      <div class="appraisal-cta-icon">
+        <i class="fas fa-search-plus"></i>
+      </div>
+      <div class="appraisal-cta-text">
+        <h4>您有宝贝想鉴定吗？</h4>
+        <p>平台专家在线服务，为您提供专业、权威的绿松石鉴定</p>
+      </div>
+    </div>
+    <a href="#appraisal-service" class="appraisal-cta-link">
+      立即发起鉴定 <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+
+  <!-- 回到顶部按钮 -->
+  <div class="back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo">松石雅集</div>
+        <p class="footer-desc">传承东方矿物美学，汇聚天下松石珍品。我们致力于为每一位藏家提供最优质的绿松石藏品与最专业的鉴赏服务，让千年瑰宝在当代焕发新的光彩。</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-weixin"></i></a>
+          <a href="#"><i class="fab fa-weibo"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4>快速导航</h4>
+        <ul class="footer-links">
+          <li><a href="#home">首页</a></li>
+          <li><a href="#treasure">珍宝馆</a></li>
+          <li><a href="#culture">文化论坛</a></li>
+          <li><a href="#exhibition">文化展厅</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>藏品分类</h4>
+        <ul class="footer-links">
+          <li><a href="#">高瓷蓝</a></li>
+          <li><a href="#">乌兰花</a></li>
+          <li><a href="#">菜籽黄</a></li>
+          <li><a href="#">唐三彩</a></li>
+        </ul>
+      </div>
+      <div class="footer-column footer-contact">
+        <h4>联系我们</h4>
+        <p><i class="fas fa-phone"></i> 400-888-9999</p>
+        <p><i class="fas fa-envelope"></i> contact@songshiyaji.com</p>
+        <p><i class="fas fa-map-marker-alt"></i> 湖北省十堰市绿松石文化产业园</p>
+        <p><i class="fas fa-clock"></i> 周一至周日 9:00-21:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-slogan">传承东方美学 · 每一块绿松石都值得被认真对待</p>
+      <p class="footer-copy">© 2024 松石雅集 版权所有 | 鄂ICP备XXXXXXXX号</p>
+    </div>
+  </footer>
+
+  <script>
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > window.innerHeight - 100) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // 平滑滚动到指定区域
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // 回到顶部
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 回到顶部按钮显示/隐藏
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > window.innerHeight) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    // 轮播图数据
+    const carouselData = [
+      {
+        badge: '镇馆之宝 · 可收藏',
+        title: '天青冻玉 · 观音像',
+        desc: '此件作品选用顶级高瓷蓝料，色泽如雨后初晴的天空，质地细腻温润。雕刻工艺精湛，观音面容慈祥，衣袂飘逸，是当代绿松石雕刻艺术的巅峰之作。',
+        texture: '高瓷蓝',
+        origin: '云盖寺',
+        weight: '286g',
+        image: 'https://images.unsplash.com/photo-1617038260897-41a1f14cd8cd?w=800&q=80'
+      },
+      {
+        badge: '传世珍品 · 可收藏',
+        title: '乌兰花 · 龙纹扳指',
+        desc: '精选云盖寺乌兰花料，铁线分布如墨线勾勒，与深邃的蓝绿色形成绝美对比。龙纹雕刻栩栩如生，彰显皇家气韵，是收藏级精品。',
+        texture: '乌兰花',
+        origin: '云盖寺',
+        weight: '45g',
+        image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80'
+      },
+      {
+        badge: '匠心之作 · 可收藏',
+        title: '菜籽黄 · 山水牌',
+        desc: '罕见的菜籽黄料，色泽如春日的嫩芽，清新雅致。山水意境深远，松鹤延年，寓意吉祥。此料极为稀少，具有极高的收藏价值。',
+        texture: '菜籽黄',
+        origin: '喇叭山',
+        weight: '68g',
+        image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80'
+      }
+    ];
+
+    let currentSlide = 0;
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateCarousel();
+    }
+
+    function updateCarousel() {
+      const data = carouselData[currentSlide];
+      const carousel = document.getElementById('carousel');
+      const dots = document.querySelectorAll('.dot');
+      
+      carousel.innerHTML = `
+        <div class="carousel-image">
+          <img src="${data.image}" alt="${data.title}">
+        </div>
+        <div class="carousel-info">
+          <span class="carousel-badge">${data.badge}</span>
+          <h3 class="carousel-title">${data.title}</h3>
+          <p class="carousel-desc">${data.desc}</p>
+          <div class="carousel-meta">
+            <div class="meta-item">
+              <span class="meta-label">质地</span>
+              <span class="meta-value">${data.texture}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">产地</span>
+              <span class="meta-value">${data.origin}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">重量</span>
+              <span class="meta-value">${data.weight}</span>
+            </div>
+          </div>
+          <button class="btn-primary">鉴赏此藏品</button>
+        </div>
+      `;
+      
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+      });
+    }
+
+    // 自动轮播
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % carouselData.length;
+      updateCarousel();
+    }, 5000);
+
+    // 筛选切换功能
+    function switchFilter(filterType, btn) {
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      btn.classList.add('active');
+      
+      const titles = {
+        category: '按品类鉴赏',
+        mine: '按矿口鉴赏',
+        color: '按颜色鉴赏',
+        porcelain: '按瓷度鉴赏'
+      };
+      document.querySelector('.category-section .section-title').textContent = titles[filterType];
+      
+      document.querySelectorAll('.category-card').forEach(card => {
+        if (card.dataset.filter === filterType) {
+          card.style.display = '';
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            card.style.transition = 'all 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = '';
+          }, 50);
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // 涟漪效果
+    document.querySelectorAll('.category-card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        
+        this.appendChild(ripple);
+        
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+
+    // 每日一栏数据
+    const tips = [
+      '绿松石的颜色来源于铜和铁元素，含铜量高则呈现蓝色，含铁量高则呈现绿色。优质的绿松石颜色均匀、质地细腻，具有瓷器般的光泽。',
+      '绿松石的硬度在5-6之间，属于中等硬度宝石。佩戴时应避免与硬物碰撞，避免接触化妆品、香水等化学物质。',
+      '中国是世界上最大的绿松石产地，湖北十堰的绿松石产量占全球总产量的一半以上，被誉为"东方绿宝石之乡"。',
+      '绿松石在中国已有8000多年的使用历史，是新石器时代最早的玉料之一，与和田玉、岫岩玉、独山玉并称中国四大名玉。',
+      '优质的绿松石在盘玩过程中会逐渐变色，由最初的青涩变得温润如玉，这种变化被称为"包浆"，是藏家最为珍视的特征。',
+      '绿松石的铁线是由褐铁矿形成的天然纹理，并非瑕疵。乌兰花等品种正是因为独特的铁线分布而备受推崇。'
+    ];
+
+    let currentTip = 0;
+
+    function changeTip() {
+      currentTip = (currentTip + 1) % tips.length;
+      const tipsText = document.getElementById('tipsText');
+      tipsText.style.opacity = '0';
+      setTimeout(() => {
+        tipsText.textContent = tips[currentTip];
+        tipsText.style.opacity = '1';
+      }, 300);
+    }
+
+    document.getElementById('tipsText').style.transition = 'opacity 0.3s ease';
+
+    document.querySelectorAll('.stacked-card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.style.transform = 'translateY(-5px) scale(0.98)';
+        setTimeout(() => {
+          card.style.transform = '';
+        }, 150);
+      });
+    });
+
+    document.querySelectorAll('.forum-item').forEach(item => {
+      item.addEventListener('click', () => {
+        console.log('进入帖子详情');
+      });
+    });
+  </script>
+</body>
+</html>

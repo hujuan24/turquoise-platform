@@ -1,0 +1,364 @@
+<!-- 绿松石主题文化展厅页面 -->
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="mall/header::head-fragment('文化展厅 - 松石雅集','exhibition')">
+</head>
+<body class="turquoise-homepage">
+<header th:replace="mall/header::header-fragment"></header>
+
+  <!-- 页面标题区 -->
+  <section class="turquoise-page-header">
+    <div class="turquoise-page-header-content">
+      <h1 class="turquoise-page-title">文化展厅</h1>
+      <p class="turquoise-page-subtitle">从远古图腾到东方美学，探寻绿松石的千年文脉</p>
+    </div>
+  </section>
+
+  <!-- 板块导航标签 -->
+  <section class="turquoise-section-tabs">
+    <button class="turquoise-section-tab turquoise-active" onclick="switchSection('history', this)">
+      <span>历史溯源</span>
+    </button>
+    <button class="turquoise-section-tab" onclick="switchSection('mine', this)">
+      <span>矿脉地理</span>
+    </button>
+    <button class="turquoise-section-tab" onclick="switchSection('craft', this)">
+      <span>工艺传承</span>
+    </button>
+    <button class="turquoise-section-tab" onclick="switchSection('guide', this)">
+      <span>鉴赏指南</span>
+    </button>
+    <button class="turquoise-section-tab" onclick="switchSection('care', this)">
+      <span>养护之道</span>
+    </button>
+  </section>
+
+  <!-- 内容区 -->
+  <section class="turquoise-content-area">
+    <!-- 历史溯源 -->
+    <div class="turquoise-content-section turquoise-active" id="history">
+      <div class="turquoise-history-layout">
+        <div class="turquoise-history-image">
+          <img th:src="@{/mall/images/history-turquoise.jpg}" alt="古代绿松石文物">
+        </div>
+        <div class="turquoise-history-timeline">
+          <div class="turquoise-timeline-item">
+            <div class="turquoise-timeline-period">新石器时代</div>
+            <div class="turquoise-timeline-content">
+              <h4>文明初现</h4>
+              <p>距今约7000年前，绿松石已被先民视为神物，用于祭祀和装饰，是最早被人类开发利用的宝石之一。</p>
+            </div>
+          </div>
+          <div class="turquoise-timeline-item">
+            <div class="turquoise-timeline-period">商周时期</div>
+            <div class="turquoise-timeline-content">
+              <h4>礼器时代</h4>
+              <p>商代将绿松石镶嵌于青铜器上，形成独特的"金镶玉"工艺，成为王权与神权的象征。</p>
+            </div>
+          </div>
+          <div class="turquoise-timeline-item">
+            <div class="turquoise-timeline-period">春秋战国</div>
+            <div class="turquoise-timeline-content">
+              <h4>工艺巅峰</h4>
+              <p>镶嵌工艺达到顶峰，出现"越王勾践剑"等传世珍品，绿松石与青铜完美结合。</p>
+            </div>
+          </div>
+          <div class="turquoise-timeline-item">
+            <div class="turquoise-timeline-period">唐宋时期</div>
+            <div class="turquoise-timeline-content">
+              <h4>文人雅趣</h4>
+              <p>绿松石进入文人雅士视野，成为书房清供、佩饰珍玩，与诗词书画相得益彰。</p>
+            </div>
+          </div>
+          <div class="turquoise-timeline-item">
+            <div class="turquoise-timeline-period">明清时期</div>
+            <div class="turquoise-timeline-content">
+              <h4>宫廷珍藏</h4>
+              <p>成为皇家御用宝石，用于朝珠、冠饰、器皿，象征尊贵与祥瑞，工艺臻于至善。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="turquoise-timeline-bar">
+        <div class="turquoise-timeline-node">
+          <div class="turquoise-timeline-dot"></div>
+          <span class="turquoise-timeline-label">新石器</span>
+        </div>
+        <div class="turquoise-timeline-node">
+          <div class="turquoise-timeline-dot"></div>
+          <span class="turquoise-timeline-label">商周</span>
+        </div>
+        <div class="turquoise-timeline-node">
+          <div class="turquoise-timeline-dot"></div>
+          <span class="turquoise-timeline-label">春秋战国</span>
+        </div>
+        <div class="turquoise-timeline-node">
+          <div class="turquoise-timeline-dot"></div>
+          <span class="turquoise-timeline-label">唐宋</span>
+        </div>
+        <div class="turquoise-timeline-node">
+          <div class="turquoise-timeline-dot"></div>
+          <span class="turquoise-timeline-label">明清</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 矿脉地理 -->
+    <div class="turquoise-content-section" id="mine">
+      <div class="turquoise-mine-map-section">
+        <div class="turquoise-mine-map">
+          <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&q=80" alt="中国地图">
+          <div class="turquoise-mine-marker" style="top: 55%; left: 48%;" data-name="云盖寺"></div>
+          <div class="turquoise-mine-marker" style="top: 50%; left: 50%;" data-name="丫角山"></div>
+          <div class="turquoise-mine-marker" style="top: 58%; left: 52%;" data-name="郧西"></div>
+          <div class="turquoise-mine-marker" style="top: 52%; left: 46%;" data-name="秦古"></div>
+        </div>
+      </div>
+      <div class="turquoise-mine-cards">
+        <div class="turquoise-mine-card">
+          <h4>云盖寺</h4>
+          <p>湖北十堰郧阳区，历史最悠久的绿松石矿口，以高瓷蓝料闻名，质地细腻，色泽纯正。</p>
+        </div>
+        <div class="turquoise-mine-card">
+          <h4>丫角山</h4>
+          <p>湖北竹山县，以出产果冻料、油绿料著称，料质温润，铁线细腻，深受藏家喜爱。</p>
+        </div>
+        <div class="turquoise-mine-card">
+          <h4>郧西</h4>
+          <p>湖北郧西县，矿脉丰富，产出多种颜色绿松石，从蓝绿到翠绿，品质上乘。</p>
+        </div>
+        <div class="turquoise-mine-card">
+          <h4>秦古</h4>
+          <p>湖北竹山县秦古镇，以出产高瓷高蓝料闻名，料质坚硬，色泽浓郁，极具收藏价值。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 工艺传承 -->
+    <div class="turquoise-content-section" id="craft">
+      <div class="turquoise-craft-layout">
+        <div class="turquoise-craft-image">
+          <img src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=800&q=80" alt="工匠雕刻">
+        </div>
+        <div class="turquoise-craft-process">
+          <div class="turquoise-process-step">
+            <div class="turquoise-step-number">1</div>
+            <div class="turquoise-step-content">
+              <h4>选料</h4>
+              <p>根据颜色、瓷度、纹理精挑细选，去杂存精，为后续工艺奠定基础。</p>
+            </div>
+          </div>
+          <div class="turquoise-process-step">
+            <div class="turquoise-step-number">2</div>
+            <div class="turquoise-step-content">
+              <h4>切割</h4>
+              <p>依料设计，合理切割，最大限度保留原石精华，展现天然之美。</p>
+            </div>
+          </div>
+          <div class="turquoise-process-step">
+            <div class="turquoise-step-number">3</div>
+            <div class="turquoise-step-content">
+              <h4>粗雕</h4>
+              <p>确定整体造型，去除多余部分，勾勒出作品的基本轮廓与神韵。</p>
+            </div>
+          </div>
+          <div class="turquoise-process-step">
+            <div class="turquoise-step-number">4</div>
+            <div class="turquoise-step-content">
+              <h4>精雕</h4>
+              <p>细入毫微，刻画细节，赋予作品生命力与艺术灵魂，展现匠人之心。</p>
+            </div>
+          </div>
+          <div class="turquoise-process-step">
+            <div class="turquoise-step-number">5</div>
+            <div class="turquoise-step-content">
+              <h4>抛光</h4>
+              <p>由粗到细，层层打磨，使表面光洁如镜，呈现温润如玉的质感。</p>
+            </div>
+          </div>
+          <div class="turquoise-process-step">
+            <div class="turquoise-step-number">6</div>
+            <div class="turquoise-step-content">
+              <h4>镶嵌</h4>
+              <p>与金银、宝石完美结合，提升艺术价值，成就传世珍品。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="turquoise-craft-showcase">
+        <div class="turquoise-showcase-card">
+          <div class="turquoise-showcase-image">
+            <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80" alt="雕件">
+          </div>
+          <div class="turquoise-showcase-info">
+            <h4>精雕件</h4>
+            <p>传统题材与现代审美融合，刀法细腻，意境深远。</p>
+          </div>
+        </div>
+        <div class="turquoise-showcase-card">
+          <div class="turquoise-showcase-image">
+            <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab79008?w=400&q=80" alt="首饰">
+          </div>
+          <div class="turquoise-showcase-info">
+            <h4>珠宝首饰</h4>
+            <p>镶嵌工艺精湛，设计典雅大方，佩戴尽显东方韵味。</p>
+          </div>
+        </div>
+        <div class="turquoise-showcase-card">
+          <div class="turquoise-showcase-image">
+            <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&q=80" alt="文玩">
+          </div>
+          <div class="turquoise-showcase-info">
+            <h4>文玩珠串</h4>
+            <p>珠圆玉润，盘玩生趣，岁月沉淀更显温润光泽。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 鉴赏指南 -->
+    <div class="turquoise-content-section" id="guide">
+      <div class="turquoise-guide-grid">
+        <div class="turquoise-guide-card">
+          <div class="turquoise-guide-icon">
+            <i class="fas fa-gem"></i>
+          </div>
+          <h4>瓷度</h4>
+          <p>瓷度是绿松石品质的核心指标，高瓷料质地致密，光泽如瓷，敲击声清脆悦耳。</p>
+          <div class="turquoise-guide-image">
+            <img src="https://images.unsplash.com/photo-1576153192396-180ecef5a715?w=300&q=80" alt="瓷度示意">
+          </div>
+        </div>
+        <div class="turquoise-guide-card">
+          <div class="turquoise-guide-icon">
+            <i class="fas fa-palette"></i>
+          </div>
+          <h4>颜色</h4>
+          <p>以高瓷蓝最为珍贵，蓝绿、翠绿次之，颜色越纯正、饱和度越高，价值越高。</p>
+          <div class="turquoise-guide-image">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80" alt="颜色示意">
+          </div>
+        </div>
+        <div class="turquoise-guide-card">
+          <div class="turquoise-guide-icon">
+            <i class="fas fa-stream"></i>
+          </div>
+          <h4>铁线</h4>
+          <p>天然铁线是绿松石的特征，细密均匀者为佳，乌兰花、水草纹等别具韵味。</p>
+          <div class="turquoise-guide-image">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=300&q=80" alt="铁线示意">
+          </div>
+        </div>
+        <div class="turquoise-guide-card">
+          <div class="turquoise-guide-icon">
+            <i class="fas fa-mountain"></i>
+          </div>
+          <h4>矿口特征</h4>
+          <p>不同矿口产出特征各异，云盖寺蓝、丫角山绿、秦古瓷，各具特色。</p>
+          <div class="turquoise-guide-image">
+            <img src="https://images.unsplash.com/photo-1608371945643-2807b5b1d2f3?w=300&q=80" alt="矿口示意">
+          </div>
+        </div>
+      </div>
+      <div class="turquoise-guide-footer">
+        <p>了解更多，欢迎前往<a th:href="@{/forum}">藏家论坛</a>与资深藏友交流</p>
+      </div>
+    </div>
+
+    <!-- 养护之道 -->
+    <div class="turquoise-content-section" id="care">
+      <div class="turquoise-care-section">
+        <div class="turquoise-care-grid">
+          <div class="turquoise-care-item">
+            <div class="turquoise-care-icon">
+              <i class="fas fa-flask"></i>
+            </div>
+            <h4>避酸碱</h4>
+            <p>远离化妆品、香水、清洁剂等化学物品，避免腐蚀损伤。</p>
+          </div>
+          <div class="turquoise-care-item">
+            <div class="turquoise-care-icon">
+              <i class="fas fa-temperature-high"></i>
+            </div>
+            <h4>避高温</h4>
+            <p>避免暴晒和高温环境，防止失水变色，保持温润光泽。</p>
+          </div>
+          <div class="turquoise-care-item">
+            <div class="turquoise-care-icon">
+              <i class="fas fa-tint"></i>
+            </div>
+            <h4>定期补水</h4>
+            <p>定期用清水浸泡或擦拭，补充水分，保持玉石活性。</p>
+          </div>
+          <div class="turquoise-care-item">
+            <div class="turquoise-care-icon">
+              <i class="fas fa-hand-sparkles"></i>
+            </div>
+            <h4>软布擦拭</h4>
+            <p>用柔软棉布轻轻擦拭，去除汗渍污垢，保持光洁如新。</p>
+          </div>
+          <div class="turquoise-care-item">
+            <div class="turquoise-care-icon">
+              <i class="fas fa-box"></i>
+            </div>
+            <h4>单独存放</h4>
+            <p>单独收纳避免磕碰，用软布包裹，置于阴凉干燥处。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<footer th:replace="mall/footer::footer"></footer>
+
+  <!-- 返回顶部 -->
+  <div class="turquoise-back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <script>
+    // 导航栏滚动效果
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('turquoise-scrolled');
+      } else {
+        navbar.classList.remove('turquoise-scrolled');
+      }
+
+      // 返回顶部按钮显示/隐藏
+      const backToTop = document.getElementById('backToTop');
+      if (window.scrollY > 300) {
+        backToTop.classList.add('turquoise-visible');
+      } else {
+        backToTop.classList.remove('turquoise-visible');
+      }
+    });
+
+    // 板块切换
+    function switchSection(sectionId, btn) {
+      // 移除所有标签的active状态
+      document.querySelectorAll('.turquoise-section-tab').forEach(tab => {
+        tab.classList.remove('turquoise-active');
+      });
+      // 添加当前标签的active状态
+      btn.classList.add('turquoise-active');
+
+      // 隐藏所有内容区
+      document.querySelectorAll('.turquoise-content-section').forEach(section => {
+        section.classList.remove('turquoise-active');
+      });
+      // 显示目标内容区
+      document.getElementById(sectionId).classList.add('turquoise-active');
+    }
+
+    // 返回顶部
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  </script>
+</body>
+</html>

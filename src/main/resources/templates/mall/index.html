@@ -2,460 +2,523 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="mall/header::head-fragment('NewBee商城-首页','index')">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
 </head>
-<body>
+<body class="turquoise-homepage">
 <header th:replace="mall/header::header-fragment"></header>
+
+<!-- 文化沉浸板块 -->
+<div class="hero" style="height: 100vh; width: 100%; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; top: 0; left: 0;">
+    <!-- 背景图 -->
+    <div class="hero-bg" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1920&q=85'); background-size: cover; background-position: center; background-attachment: fixed;"></div>
+    
+    <!-- 遮罩层 -->
+    <div class="hero-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, rgba(232, 228, 220, 0.3) 0%, rgba(232, 228, 220, 0.5) 50%, rgba(232, 228, 220, 0.7) 100%);"></div>
+    
+    <!-- 纹理效果 -->
+    <div class="hero-texture" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.15; background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(64, 224, 208, 0.02) 35px, rgba(64, 224, 208, 0.02) 70px), repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(201, 162, 39, 0.015) 35px, rgba(201, 162, 39, 0.015) 70px); animation: textureMove 20s linear infinite;"></div>
+    
+    <!-- 内容 -->
+    <div class="hero-content" style="text-align: center; z-index: 10; padding: 0 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+        <h1 class="hero-title" style="font-size: 68px; font-weight: 900; letter-spacing: 16px; margin-bottom: 20px; background: linear-gradient(135deg, #0d5c5c 0%, #1a7a7a 50%, #c9a227 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: titleGlow 3s ease-in-out infinite alternate; font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;">东方美学 · 千年瑰宝</h1>
+        <p class="hero-subtitle" style="font-size: 20px; color: #5a5a5a; letter-spacing: 8px; margin-bottom: 60px; font-weight: 400; font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;">探寻东方矿物之美，感受绿松石的文化底蕴</p>
+        <div class="hero-buttons" style="display: flex; gap: 40px; justify-content: center;">
+            <a href="#culture-origin" class="gate-btn" style="position: relative; padding: 20px 50px; background: rgba(15, 12, 8, 0.7); border: 1px solid rgba(201, 162, 39, 0.5); cursor: pointer; font-family: inherit; font-size: 16px; letter-spacing: 4px; color: #40e0d0; overflow: hidden; transition: all 0.5s ease; border-radius: 4px; text-decoration: none;">
+                <span>探索文化渊源</span>
+            </a>
+            <a href="#treasure-hall" class="gate-btn" style="position: relative; padding: 20px 50px; background: rgba(15, 12, 8, 0.7); border: 1px solid rgba(201, 162, 39, 0.5); cursor: pointer; font-family: inherit; font-size: 16px; letter-spacing: 4px; color: #40e0d0; overflow: hidden; transition: all 0.5s ease; border-radius: 4px; text-decoration: none;">
+                <span>进入珍宝馆</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+
 <content id="content">
     <nav th:replace="mall/header::nav-fragment"></nav>
     
-    <!-- 文化沉浸板块 -->
-    <div class="culture-immersion">
-        <div class="culture-content">
-            <h2 class="culture-title">石韵千年</h2>
-            <p class="culture-subtitle">绿松石文化展销·从矿脉到腕间的东方美学</p>
-            <div class="culture-buttons">
-                <a href="#culture-origin" class="culture-btn">探索文化渊源</a>
-                <a href="#treasure-hall" class="culture-btn">进入珍宝馆</a>
-            </div>
-        </div>
-    </div>
+
     
-    <!-- 文化渊源板块 -->
-    <div id="culture-origin" class="culture-section">
-        <div class="section-content">
-            <h2 class="section-title">文化渊源</h2>
-            <div class="culture-content-wrapper">
-                <div class="culture-image-left">
-                    <img src="./mall/image/culture-left.jpg" alt="绿松石文化">
-                </div>
-                <div class="culture-text">
-                    <p>新石器时代：绿松石就被人类视为珍贵的宝石，用于制作装饰品和宗教仪式用品。在我国的仰韶文化、龙山文化等遗址中，都发现了绿松石制品。</p>
-                    <p>商周时期：绿松石被广泛用于制作礼器和装饰品，如殷墟妇好墓中就出土了大量精美的绿松石镶嵌器物，显示了当时高超的工艺水平。</p>
-                    <p>清代：绿松石成为宫廷御用宝石，被大量用于制作朝珠、佩饰等，同时也是官员品级的象征之一，具有极高的地位和价值。</p>
-                </div>
-                <div class="culture-image-right">
-                    <img src="./mall/image/culture-right.jpg" alt="绿松石历史">
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- 珍宝馆板块 --> 
+    <section class="turquoise-treasure-section"> 
+        <!-- 1. 轮播精选 --> 
+        <div class="turquoise-carousel-container"> 
+            <div class="turquoise-carousel"> 
+                <div class="turquoise-carousel-image"> 
+                    <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                        藏品图片占位 
+                    </div> 
+                </div> 
+                <div class="turquoise-carousel-info"> 
+                    <div class="turquoise-carousel-badge">传世珍品 · 可收藏</div> 
+                    <h3 class="turquoise-carousel-title">乌兰花 · 龙纹扳指</h3> 
+                    <p class="turquoise-carousel-desc">精选高瓷蓝绿松石，色泽浓郁，质地细腻，雕工精湛，龙纹栩栩如生，彰显东方美学魅力。</p> 
+                    <div class="turquoise-carousel-meta"> 
+                        <div class="turquoise-meta-item"> 
+                            <span class="turquoise-meta-label">质地</span> 
+                            <span class="turquoise-meta-value">高瓷蓝绿松石</span> 
+                        </div> 
+                        <div class="turquoise-meta-item"> 
+                            <span class="turquoise-meta-label">产地</span> 
+                            <span class="turquoise-meta-value">湖北十堰</span> 
+                        </div> 
+                        <div class="turquoise-meta-item"> 
+                            <span class="turquoise-meta-label">重量</span> 
+                            <span class="turquoise-meta-value">28.5g</span> 
+                        </div> 
+                    </div> 
+                    <a href="#" class="turquoise-btn-primary">鉴赏此藏品</a> 
+                </div> 
+            </div> 
+            <div class="turquoise-carousel-dots"> 
+                <div class="turquoise-dot active"></div> 
+                <div class="turquoise-dot"></div> 
+                <div class="turquoise-dot"></div> 
+            </div> 
+        </div> 
+        
+        <!-- 2. 按颜色鉴赏 --> 
+        <div class="turquoise-category-section"> 
+            <h2 id="categoryTitle" class="turquoise-section-title">按颜色鉴赏</h2> 
+            <p class="turquoise-section-subtitle">探索绿松石的色彩世界</p> 
+            
+            <div class="turquoise-filter-tabs"> 
+                <button class="turquoise-filter-tab" data-title="按品类">按品类</button> 
+                <button class="turquoise-filter-tab" data-title="按矿口">按矿口</button> 
+                <button class="turquoise-filter-tab active" data-title="按颜色">按颜色</button> 
+                <button class="turquoise-filter-tab" data-title="按瓷度">按瓷度</button> 
+            </div> 
+            
+            <div class="turquoise-category-grid"> 
+                <div class="turquoise-category-card"> 
+                    <div class="turquoise-category-image"> 
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                            高瓷蓝 
+                        </div> 
+                    </div> 
+                    <div class="turquoise-category-info"> 
+                        <h3 class="turquoise-category-name">高瓷蓝</h3> 
+                        <p class="turquoise-category-count">12 件藏品</p> 
+                    </div> 
+                </div> 
+                <div class="turquoise-category-card"> 
+                    <div class="turquoise-category-image"> 
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                            乌兰花 
+                        </div> 
+                    </div> 
+                    <div class="turquoise-category-info"> 
+                        <h3 class="turquoise-category-name">乌兰花</h3> 
+                        <p class="turquoise-category-count">8 件藏品</p> 
+                    </div> 
+                </div> 
+                <div class="turquoise-category-card"> 
+                    <div class="turquoise-category-image"> 
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                            菜籽黄 
+                        </div> 
+                    </div> 
+                    <div class="turquoise-category-info"> 
+                        <h3 class="turquoise-category-name">菜籽黄</h3> 
+                        <p class="turquoise-category-count">6 件藏品</p> 
+                    </div> 
+                </div> 
+                <div class="turquoise-category-card"> 
+                    <div class="turquoise-category-image"> 
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                            苹果绿 
+                        </div> 
+                    </div> 
+                    <div class="turquoise-category-info"> 
+                        <h3 class="turquoise-category-name">苹果绿</h3> 
+                        <p class="turquoise-category-count">10 件藏品</p> 
+                    </div> 
+                </div> 
+                <div class="turquoise-category-card"> 
+                    <div class="turquoise-category-image"> 
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                            唐三彩 
+                        </div> 
+                    </div> 
+                    <div class="turquoise-category-info"> 
+                        <h3 class="turquoise-category-name">唐三彩</h3> 
+                        <p class="turquoise-category-count">5 件藏品</p> 
+                    </div> 
+                </div> 
+                <div class="turquoise-category-card"> 
+                    <div class="turquoise-category-image"> 
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                            青黄料 
+                        </div> 
+                    </div> 
+                    <div class="turquoise-category-info"> 
+                        <h3 class="turquoise-category-name">青黄料</h3> 
+                        <p class="turquoise-category-count">7 件藏品</p> 
+                    </div> 
+                </div> 
+                <div class="turquoise-category-card"> 
+                    <div class="turquoise-category-image"> 
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                            白皮料 
+                        </div> 
+                    </div> 
+                    <div class="turquoise-category-info"> 
+                        <h3 class="turquoise-category-name">白皮料</h3> 
+                        <p class="turquoise-category-count">4 件藏品</p> 
+                    </div> 
+                </div> 
+                <div class="turquoise-category-card"> 
+                    <div class="turquoise-category-image"> 
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                            紫罗兰 
+                        </div> 
+                    </div> 
+                    <div class="turquoise-category-info"> 
+                        <h3 class="turquoise-category-name">紫罗兰</h3> 
+                        <p class="turquoise-category-count">3 件藏品</p> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+        
+        <!-- 3. 新入馆藏 --> 
+        <div class="turquoise-new-arrivals"> 
+            <h2 class="turquoise-section-title">新入馆藏</h2> 
+            <div class="turquoise-scroll-container"> 
+                <div class="turquoise-scroll-track"> 
+                    <div class="turquoise-arrival-card"> 
+                        <div class="turquoise-arrival-image"> 
+                            <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                                藏品图片 
+                            </div> 
+                            <div class="turquoise-arrival-badge">新品</div> 
+                        </div> 
+                        <div class="turquoise-arrival-info"> 
+                            <p class="turquoise-arrival-origin">湖北十堰</p> 
+                            <h3 class="turquoise-arrival-title">高瓷蓝绿松石手串</h3> 
+                            <div class="turquoise-arrival-specs"> 
+                                <span class="turquoise-spec">规格：10mm*12颗</span> 
+                            </div> 
+                            <p class="turquoise-arrival-price">¥ 2,880.00</p> 
+                        </div> 
+                    </div> 
+                    <div class="turquoise-arrival-card"> 
+                        <div class="turquoise-arrival-image"> 
+                            <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                                藏品图片 
+                            </div> 
+                            <div class="turquoise-arrival-badge">精品</div> 
+                        </div> 
+                        <div class="turquoise-arrival-info"> 
+                            <p class="turquoise-arrival-origin">湖北十堰</p> 
+                            <h3 class="turquoise-arrival-title">乌兰花绿松石挂件</h3> 
+                            <div class="turquoise-arrival-specs"> 
+                                <span class="turquoise-spec">规格：25mm*35mm</span> 
+                            </div> 
+                            <p class="turquoise-arrival-price">¥ 5,680.00</p> 
+                        </div> 
+                    </div> 
+                    <div class="turquoise-arrival-card"> 
+                        <div class="turquoise-arrival-image"> 
+                            <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                                藏品图片 
+                            </div> 
+                            <div class="turquoise-arrival-badge">新品</div> 
+                        </div> 
+                        <div class="turquoise-arrival-info"> 
+                            <p class="turquoise-arrival-origin">湖北十堰</p> 
+                            <h3 class="turquoise-arrival-title">菜籽黄绿松石戒面</h3> 
+                            <div class="turquoise-arrival-specs"> 
+                                <span class="turquoise-spec">规格：15mm*18mm</span> 
+                            </div> 
+                            <p class="turquoise-arrival-price">¥ 1,980.00</p> 
+                        </div> 
+                    </div> 
+                    <div class="turquoise-arrival-card"> 
+                        <div class="turquoise-arrival-image"> 
+                            <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                                藏品图片 
+                            </div> 
+                            <div class="turquoise-arrival-badge">精品</div> 
+                        </div> 
+                        <div class="turquoise-arrival-info"> 
+                            <p class="turquoise-arrival-origin">湖北十堰</p> 
+                            <h3 class="turquoise-arrival-title">苹果绿绿松石雕刻件</h3> 
+                            <div class="turquoise-arrival-specs"> 
+                                <span class="turquoise-spec">规格：30mm*40mm</span> 
+                            </div> 
+                            <p class="turquoise-arrival-price">¥ 8,880.00</p> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+        
+        <!-- 4. 馆藏精选 --> 
+        <div class="turquoise-featured-collection"> 
+            <h2 class="turquoise-section-title">馆藏精选</h2> 
+            <p class="turquoise-section-subtitle">仅供鉴赏的顶级绿松石藏品</p> 
+            <div class="turquoise-featured-collection-grid"> 
+                <div class="turquoise-featured-collection-card"> 
+                    <div class="turquoise-featured-collection-image"> 
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                            藏品图片 
+                        </div> 
+                        <div class="turquoise-view-only-badge">仅供鉴赏</div> 
+                    </div> 
+                    <div class="turquoise-featured-collection-info"> 
+                        <h3 class="turquoise-featured-collection-title">极品高瓷蓝绿松石原石</h3> 
+                        <p class="turquoise-featured-collection-desc">罕见的高瓷蓝绿松石原石，色泽浓郁，质地细腻，是收藏级别的珍品。</p> 
+                    </div> 
+                </div> 
+                <div class="turquoise-featured-collection-card"> 
+                    <div class="turquoise-featured-collection-image"> 
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                            藏品图片 
+                        </div> 
+                        <div class="turquoise-view-only-badge">仅供鉴赏</div> 
+                    </div> 
+                    <div class="turquoise-featured-collection-info"> 
+                        <h3 class="turquoise-featured-collection-title">乌兰花绿松石雕刻摆件</h3> 
+                        <p class="turquoise-featured-collection-desc">精湛的雕刻工艺，独特的乌兰花纹理，展现了绿松石的天然魅力。</p> 
+                    </div> 
+                </div> 
+                <div class="turquoise-featured-collection-card"> 
+                    <div class="turquoise-featured-collection-image"> 
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
+                            藏品图片 
+                        </div> 
+                        <div class="turquoise-view-only-badge">仅供鉴赏</div> 
+                    </div> 
+                    <div class="turquoise-featured-collection-info"> 
+                        <h3 class="turquoise-featured-collection-title">菜籽黄绿松石手镯</h3> 
+                        <p class="turquoise-featured-collection-desc">温润的菜籽黄色调，质地纯净，是不可多得的艺术珍品。</p> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </section>
     
-    <!-- 珍宝馆板块 -->
-    <div id="treasure-hall" class="culture-section">
-        <div class="section-content">
-            <h2 class="section-title">珍宝馆</h2>
-            <div class="treasure-content">
-                <p>这里展示了各种珍贵的绿松石制品，包括原石、雕件、手串、珠链等。每一件作品都经过精心挑选，展现了绿松石的独特魅力和工艺价值。</p>
-            </div>
-        </div>
-    </div>
+    <!-- 文化渊源板块 --> 
+    <section class="turquoise-culture-section"> 
+      <div class="turquoise-culture-header"> 
+        <h2 class="turquoise-culture-title">文化渊源</h2> 
+        <p class="turquoise-culture-subtitle">从远古图腾到东方美学，探寻绿松石的千年文脉</p> 
+      </div> 
+      
+      <div class="turquoise-culture-card"> 
+        <div class="turquoise-culture-image"> 
+          <img th:src="@{/images/placeholder/placeholder.jpg}" alt="历史溯源" /> 
+        </div> 
+        <div class="turquoise-culture-content"> 
+          <span class="turquoise-culture-tag">历史长河</span> 
+          <h3 class="turquoise-culture-item-title">历史溯源</h3> 
+          <p class="turquoise-culture-desc"> 
+            从新石器时代的礼器，到商周时期的镶嵌工艺，再到明清文人的案头清供，绿松石见证了中华文明八千年的辉煌历程。每一件藏品都承载着一段历史，每一道纹理都诉说着一个故事。 
+          </p> 
+          <a href="#" class="turquoise-culture-link">探索历史 →</a> 
+        </div> 
+      </div> 
+    </section>
     
-    <div id="banner">
-
-
-        <div class="all-sort-list">
-            <!-- 原石 -->
-            <div class="item">
-                <h3><span>.</span><a href=" ">原石</a ></h3>
-                <div class="item-list clearfix">
-                    <div class="subitem">
-                        <dl class="fore1">
-                            <dt><a href="search?goodsCategoryId=101">全皮籽料</a ></dt>
-                            <dt><a href="search?goodsCategoryId=102">开口料</a ></dt>
-                            <dt><a href="search?goodsCategoryId=103">明料</a ></dt>
-                            <dt><a href="search?goodsCategoryId=104">随形</a ></dt>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-            <!-- 雕件 -->
-            <div class="item">
-                <h3><span>.</span><a href="search?goodsCategoryId=201">雕件</a ></h3>
-                <div class="item-list clearfix">
-                    <div class="subitem">
-                        <dl class="fore1">
-                            <dt><a href="search?goodsCategoryId=201">人物</a ></dt>
-                            <dt><a href="search?goodsCategoryId=202">瑞兽</a ></dt>
-                            <dt><a href="search?goodsCategoryId=203">花鸟山水</a ></dt>
-                            <dt><a href="search?goodsCategoryId=204">纹饰牌</a ></dt>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-            <!-- 手串 -->
-            <div class="item">
-                <h3><span>.</span><a href="search?goodsCategoryId=301">手串</a ></h3>
-                <div class="item-list clearfix">
-                    <div class="subitem">
-                        <dl class="fore1">
-                            <dt><a href="search?goodsCategoryId=301">单圈手串</a ></dt>
-                            <dt><a href="search?goodsCategoryId=302">108佛珠</a ></dt>
-                            <dt><a href="search?goodsCategoryId=303">手持十八子</a ></dt>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-            <!-- 珠链 -->
-            <div class="item">
-                <h3><span>.</span><a href="search?goodsCategoryId=401">珠链</a ></h3>
-                <div class="item-list clearfix">
-                    <div class="subitem">
-                        <dl class="fore1">
-                            <dt><a href="search?goodsCategoryId=401">圆珠项链</a ></dt>
-                            <dt><a href="search?goodsCategoryId=402">桶珠链</a ></dt>
-                            <dt><a href="search?goodsCategoryId=403">锁骨链</a ></dt>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-            <!-- 配饰 -->
-            <div class="item">
-                <h3><span>.</span><a href="search?goodsCategoryId=501">配饰</a ></h3>
-                <div class="item-list clearfix">
-                    <div class="subitem">
-                        <dl class="fore1">
-                            <dt><a href="search?goodsCategoryId=501">三通</a ></dt>
-                            <dt><a href="search?goodsCategoryId=502">隔片</a ></dt>
-                            <dt><a href="search?goodsCategoryId=503">吊坠</a ></dt>
-                            <dt><a href="search?goodsCategoryId=504">戒指</a ></dt>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-            <!-- 收藏级孤品 -->
-            <div class="item">
-                <h3><span>.</span><a href="search?goodsCategoryId=601">收藏级孤品</a ></h3>
-                <div class="item-list clearfix">
-                    <div class="subitem">
-                        <dl class="fore1">
-                            <dt><a href="search?goodsCategoryId=601">大师雕刻</a ></dt>
-                            <dt><a href="search?goodsCategoryId=602">高瓷蓝料</a ></dt>
-                            <dt><a href="search?goodsCategoryId=603">乌兰花</a ></dt>
-                            <dt><a href="search?goodsCategoryId=604">菜籽黄</a ></dt>
-                        </dl>
-                    </div>
-                </div>
-            </div>
+    <!-- 矿脉地理板块 -->
+    <section class="turquoise-vein-section">
+      <div class="turquoise-vein-card">
+        <div class="turquoise-vein-content">
+          <span class="turquoise-vein-tag">矿脉探秘</span>
+          <h3 class="turquoise-vein-title">矿脉地理</h3>
+          <p class="turquoise-vein-desc">
+            探秘中国绿松石主要矿口：湖北十堰、安徽马鞍山、陕西白河等地，了解不同矿口的独特地质特征与品质差异。每一块绿松石都源自大地的馈赠，蕴含着独特的地域印记。
+          </p>
+          <a href="#" class="turquoise-vein-link">查看矿口 →</a>
         </div>
-
-
-
-        <div class="swiper-container fl">
-            <div class="swiper-wrapper">
-                <!-- 配置了轮播图则显示后台配置的轮播图 -->
-                <th:block th:unless="${#lists.isEmpty(carousels)}">
-                    <th:block th:each="carousel : ${carousels}">
-                        <div class="swiper-slide">
-                            <a th:href="@{${carousel.redirectUrl}}">
-                                <img th:src="@{${carousel.carouselUrl}}" alt="">
-                            </a>
-                        </div>
-                    </th:block>
-                </th:block>
-                <!-- 未配置轮播图则显示默认的三张轮播图 -->
-                <th:block th:if="${#lists.isEmpty(carousels)}">
-                    <div class="swiper-slide">
-                        <img src="./mall/image/swiper/banner01.png" alt="">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="./mall/image/swiper/banner02.png" alt="">
-                    </div>
-<!--                    <div class="swiper-slide">-->
-<!--                        <img src="./mall/image/swiper/banner03.png" alt="">-->
-<!--                    </div>-->
-                </th:block>
-            </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
+        <div class="turquoise-vein-image">
+          <img th:src="@{/images/placeholder/placeholder.jpg}" alt="矿脉地理" />
         </div>
-    </div>
+      </div>
+    </section>
+    
+    <!-- 三大特色卡片板块 -->
+    <section class="turquoise-feature-section">
+      <div class="turquoise-feature-grid">
+        
+        <div class="turquoise-feature-card">
+          <div class="turquoise-feature-icon">🔨</div>
+          <h4 class="turquoise-feature-title">工艺传承</h4>
+          <p class="turquoise-feature-desc">
+            从原石开采到精雕细琢，每一道工序都凝聚着匠人的心血。了解传统雕刻技艺与现代工艺的完美结合。
+          </p>
+        </div>
+        
+        <div class="turquoise-feature-card">
+          <div class="turquoise-feature-icon">💎</div>
+          <h4 class="turquoise-feature-title">鉴赏指南</h4>
+          <p class="turquoise-feature-desc">
+            学习如何辨别真伪、评估品质、欣赏工艺，成为绿松石鉴赏的行家里手。
+          </p>
+        </div>
+        
+        <div class="turquoise-feature-card">
+          <div class="turquoise-feature-icon">🌿</div>
+          <h4 class="turquoise-feature-title">养护之道</h4>
+          <p class="turquoise-feature-desc">
+            掌握正确的盘玩方法与保养技巧，让您的绿松石藏品愈发光彩照人。
+          </p>
+        </div>
+        
+      </div>
+    </section>
+    
+    <!-- 藏家论坛 · 热门讨论板块 -->
+    <section class="turquoise-forum-section">
+      <!-- 标题行 -->
+      <div class="turquoise-forum-header">
+        <h2 class="turquoise-forum-title">藏家论坛 · 热门讨论</h2>
+        <a href="#" class="turquoise-forum-more">进入论坛 →</a>
+      </div>
+      
+      <!-- 标签栏 -->
+      <div class="turquoise-forum-tags">
+        <span class="turquoise-forum-tag active">#乌兰花</span>
+        <span class="turquoise-forum-tag">#鉴定科普</span>
+        <span class="turquoise-forum-tag">#高瓷蓝</span>
+        <span class="turquoise-forum-tag">#盘玩心得</span>
+        <span class="turquoise-forum-tag">#市场行情</span>
+      </div>
+      
+      <!-- 帖子列表 -->
+      <div class="turquoise-forum-list">
+        
+        <!-- 帖子1（精华帖） -->
+        <div class="turquoise-forum-item turquoise-forum-item-pinned">
+          <div class="turquoise-forum-avatar">
+            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #1a7a7a, #0d5c5c); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px;">官</div>
+          </div>
+          <div class="turquoise-forum-info">
+            <span class="turquoise-forum-badge">精华</span>
+            <h4 class="turquoise-forum-item-title">【精华】绿松石鉴定完全指南：从入门到精通</h4>
+            <span class="turquoise-forum-meta">平台官方 · 置顶</span>
+          </div>
+          <div class="turquoise-forum-stats">
+            <span class="turquoise-forum-stat">💬 1.2k</span>
+            <span class="turquoise-forum-stat">👁 58k</span>
+          </div>
+        </div>
+        
+        <!-- 帖子2 -->
+        <div class="turquoise-forum-item">
+          <div class="turquoise-forum-avatar">
+            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #c9a227, #d4af37); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px;">新</div>
+          </div>
+          <div class="turquoise-forum-info">
+            <h4 class="turquoise-forum-item-title">新手入门：如何辨别高瓷蓝与注胶优化？</h4>
+            <span class="turquoise-forum-meta">收藏新手 · 2小时前</span>
+          </div>
+          <div class="turquoise-forum-stats">
+            <span class="turquoise-forum-stat">💬 48</span>
+            <span class="turquoise-forum-stat">👁 1.2k</span>
+          </div>
+        </div>
+        
+        <!-- 帖子3 -->
+        <div class="turquoise-forum-item">
+          <div class="turquoise-forum-avatar">
+            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #40e0d0, #1a7a7a); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px;">爱</div>
+          </div>
+          <div class="turquoise-forum-info">
+            <h4 class="turquoise-forum-item-title">晒晒刚入手的云盖寺乌兰花，大家帮忙掌掌眼</h4>
+            <span class="turquoise-forum-meta">松石爱好者 · 5小时前</span>
+          </div>
+          <div class="turquoise-forum-stats">
+            <span class="turquoise-forum-stat">💬 86</span>
+            <span class="turquoise-forum-stat">👁 2.8k</span>
+          </div>
+        </div>
+        
+        <!-- 帖子4 -->
+        <div class="turquoise-forum-item">
+          <div class="turquoise-forum-avatar">
+            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #e8e4dc, #d4cfc7); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0d5c5c; font-size: 20px;">资</div>
+          </div>
+          <div class="turquoise-forum-info">
+            <h4 class="turquoise-forum-item-title">绿松石盘玩心得分享：从青涩到温润的蜕变</h4>
+            <span class="turquoise-forum-meta">资深藏家 · 1天前</span>
+          </div>
+          <div class="turquoise-forum-stats">
+            <span class="turquoise-forum-stat">💬 156</span>
+            <span class="turquoise-forum-stat">👁 5.6k</span>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+    
+    <!-- 每日一栏（科普小知识）板块 -->
+    <section class="turquoise-daily-section">
+      <div class="turquoise-daily-content">
+        <div class="turquoise-daily-icon">💡</div>
+        <span class="turquoise-daily-label">每日一栏</span>
+        <p class="turquoise-daily-text">
+          绿松石的铁线是由褐铁矿形成的天然纹理，并非瑕疵。乌兰花等品种正是因为独特的铁线分布而备受推崇。
+        </p>
+        <button class="turquoise-daily-btn">换一条</button>
+      </div>
+    </section>
+    
+    <!-- 平台数据统计（大数字展示）板块 -->
+    <section class="turquoise-stats-section">
+      <div class="turquoise-stats-grid">
+        <div class="turquoise-stat-item">
+          <span class="turquoise-stat-number" data-target="10000">10,000+</span>
+          <span class="turquoise-stat-label">累计服务藏家</span>
+        </div>
+        <div class="turquoise-stat-item">
+          <span class="turquoise-stat-number" data-target="5000">5,000+</span>
+          <span class="turquoise-stat-label">鉴定藏品</span>
+        </div>
+        <div class="turquoise-stat-item">
+          <span class="turquoise-stat-number" data-target="20">20+</span>
+          <span class="turquoise-stat-label">合作矿口</span>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 服务承诺/保障板块 -->
+    <section class="turquoise-guarantee-section">
+      <div class="turquoise-guarantee-grid">
+        <div class="turquoise-guarantee-item">
+          <div class="turquoise-guarantee-icon">📄</div>
+          <span class="turquoise-guarantee-text">一物一证</span>
+        </div>
+        <div class="turquoise-guarantee-item">
+          <div class="turquoise-guarantee-icon">👨‍⚖️</div>
+          <span class="turquoise-guarantee-text">专家鉴定</span>
+        </div>
+        <div class="turquoise-guarantee-item">
+          <div class="turquoise-guarantee-icon">🔄</div>
+          <span class="turquoise-guarantee-text">7天退换</span>
+        </div>
+        <div class="turquoise-guarantee-item">
+          <div class="turquoise-guarantee-icon">🛡️</div>
+          <span class="turquoise-guarantee-text">安全支付</span>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 鉴定服务 CTA（行动号召）板块 -->
+    <section class="turquoise-appraisal-section">
+      <div class="turquoise-appraisal-card">
+        <div class="turquoise-appraisal-icon">🔍</div>
+        <div class="turquoise-appraisal-info">
+          <h3 class="turquoise-appraisal-title">您有宝贝想鉴定吗？</h3>
+          <p class="turquoise-appraisal-desc">平台专家在线服务，为您提供专业、权威的绿松石鉴定</p>
+        </div>
+        <a href="#" class="turquoise-appraisal-btn">立即发起鉴定 →</a>
+      </div>
+    </section>
 
-    <div id="sub_banner">
-        <!-- 已配置热销商品则显示配置内容 -->
-        <th:block th:unless="${#lists.isEmpty(hotGoodses)}">
-            <th:block th:each="hotGoodse : ${hotGoodses}">
-                <div class="hot-image">
-                    <a th:href="@{'/goods/detail/'+${hotGoodse.goodsId}}">
-                        <img th:src="@{${hotGoodse.goodsCoverImg}}" th:alt="${hotGoodse.goodsName}">
-                    </a>
-                </div>
-            </th:block>
-        </th:block>
-        <!-- 未配置热销商品则显示默认 -->
-        <th:block th:if="${#lists.isEmpty(hotGoodses)}">
-            <div class="hot-image">
-                <a href="##">
-                    <img src="./mall/image/sub_banner/r4.jpg" alt="">
-                </a>
-            </div>
-            <div class="hot-image">
-                <a href="##">
-                    <img src="./mall/image/sub_banner/hot2.jpg" alt="">
-                </a>
-            </div>
-            <div class="hot-image">
-                <a href="##">
-                    <img src="./mall/image/sub_banner/hot3.jpg" alt="">
-                </a>
-            </div>
-            <div class="hot-image">
-                <a href="##">
-                    <img src="./mall/image/sub_banner/hot4.jpg" alt="">
-                </a>
-            </div>
-        </th:block>
-    </div>
-
-    <div id="flash">
-        <h2>新品上线</h2>
-        <ul>
-            <!-- 已配置新品则显示配置内容 -->
-            <th:block th:unless="${#lists.isEmpty(newGoodses)}">
-                <th:block th:each="newGoods : ${newGoodses}">
-                    <li>
-                        <a th:href="@{'/goods/detail/'+${newGoods.goodsId}}">
-                            <img th:src="@{${newGoods.goodsCoverImg}}" th:alt="${newGoods.goodsName}">
-                            <p class="name" th:text="${newGoods.goodsName}">NewBeeMall</p>
-                            <p class="discount" th:text="${newGoods.goodsIntro}">NewBeeMall</p>
-                            <p class="item_price" th:text="${newGoods.sellingPrice}">NewBeeMall</p>
-                        </a>
-                        <button class="favorite-btn" th:data-goods-id="${newGoods.goodsId}">
-                            <i class="iconfont icon-heart"></i>
-                        </button>
-                    </li>
-                </th:block>
-            </th:block>
-            <!-- 未配置则显示默认 -->
-            <th:block th:if="${#lists.isEmpty(newGoodses)}">
-                <li>
-                    <a href="##">
-                        <img src="./mall/image/sub_banner/m6.jpg" alt=""/>
-                        <p class="name">华为平板 M6</p>
-                        <p class="discount">醇香音质 身临其境</p>
-                        <p class="price">1499元起</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <img src="./mall/image/sub_banner/headphones.jpg" alt=""/>
-                        <p class="name">蓝牙耳机</p>
-                        <p class="discount">一键变声 原唱消音</p>
-                        <p class="price">228元</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <img src="./mall/image/sub_banner/pc.jpg" alt=""/>
-                        <p class="name">15.6" i3笔记本</p>
-                        <p class="discount">纤薄机身 金属材质</p>
-                        <p class="price">3099元起</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <img src="./mall/image/sub_banner/air.jpg" alt=""/>
-                        <p class="name">空气净化器</p>
-                        <p class="discount">大空间 快循环</p>
-                        <p class="price">1099元起</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <img src="./mall/image/sub_banner/baby-car.jpg" alt=""/>
-                        <p class="name">折叠婴儿推车</p>
-                        <p class="discount">出发去向往的地方</p>
-                        <p class="price">649元起</p>
-                    </a>
-                </li>
-            </th:block>
-        </ul>
-    </div>
-
-    <div id="recommend">
-        <h2>为你推荐</h2>
-        <a href="##" class="more">查看更多>></a>
-        <ul>
-            <!-- 已配置推荐商品则显示配置内容 -->
-            <th:block th:unless="${#lists.isEmpty(recommendGoodses)}">
-                <th:block th:each="recommendGoods : ${recommendGoodses}">
-                    <li>
-                        <a th:href="@{'/goods/detail/'+${recommendGoods.goodsId}}">
-                            <div class="info discount" th:text="${recommendGoods.tag}">
-                                新品
-                            </div>
-                            <img th:src="@{${recommendGoods.goodsCoverImg}}" th:alt="${recommendGoods.goodsName}">
-                            <p class="name" th:text="${recommendGoods.goodsName}">NewBeeMall</p>
-                            <p class="item_price" th:text="${recommendGoods.sellingPrice}">NewBeeMall</p>
-                            <p class="counter">猜你喜欢</p>
-                            <div class="comment">
-                                <p>新蜂精选</p>
-                                <p>好物也可以不贵</p>
-                            </div>
-                        </a>
-                        <button class="favorite-btn" th:data-goods-id="${recommendGoods.goodsId}">
-                            <i class="iconfont icon-heart"></i>
-                        </button>
-                    </li>
-                </th:block>
-            </th:block>
-            <!-- 未配置则显示默认 -->
-            <th:block th:if="${#lists.isEmpty(recommendGoodses)}">
-                <li>
-                    <a href="##">
-                        <div class="info discount">
-                            新品
-                        </div>
-                        <img src="./mall/image/sub_banner/r1.jpg" alt=""/>
-                        <p class="name">华为平板 M6</p>
-                        <p class="price">1499元</p>
-                        <p class="counter">猜你喜欢</p>
-                        <div class="comment">
-                            <p>新蜂精选</p>
-                            <p>好物也可以不贵</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <div class="info discount">
-                            5折起
-                        </div>
-                        <img src="./mall/image/sub_banner/r2.jpg" alt=""/>
-                        <p class="name">华为平板 M6</p>
-                        <p class="price">1499元</p>
-                        <p class="counter">猜你喜欢</p>
-                        <div class="comment">
-                            <p>新蜂精选</p>
-                            <p>好物也可以不贵</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <div class="info discount">
-                            新品
-                        </div>
-                        <img src="./mall/image/sub_banner/r5.jpg" alt=""/>
-                        <p class="name">华为平板 M6</p>
-                        <p class="price">1499元</p>
-                        <p class="counter">猜你喜欢</p>
-                        <div class="comment">
-                            <p>新蜂精选</p>
-                            <p>好物也可以不贵</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <div class="info discount">
-                            官降
-                        </div>
-                        <img src="./mall/image/sub_banner/m6.jpg" alt=""/>
-                        <p class="name">华为平板 M6</p>
-                        <p class="price">1499元</p>
-                        <p class="counter">猜你喜欢</p>
-                        <div class="comment">
-                            <p>新蜂精选</p>
-                            <p>好物也可以不贵</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <div class="info discount">
-                            新品
-                        </div>
-                        <img src="./mall/image/sub_banner/r6.jpg" alt=""/>
-                        <p class="name">华为平板 M6</p>
-                        <p class="price">1499元</p>
-                        <p class="counter">猜你喜欢</p>
-                        <div class="comment">
-                            <p>新蜂精选</p>
-                            <p>好物也可以不贵</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <div class="info discount">
-                            热销
-                        </div>
-                        <img src="./mall/image/sub_banner/r5.jpg" alt=""/>
-                        <p class="name">华为平板 M6</p>
-                        <p class="price">1499元</p>
-                        <p class="counter">猜你喜欢</p>
-                        <div class="comment">
-                            <p>新蜂精选</p>
-                            <p>好物也可以不贵</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <div class="info discount">
-                            享折扣
-                        </div>
-                        <img src="./mall/image/sub_banner/r4.jpg" alt=""/>
-                        <p class="name">华为平板 M6</p>
-                        <p class="price">1499元</p>
-                        <p class="counter">猜你喜欢</p>
-                        <div class="comment">
-                            <p>新蜂精选</p>
-                            <p>好物也可以不贵</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <div class="info discount">
-                            最低价
-                        </div>
-                        <img src="./mall/image/sub_banner/r3.jpg" alt=""/>
-                        <p class="name">华为平板 M6</p>
-                        <p class="price">1499元</p>
-                        <p class="counter">猜你喜欢</p>
-                        <div class="comment">
-                            <p>新蜂精选</p>
-                            <p>好物也可以不贵</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <div class="info discount">
-                            热销
-                        </div>
-                        <img src="./mall/image/sub_banner/r2.jpg" alt=""/>
-                        <p class="name">华为平板 M6</p>
-                        <p class="price">1499元</p>
-                        <p class="counter">猜你喜欢</p>
-                        <div class="comment">
-                            <p>新蜂精选</p>
-                            <p>好物也可以不贵</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="##">
-                        <div class="info discount">
-                            热销
-                        </div>
-                        <img src="./mall/image/sub_banner/r1.jpg" alt=""/>
-                        <p class="name">华为平板 M6</p>
-                        <p class="price">1499元</p>
-                        <p class="counter">猜你喜欢</p>
-                        <div class="comment">
-                            <p>新蜂精选</p>
-                            <p>好物也可以不贵</p>
-                        </div>
-                    </a>
-                </li>
-            </th:block>
-        </ul>
-    </div>
 </content>
-<div th:replace="mall/footer::footer-fragment"></div>
+
 <!-- jQuery -->
 <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
 <!-- Bootstrap 4 -->
@@ -614,10 +677,83 @@
         });
     });
 </script>
-<style>
-    #flash li, #recommend li {
-        position: relative;
-    }
-</style>
+<script>
+    // 滚动效果
+    window.addEventListener('scroll', function() {
+        const header = document.getElementById('header');
+        if (window.scrollY > 100) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // 回到顶部按钮
+    const backToTop = document.createElement('div');
+    backToTop.className = 'back-to-top';
+    backToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
+    document.body.appendChild(backToTop);
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 500) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+
+    backToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    window.addEventListener('scroll', function() {
+        var nav = document.getElementById('headerNav');
+        if (nav) {
+            if (window.scrollY >= window.innerHeight) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        }
+    });
+
+</script>
+
+<script>
+    // 标题切换逻辑
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterBtns = document.querySelectorAll('.turquoise-filter-tab');
+        const categoryTitle = document.getElementById('categoryTitle');
+        const categorySubtitle = document.querySelector('.turquoise-section-subtitle');
+        
+        // 标题与副标题的对应关系
+        const titleSubtitleMap = {
+            '按品类': '探索绿松石的品类世界',
+            '按矿口': '探索绿松石的矿口特色',
+            '按颜色': '探索绿松石的色彩世界',
+            '按瓷度': '探索绿松石的瓷度等级'
+        };
+        
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除所有按钮的active类
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // 添加当前按钮的active类
+                this.classList.add('active');
+                // 更新标题
+                const title = this.getAttribute('data-title');
+                categoryTitle.textContent = title;
+                // 更新副标题
+                if (categorySubtitle && titleSubtitleMap[title]) {
+                    categorySubtitle.textContent = titleSubtitleMap[title];
+                }
+            });
+        });
+    });
+</script>
+
+<footer th:replace="mall/footer::footer"></footer>
 </body>
 </html>

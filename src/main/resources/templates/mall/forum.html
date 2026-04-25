@@ -1,0 +1,484 @@
+<!-- 绿松石主题文化论坛页面 -->
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="mall/header::head-fragment('文化论坛 - 松石雅集','forum')">
+</head>
+<body class="turquoise-homepage">
+<header th:replace="mall/header::header-fragment"></header>
+
+  <!-- 页面标题区 -->
+  <header class="turquoise-page-header">
+    <h1 class="turquoise-page-title">藏家论坛</h1>
+    <p class="turquoise-page-subtitle">以石会友，共话绿松石的千年之美</p>
+  </header>
+
+  <!-- 标签栏 + 发帖入口 -->
+  <section class="turquoise-tag-bar">
+    <div class="turquoise-tag-list">
+      <button class="turquoise-tag-item turquoise-active" onclick="filterByTag('all', this)">
+        <span>全部</span>
+      </button>
+      <button class="turquoise-tag-item" onclick="filterByTag('wulanhua', this)">
+        <span>#乌兰花</span>
+      </button>
+      <button class="turquoise-tag-item" onclick="filterByTag('gaocilan', this)">
+        <span>#高瓷蓝</span>
+      </button>
+      <button class="turquoise-tag-item" onclick="filterByTag('jianding', this)">
+        <span>#鉴定科普</span>
+      </button>
+      <button class="turquoise-tag-item" onclick="filterByTag('kengkou', this)">
+        <span>#矿口漫谈</span>
+      </button>
+      <button class="turquoise-tag-item" onclick="filterByTag('shaibao', this)">
+        <span>#晒宝</span>
+      </button>
+    </div>
+    <button class="turquoise-new-post-btn" onclick="newPost()">
+      <i class="fas fa-pen"></i>
+      <span>发布新帖</span>
+    </button>
+  </section>
+
+  <!-- 主内容区 -->
+  <main class="turquoise-main-content">
+    <!-- 帖子列表 -->
+    <div class="turquoise-post-list" id="postList">
+      <!-- 置顶帖 1 - 悬赏问答 -->
+      <div class="turquoise-post-card turquoise-pinned" data-tag="jianding" onclick="goToPost('#post-1')">
+        <div class="turquoise-post-header">
+          <h3 class="turquoise-post-title">【悬赏中】刚入手的云盖寺料，请老师们帮忙鉴定真假和瓷度</h3>
+          <span class="turquoise-reward-badge"><i class="fas fa-coins"></i>悬赏中</span>
+        </div>
+        <div class="turquoise-post-meta">
+          <div class="turquoise-post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=newbie" alt="用户" class="turquoise-author-avatar">
+            <span class="turquoise-author-name">松石小白</span>
+          </div>
+          <span class="turquoise-post-tag">鉴定科普</span>
+          <div class="turquoise-post-stats">
+            <span class="turquoise-stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>56</span>
+            </span>
+            <span class="turquoise-stat-item">
+              <i class="fas fa-eye"></i>
+              <span>2.3k</span>
+            </span>
+          </div>
+          <span class="turquoise-post-time">最后回复：5分钟前</span>
+        </div>
+      </div>
+
+      <!-- 置顶帖 2 -->
+      <div class="turquoise-post-card turquoise-pinned" data-tag="jianding" onclick="goToPost('#post-2')">
+        <div class="turquoise-post-header">
+          <h3 class="turquoise-post-title">新手必读：绿松石鉴别完全指南，从入门到精通</h3>
+          <span class="turquoise-essence-badge">精</span>
+        </div>
+        <div class="turquoise-post-meta">
+          <div class="turquoise-post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin" alt="管理员" class="turquoise-author-avatar">
+            <span class="turquoise-author-name">松石雅集官方</span>
+          </div>
+          <span class="turquoise-post-tag">鉴定科普</span>
+          <div class="turquoise-post-stats">
+            <span class="turquoise-stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>328</span>
+            </span>
+            <span class="turquoise-stat-item">
+              <i class="fas fa-eye"></i>
+              <span>12.5k</span>
+            </span>
+          </div>
+          <span class="turquoise-post-time">最后回复：2小时前</span>
+        </div>
+      </div>
+
+      <!-- 置顶帖 3 -->
+      <div class="turquoise-post-card turquoise-pinned" data-tag="kengkou" onclick="goToPost('#post-3')">
+        <div class="turquoise-post-header">
+          <h3 class="turquoise-post-title">云盖寺、丫角山、秦古...各大矿口特点全解析</h3>
+          <span class="turquoise-essence-badge">精</span>
+        </div>
+        <div class="turquoise-post-meta">
+          <div class="turquoise-post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=expert" alt="专家" class="turquoise-author-avatar">
+            <span class="turquoise-author-name">松石老玩家</span>
+          </div>
+          <span class="turquoise-post-tag">矿口漫谈</span>
+          <div class="turquoise-post-stats">
+            <span class="turquoise-stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>256</span>
+            </span>
+            <span class="turquoise-stat-item">
+              <i class="fas fa-eye"></i>
+              <span>8.9k</span>
+            </span>
+          </div>
+          <span class="turquoise-post-time">最后回复：5小时前</span>
+        </div>
+      </div>
+
+      <!-- 普通帖子 -->
+      <div class="turquoise-post-card" data-tag="shaibao" onclick="goToPost('#post-4')">
+        <div class="turquoise-post-header">
+          <h3 class="turquoise-post-title">入手一枚云盖寺高瓷蓝，请各位老师帮忙掌眼</h3>
+          <span class="turquoise-essence-badge">精</span>
+        </div>
+        <div class="turquoise-post-meta">
+          <div class="turquoise-post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user1" alt="用户" class="turquoise-author-avatar">
+            <span class="turquoise-author-name">松石新人</span>
+          </div>
+          <span class="turquoise-post-tag">晒宝</span>
+          <div class="turquoise-post-stats">
+            <span class="turquoise-stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>45</span>
+            </span>
+            <span class="turquoise-stat-item">
+              <i class="fas fa-eye"></i>
+              <span>1.2k</span>
+            </span>
+          </div>
+          <span class="turquoise-post-time">最后回复：10分钟前</span>
+        </div>
+      </div>
+
+      <div class="turquoise-post-card" data-tag="wulanhua" onclick="goToPost('#post-5')">
+        <div class="turquoise-post-header">
+          <h3 class="turquoise-post-title">乌兰花盘玩三个月的变化记录，从哑光到玻璃光泽</h3>
+        </div>
+        <div class="turquoise-post-meta">
+          <div class="turquoise-post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user2" alt="用户" class="turquoise-author-avatar">
+            <span class="turquoise-author-name">盘串达人</span>
+          </div>
+          <span class="turquoise-post-tag">乌兰花</span>
+          <div class="turquoise-post-stats">
+            <span class="turquoise-stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>89</span>
+            </span>
+            <span class="turquoise-stat-item">
+              <i class="fas fa-eye"></i>
+              <span>3.5k</span>
+            </span>
+          </div>
+          <span class="turquoise-post-time">最后回复：1小时前</span>
+        </div>
+      </div>
+
+      <div class="turquoise-post-card" data-tag="gaocilan" onclick="goToPost('#post-6')">
+        <div class="turquoise-post-header">
+          <h3 class="turquoise-post-title">高瓷蓝和果冻料的区别，新手最容易混淆的两种料质</h3>
+          <span class="turquoise-essence-badge">精</span>
+        </div>
+        <div class="turquoise-post-meta">
+          <div class="turquoise-post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user3" alt="用户" class="turquoise-author-avatar">
+            <span class="turquoise-author-name">松石鉴定师</span>
+          </div>
+          <span class="turquoise-post-tag">高瓷蓝</span>
+          <div class="turquoise-post-stats">
+            <span class="turquoise-stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>156</span>
+            </span>
+            <span class="turquoise-stat-item">
+              <i class="fas fa-eye"></i>
+              <span>5.8k</span>
+            </span>
+          </div>
+          <span class="turquoise-post-time">最后回复：3小时前</span>
+        </div>
+      </div>
+
+      <div class="turquoise-post-card" data-tag="kengkou" onclick="goToPost('#post-7')">
+        <div class="turquoise-post-header">
+          <h3 class="turquoise-post-title">丫角山料为什么被称为"果冻料"？实地探访矿口实录</h3>
+        </div>
+        <div class="turquoise-post-meta">
+          <div class="turquoise-post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user4" alt="用户" class="turquoise-author-avatar">
+            <span class="turquoise-author-name">矿区行者</span>
+          </div>
+          <span class="turquoise-post-tag">矿口漫谈</span>
+          <div class="turquoise-post-stats">
+            <span class="turquoise-stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>67</span>
+            </span>
+            <span class="turquoise-stat-item">
+              <i class="fas fa-eye"></i>
+              <span>2.1k</span>
+            </span>
+          </div>
+          <span class="turquoise-post-time">最后回复：6小时前</span>
+        </div>
+      </div>
+
+      <div class="turquoise-post-card" data-tag="jianding" onclick="goToPost('#post-8')">
+        <div class="turquoise-post-header">
+          <h3 class="turquoise-post-title">【科普】绿松石优化处理全解析：注胶、染色、电解</h3>
+          <span class="turquoise-essence-badge">精</span>
+        </div>
+        <div class="turquoise-post-meta">
+          <div class="turquoise-post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user5" alt="用户" class="turquoise-author-avatar">
+            <span class="turquoise-author-name">宝石学博士</span>
+          </div>
+          <span class="turquoise-post-tag">鉴定科普</span>
+          <div class="turquoise-post-stats">
+            <span class="turquoise-stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>234</span>
+            </span>
+            <span class="turquoise-stat-item">
+              <i class="fas fa-eye"></i>
+              <span>9.6k</span>
+            </span>
+          </div>
+          <span class="turquoise-post-time">最后回复：昨天</span>
+        </div>
+      </div>
+
+      <div class="turquoise-post-card" data-tag="shaibao" onclick="goToPost('#post-9')">
+        <div class="turquoise-post-header">
+          <h3 class="turquoise-post-title">收藏三年的秦古唐三彩，终于等到它包浆完美</h3>
+        </div>
+        <div class="turquoise-post-meta">
+          <div class="turquoise-post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user6" alt="用户" class="turquoise-author-avatar">
+            <span class="turquoise-author-name">松石收藏家</span>
+          </div>
+          <span class="turquoise-post-tag">晒宝</span>
+          <div class="turquoise-post-stats">
+            <span class="turquoise-stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>112</span>
+            </span>
+            <span class="turquoise-stat-item">
+              <i class="fas fa-eye"></i>
+              <span>4.3k</span>
+            </span>
+          </div>
+          <span class="turquoise-post-time">最后回复：昨天</span>
+        </div>
+      </div>
+
+      <div class="turquoise-post-card" data-tag="wulanhua" onclick="goToPost('#post-10')">
+        <div class="turquoise-post-header">
+          <h3 class="turquoise-post-title">乌兰花108佛珠搭配心得，从选料到配饰的完整攻略</h3>
+        </div>
+        <div class="turquoise-post-meta">
+          <div class="turquoise-post-author">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user7" alt="用户" class="turquoise-author-avatar">
+            <span class="turquoise-author-name">文玩搭配师</span>
+          </div>
+          <span class="turquoise-post-tag">乌兰花</span>
+          <div class="turquoise-post-stats">
+            <span class="turquoise-stat-item">
+              <i class="fas fa-comment-alt"></i>
+              <span>78</span>
+            </span>
+            <span class="turquoise-stat-item">
+              <i class="fas fa-eye"></i>
+              <span>2.8k</span>
+            </span>
+          </div>
+          <span class="turquoise-post-time">最后回复：2天前</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 侧边栏 -->
+    <aside class="turquoise-sidebar">
+      <!-- 平台鉴定师 -->
+      <div class="turquoise-sidebar-card">
+        <h3 class="turquoise-sidebar-title">
+          <i class="fas fa-user-check"></i>
+          平台鉴定师
+        </h3>
+        <div class="turquoise-appraiser-list">
+          <div class="turquoise-appraiser-item">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=expert" alt="鉴定师" class="turquoise-appraiser-avatar">
+            <div class="turquoise-appraiser-info">
+              <div class="turquoise-appraiser-name">松石老玩家</div>
+              <span class="turquoise-appraiser-badge"><i class="fas fa-certificate"></i>官方鉴定师</span>
+            </div>
+          </div>
+          <div class="turquoise-appraiser-item">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user3" alt="鉴定师" class="turquoise-appraiser-avatar">
+            <div class="turquoise-appraiser-info">
+              <div class="turquoise-appraiser-name">松石鉴定师</div>
+              <span class="turquoise-appraiser-badge"><i class="fas fa-certificate"></i>官方鉴定师</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 本周热议 -->
+      <div class="turquoise-sidebar-card">
+        <h3 class="turquoise-sidebar-title">
+          <i class="fas fa-fire-alt"></i>
+          本周热议
+        </h3>
+        <div class="turquoise-hot-topics">
+          <div class="turquoise-hot-topic-item" onclick="goToPost('#post-2')">
+            <span class="turquoise-hot-rank">1</span>
+            <span class="turquoise-hot-topic-title">新手必读：绿松石鉴别完全指南，从入门到精通</span>
+            <i class="fas fa-fire turquoise-hot-icon"></i>
+          </div>
+          <div class="turquoise-hot-topic-item" onclick="goToPost('#post-8')">
+            <span class="turquoise-hot-rank turquoise-second">2</span>
+            <span class="turquoise-hot-topic-title">【科普】绿松石优化处理全解析：注胶、染色、电解</span>
+            <i class="fas fa-fire turquoise-hot-icon"></i>
+          </div>
+          <div class="turquoise-hot-topic-item" onclick="goToPost('#post-6')">
+            <span class="turquoise-hot-rank turquoise-third">3</span>
+            <span class="turquoise-hot-topic-title">高瓷蓝和果冻料的区别，新手最容易混淆的两种料质</span>
+            <i class="fas fa-fire turquoise-hot-icon"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- 论坛公告 -->
+      <div class="turquoise-sidebar-card">
+        <h3 class="turquoise-sidebar-title">
+          <i class="fas fa-bullhorn"></i>
+          论坛公告
+        </h3>
+        <div class="turquoise-notice-list">
+          <div class="turquoise-notice-item">
+            <div>关于规范晒宝区发帖的说明</div>
+            <div class="turquoise-notice-date">2024-01-15</div>
+          </div>
+          <div class="turquoise-notice-item">
+            <div>论坛积分规则调整通知</div>
+            <div class="turquoise-notice-date">2024-01-10</div>
+          </div>
+          <div class="turquoise-notice-item">
+            <div>新增"矿口漫谈"板块</div>
+            <div class="turquoise-notice-date">2024-01-05</div>
+          </div>
+          <div class="turquoise-notice-item">
+            <div>春节放假期间版务安排</div>
+            <div class="turquoise-notice-date">2024-01-01</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 分页器 -->
+  <div class="turquoise-pagination">
+    <button class="turquoise-page-btn turquoise-prev" onclick="changePage('prev')">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="turquoise-page-btn turquoise-active" onclick="changePage(1)">1</button>
+    <button class="turquoise-page-btn" onclick="changePage(2)">2</button>
+    <button class="turquoise-page-btn" onclick="changePage(3)">3</button>
+    <span class="turquoise-page-dots">...</span>
+    <button class="turquoise-page-btn" onclick="changePage(10)">10</button>
+    <button class="turquoise-page-btn turquoise-next" onclick="changePage('next')">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- 回到顶部按钮 -->
+  <div class="turquoise-back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+<footer th:replace="mall/footer::footer"></footer>
+
+  <script>
+    // 回到顶部
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 回到顶部按钮显示/隐藏
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('turquoise-visible');
+      } else {
+        backToTop.classList.remove('turquoise-visible');
+      }
+    });
+
+    // 标签筛选
+    function filterByTag(tag, btn) {
+      // 更新标签样式
+      document.querySelectorAll('.turquoise-tag-item').forEach(item => {
+        item.classList.remove('turquoise-active');
+      });
+      btn.classList.add('turquoise-active');
+
+      // 筛选帖子
+      const posts = document.querySelectorAll('.turquoise-post-card');
+      posts.forEach(post => {
+        if (tag === 'all' || post.dataset.tag === tag) {
+          post.style.display = 'block';
+          post.style.opacity = '0';
+          post.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            post.style.transition = 'all 0.4s ease';
+            post.style.opacity = '1';
+            post.style.transform = 'translateY(0)';
+          }, 50);
+        } else {
+          post.style.display = 'none';
+        }
+      });
+    }
+
+    // 发布新帖
+    function newPost() {
+      alert('发布新帖功能即将上线，敬请期待！');
+    }
+
+    // 跳转到帖子详情
+    function goToPost(anchor) {
+      window.location.href = anchor;
+    }
+
+    // 分页
+    let currentPage = 1;
+    function changePage(page) {
+      if (page === 'prev') {
+        if (currentPage > 1) currentPage--;
+      } else if (page === 'next') {
+        if (currentPage < 10) currentPage++;
+      } else {
+        currentPage = page;
+      }
+
+      // 更新分页按钮状态
+      document.querySelectorAll('.turquoise-page-btn').forEach(btn => {
+        btn.classList.remove('turquoise-active');
+        if (btn.textContent === String(currentPage)) {
+          btn.classList.add('turquoise-active');
+        }
+      });
+
+      // 模拟页面切换效果
+      const posts = document.querySelectorAll('.turquoise-post-card');
+      posts.forEach((post, index) => {
+        post.style.opacity = '0';
+        post.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          post.style.transition = 'all 0.4s ease';
+          post.style.opacity = '1';
+          post.style.transform = 'translateY(0)';
+        }, index * 50);
+      });
+    }
+  </script>
+</body>
+</html>

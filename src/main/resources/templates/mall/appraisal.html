@@ -1,0 +1,173 @@
+<!-- 绿松石主题鉴定服务页面 -->
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="mall/header::head-fragment('鉴定服务 - 松石雅集','appraisal')">
+</head>
+<body class="turquoise-homepage">
+<header th:replace="mall/header::header-fragment"></header>
+
+  <!-- 页面标题区 -->
+  <section class="turquoise-page-header">
+    <div class="turquoise-page-header-content">
+      <h1 class="turquoise-page-title">鉴定服务</h1>
+      <p class="turquoise-page-subtitle">平台专家为您鉴定每一件绿松石的真伪与品质</p>
+    </div>
+  </section>
+
+  <!-- 鉴定流程 -->
+  <section class="turquoise-process-section">
+    <div class="turquoise-process-container">
+      <div class="turquoise-process-grid">
+        <div class="turquoise-process-card">
+          <div class="turquoise-process-step-number">1</div>
+          <div class="turquoise-process-icon">
+            <i class="fas fa-edit"></i>
+          </div>
+          <h3>提交申请</h3>
+          <p>填写藏品信息，上传清晰图片，选择鉴定目的</p>
+        </div>
+        <div class="turquoise-process-card">
+          <div class="turquoise-process-step-number">2</div>
+          <div class="turquoise-process-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3>专家鉴定</h3>
+          <p>资深鉴定师团队专业评估，确保结果准确可靠</p>
+        </div>
+        <div class="turquoise-process-card">
+          <div class="turquoise-process-step-number">3</div>
+          <div class="turquoise-process-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3>查看结果</h3>
+          <p>获取详细鉴定报告，了解藏品真伪与价值评估</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 鉴定申请表单 -->
+  <section class="turquoise-form-section">
+    <div class="turquoise-form-container">
+      <h2 class="turquoise-form-title">提交鉴定申请</h2>
+      <form id="appraisalForm">
+        <div class="turquoise-form-group">
+          <label class="turquoise-form-label">藏品名称 <span>*</span></label>
+          <input type="text" class="turquoise-form-input" placeholder="请输入藏品名称" required>
+        </div>
+        <div class="turquoise-form-group">
+          <label class="turquoise-form-label">藏品描述</label>
+          <textarea class="turquoise-form-textarea" placeholder="请描述藏品的尺寸、重量、来源等信息"></textarea>
+        </div>
+        <div class="turquoise-form-group">
+          <label class="turquoise-form-label">图片上传 <span>*</span></label>
+          <div class="turquoise-upload-area" onclick="document.getElementById('fileInput').click()">
+            <div class="turquoise-upload-icon">
+              <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <p class="turquoise-upload-text">点击或拖拽上传图片</p>
+            <p class="turquoise-upload-hint">支持 JPG、PNG 格式，单张不超过 10MB</p>
+          </div>
+          <input type="file" id="fileInput" hidden accept="image/*" multiple>
+        </div>
+        <div class="turquoise-form-group">
+          <label class="turquoise-form-label">鉴定目的 <span>*</span></label>
+          <select class="turquoise-form-select" required>
+            <option value="">请选择鉴定目的</option>
+            <option value="authenticity">鉴定真伪</option>
+            <option value="quality">评估品质</option>
+            <option value="comprehensive">综合鉴定</option>
+          </select>
+        </div>
+        <div class="turquoise-form-group">
+          <label class="turquoise-form-label">联系方式 <span>*</span></label>
+          <input type="text" class="turquoise-form-input" placeholder="请输入手机号或邮箱" required>
+        </div>
+        <button type="submit" class="turquoise-submit-btn">提交鉴定申请</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 鉴定记录 -->
+  <section class="turquoise-records-section">
+    <div class="turquoise-records-container">
+      <div class="turquoise-section-header">
+        <h2 class="turquoise-section-title">我的鉴定记录</h2>
+      </div>
+      <div class="turquoise-records-list" id="recordsList">
+        <!-- 示例记录，实际应由后端数据渲染 -->
+        <div class="turquoise-record-card">
+          <div class="turquoise-record-info">
+            <div class="turquoise-record-name">高瓷蓝绿松石圆珠手串</div>
+            <div class="turquoise-record-meta">提交时间：2024-01-15 14:30</div>
+          </div>
+          <div class="turquoise-record-status turquoise-status-completed">已完成</div>
+          <button class="turquoise-view-report-btn">查看报告</button>
+        </div>
+        <div class="turquoise-record-card">
+          <div class="turquoise-record-info">
+            <div class="turquoise-record-name">乌兰花绿松石雕件</div>
+            <div class="turquoise-record-meta">提交时间：2024-01-10 09:15</div>
+          </div>
+          <div class="turquoise-record-status turquoise-status-processing">鉴定中</div>
+          <button class="turquoise-view-report-btn">查看进度</button>
+        </div>
+        <div class="turquoise-record-card">
+          <div class="turquoise-record-info">
+            <div class="turquoise-record-name">丫角山果冻料吊坠</div>
+            <div class="turquoise-record-meta">提交时间：2024-01-05 16:45</div>
+          </div>
+          <div class="turquoise-record-status turquoise-status-pending">待鉴定</div>
+          <button class="turquoise-view-report-btn">查看详情</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 免责声明 -->
+  <section class="turquoise-disclaimer">
+    <p>平台合作鉴定师均具备专业资质，鉴定结果仅供参考</p>
+  </section>
+
+<footer th:replace="mall/footer::footer"></footer>
+
+  <!-- 返回顶部 -->
+  <div class="turquoise-back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <script>
+    // 导航栏滚动效果
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('turquoise-scrolled');
+      } else {
+        navbar.classList.remove('turquoise-scrolled');
+      }
+
+      // 返回顶部按钮显示/隐藏
+      const backToTop = document.getElementById('backToTop');
+      if (window.scrollY > 300) {
+        backToTop.classList.add('turquoise-visible');
+      } else {
+        backToTop.classList.remove('turquoise-visible');
+      }
+    });
+
+    // 返回顶部
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // 表单提交
+    document.getElementById('appraisalForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('鉴定申请已提交，我们会尽快联系您！');
+    });
+  </script>
+</body>
+</html>

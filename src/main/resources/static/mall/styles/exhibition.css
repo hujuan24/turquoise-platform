@@ -1,0 +1,745 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+  background: #e8e4dc;
+  color: #2c2c2c;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(26, 122, 122, 0.015) 60px, rgba(26, 122, 122, 0.015) 62px),
+    repeating-linear-gradient(-45deg, transparent, transparent 80px, rgba(26, 122, 122, 0.012) 80px, rgba(26, 122, 122, 0.012) 82px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 页面标题区 */
+.turquoise-page-header {
+  height: 50vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(180deg, #e8e4dc 0%, #f0ece4 100%);
+}
+
+.turquoise-page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://images.unsplash.com/photo-1544967082-d9d25d867d66?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.08;
+}
+
+.turquoise-page-header-content {
+  text-align: center;
+  z-index: 10;
+  padding: 0 20px;
+}
+
+.turquoise-page-title {
+  font-size: 56px;
+  font-weight: 900;
+  letter-spacing: 12px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #0d5c5c 0%, #1a7a7a 50%, #c9a227 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+}
+
+.turquoise-page-subtitle {
+  font-size: 18px;
+  color: #5a5a5a;
+  letter-spacing: 6px;
+  font-weight: 400;
+}
+
+/* 板块导航标签 */
+.turquoise-section-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 40px 60px;
+  background: #f0ece4;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.turquoise-section-tab {
+  padding: 14px 32px;
+  background: transparent;
+  border: 1px solid rgba(64, 224, 208, 0.3);
+  color: #5a5a5a;
+  font-family: inherit;
+  font-size: 15px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.turquoise-section-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(64, 224, 208, 0.08));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.turquoise-section-tab:hover {
+  border-color: #40e0d0;
+  color: #1a7a7a;
+  transform: translateY(-2px);
+}
+
+.turquoise-section-tab:hover::before {
+  opacity: 1;
+}
+
+.turquoise-section-tab.turquoise-active {
+  background: linear-gradient(135deg, #1a7a7a 0%, #2d9a9a 100%);
+  border-color: #1a7a7a;
+  color: #fff;
+  box-shadow: 0 8px 25px rgba(26, 122, 122, 0.3);
+}
+
+/* 内容区 */
+.turquoise-content-area {
+  padding: 60px;
+  min-height: 600px;
+  background: #e8e4dc;
+}
+
+.turquoise-content-section {
+  display: none;
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease;
+}
+
+.turquoise-content-section.turquoise-active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 历史溯源 */
+.turquoise-history-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 60px;
+}
+
+.turquoise-history-image {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+  min-height: 400px;
+}
+
+.turquoise-history-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.turquoise-history-image:hover img {
+  transform: scale(1.05);
+}
+
+.turquoise-history-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.turquoise-timeline-item {
+  display: flex;
+  gap: 25px;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  border-left: 3px solid #40e0d0;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.turquoise-timeline-item:hover {
+  transform: translateX(10px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.turquoise-timeline-period {
+  font-size: 14px;
+  color: #c9a227;
+  font-weight: 600;
+  letter-spacing: 2px;
+  min-width: 80px;
+}
+
+.turquoise-timeline-content h4 {
+  font-size: 18px;
+  color: #0d5c5c;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.turquoise-timeline-content p {
+  font-size: 14px;
+  color: #5a5a5a;
+  line-height: 1.6;
+}
+
+.turquoise-timeline-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 40px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.turquoise-timeline-bar::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #0d5c5c, #40e0d0, #c9a227);
+  transform: translateY(-50%);
+}
+
+.turquoise-timeline-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.turquoise-timeline-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #40e0d0;
+  border: 3px solid #c9a227;
+  box-shadow: 0 0 15px rgba(64, 224, 208, 0.4);
+}
+
+.turquoise-timeline-label {
+  font-size: 13px;
+  color: #5a5a5a;
+  letter-spacing: 1px;
+}
+
+/* 矿脉地理 */
+.turquoise-mine-map-section {
+  margin-bottom: 60px;
+}
+
+.turquoise-mine-map {
+  width: 100%;
+  height: 450px;
+  background: linear-gradient(135deg, #f5f3ef 0%, #e8e4dc 100%);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
+}
+
+.turquoise-mine-map img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+}
+
+.turquoise-mine-marker {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: #40e0d0;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 15px rgba(64, 224, 208, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.turquoise-mine-marker:hover {
+  transform: scale(1.3);
+  box-shadow: 0 6px 20px rgba(64, 224, 208, 0.7);
+}
+
+.turquoise-mine-marker::after {
+  content: attr(data-name);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #0d5c5c;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.turquoise-mine-marker:hover::after {
+  opacity: 1;
+}
+
+.turquoise-mine-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.turquoise-mine-card {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border-top: 3px solid #40e0d0;
+}
+
+.turquoise-mine-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+.turquoise-mine-card h4 {
+  font-size: 20px;
+  color: #0d5c5c;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.turquoise-mine-card p {
+  font-size: 14px;
+  color: #5a5a5a;
+  line-height: 1.6;
+}
+
+/* 工艺传承 */
+.turquoise-craft-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 60px;
+}
+
+.turquoise-craft-image {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+}
+
+.turquoise-craft-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.turquoise-craft-image:hover img {
+  transform: scale(1.05);
+}
+
+.turquoise-craft-process {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.turquoise-process-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.turquoise-process-step:hover {
+  transform: translateX(10px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.turquoise-step-number {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #1a7a7a, #2d9a9a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.turquoise-step-content h4 {
+  font-size: 16px;
+  color: #0d5c5c;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.turquoise-step-content p {
+  font-size: 13px;
+  color: #5a5a5a;
+  line-height: 1.5;
+}
+
+.turquoise-craft-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.turquoise-showcase-card {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.turquoise-showcase-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+.turquoise-showcase-image {
+  height: 200px;
+  overflow: hidden;
+}
+
+.turquoise-showcase-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.turquoise-showcase-card:hover .turquoise-showcase-image img {
+  transform: scale(1.1);
+}
+
+.turquoise-showcase-info {
+  padding: 20px;
+}
+
+.turquoise-showcase-info h4 {
+  font-size: 16px;
+  color: #0d5c5c;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.turquoise-showcase-info p {
+  font-size: 13px;
+  color: #5a5a5a;
+  line-height: 1.5;
+}
+
+/* 鉴赏指南 */
+.turquoise-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.turquoise-guide-card {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border-bottom: 3px solid #c9a227;
+}
+
+.turquoise-guide-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+.turquoise-guide-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(64, 224, 208, 0.1));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 24px;
+  color: #1a7a7a;
+}
+
+.turquoise-guide-card h4 {
+  font-size: 18px;
+  color: #0d5c5c;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.turquoise-guide-card p {
+  font-size: 14px;
+  color: #5a5a5a;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.turquoise-guide-image {
+  width: 100%;
+  height: 120px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.turquoise-guide-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.turquoise-guide-footer {
+  text-align: center;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.turquoise-guide-footer p {
+  font-size: 15px;
+  color: #5a5a5a;
+  letter-spacing: 2px;
+}
+
+.turquoise-guide-footer a {
+  color: #1a7a7a;
+  text-decoration: none;
+  border-bottom: 1px solid #40e0d0;
+  transition: all 0.3s ease;
+}
+
+.turquoise-guide-footer a:hover {
+  color: #c9a227;
+  border-bottom-color: #c9a227;
+}
+
+/* 养护之道 */
+.turquoise-care-section {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  padding: 50px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.turquoise-care-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+}
+
+.turquoise-care-item {
+  text-align: center;
+  padding: 30px 20px;
+  transition: all 0.4s ease;
+  border-radius: 8px;
+}
+
+.turquoise-care-item:hover {
+  background: rgba(64, 224, 208, 0.05);
+  transform: translateY(-5px);
+}
+
+.turquoise-care-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #1a7a7a, #2d9a9a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+  color: #fff;
+  box-shadow: 0 8px 25px rgba(26, 122, 122, 0.3);
+  transition: all 0.4s ease;
+}
+
+.turquoise-care-item:hover .turquoise-care-icon {
+  transform: scale(1.1);
+  box-shadow: 0 12px 35px rgba(26, 122, 122, 0.4);
+}
+
+.turquoise-care-item h4 {
+  font-size: 16px;
+  color: #0d5c5c;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.turquoise-care-item p {
+  font-size: 13px;
+  color: #5a5a5a;
+  line-height: 1.5;
+}
+
+/* 回到顶部按钮 */
+.turquoise-back-to-top {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #1a7a7a, #2d9a9a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 25px rgba(26, 122, 122, 0.4);
+  z-index: 999;
+}
+
+.turquoise-back-to-top.turquoise-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.turquoise-back-to-top:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(26, 122, 122, 0.5);
+}
+
+/* 响应式 */
+@media (max-width: 1200px) {
+  .turquoise-history-layout {
+    grid-template-columns: 1fr;
+  }
+  .turquoise-craft-layout {
+    grid-template-columns: 1fr;
+  }
+  .turquoise-mine-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .turquoise-craft-showcase {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .turquoise-guide-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .turquoise-care-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .turquoise-page-title {
+    font-size: 36px;
+    letter-spacing: 8px;
+  }
+  .turquoise-page-subtitle {
+    font-size: 14px;
+    letter-spacing: 3px;
+  }
+  .turquoise-section-tabs {
+    flex-wrap: wrap;
+    padding: 20px;
+  }
+  .turquoise-section-tab {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  .turquoise-content-area {
+    padding: 20px;
+  }
+  .turquoise-mine-cards {
+    grid-template-columns: 1fr;
+  }
+  .turquoise-craft-showcase {
+    grid-template-columns: 1fr;
+  }
+  .turquoise-guide-grid {
+    grid-template-columns: 1fr;
+  }
+  .turquoise-care-grid {
+    grid-template-columns: 1fr;
+  }
+  .turquoise-care-section {
+    padding: 30px 20px;
+  }
+  .turquoise-back-to-top {
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+}
