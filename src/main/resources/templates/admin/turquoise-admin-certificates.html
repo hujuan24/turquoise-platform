@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-head"></th:block>
+</head>
+<body>
+    <th:block th:replace="admin/turquoise-admin-layout :: header"></th:block>
+    <th:block th:replace="admin/turquoise-admin-layout :: sidebar"></th:block>
+    
+    <main class="turquoise-content">
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">鉴定证书管理</h2>
+                <button class="turquoise-btn turquoise-btn-primary" onclick="openAddModal()">添加证书</button>
+            </div>
+            
+            <!-- 证书列表 -->
+            <div class="turquoise-table-container">
+                <table class="turquoise-table">
+                    <thead>
+                        <tr>
+                            <th>证书编号</th>
+                            <th>证书图片</th>
+                            <th>关联商品名称</th>
+                            <th>鉴定机构</th>
+                            <th>检测结论</th>
+                            <th>鉴定日期</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="certificate : ${certificateList}">
+                            <td th:text="${certificate.certificateNo}"></td>
+                            <td>
+                                <div class="certificate-image-cell">
+                                    <img th:if="${certificate.certificateImg != null and certificate.certificateImg != ''}" th:src="${certificate.certificateImg}" alt="证书图片" class="certificate-thumbnail" onclick='viewCertificateImage("${certificate.certificateImg}")'>
+                                    <span th:else class="no-image-text">暂无图片</span>
+                                </div>
+                            </td>
+                            <td th:text="${certificate.goodsName}"></td>
+                            <td th:text="${certificate.certificateOrg}"></td>
+                            <td th:text="${certificate.certificateResult}"></td>
+                            <td th:text="${certificate.certificateDate}"></td>
+                            <td>
+                                <button class="turquoise-btn turquoise-btn-blue" th:onclick="'viewCertificateDetail(' + ${certificate.certificateId} + ')'">查看详情</button>
+                                    <button class="turquoise-btn turquoise-btn-green" th:onclick="'editCertificate(' + ${certificate.certificateId} + ')'">编辑</button>
+                                    <button class="turquoise-btn turquoise-btn-red" th:onclick="'deleteCertificate(' + ${certificate.certificateId} + ')'">删除</button>
+                            </td>
+                        </tr>
+                        <tr th:if="${certificateList == null or certificateList.size() == 0}">
+                            <td colspan="7" class="turquoise-table-empty">暂无证书数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 添加证书弹窗 -->
+    <div class="turquoise-modal-overlay" id="addModal">
+        <div class="turquoise-modal">
+            <div class="turquoise-modal-header">
+                <h3 class="turquoise-modal-title">添加证书</h3>
+            </div>
+            <div class="turquoise-modal-body">
+                <form id="addCertificateForm">
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">证书编号</label>
+                        <input type="text" class="turquoise-form-input" id="certificateNo" name="certificateNo" placeholder="自动生成" disabled>
+                    </div>
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">关联商品</label>
+                        <select class="turquoise-form-select" id="goodsId" name="goodsId" required>
+                            <option value="">请选择商品</option>
+                            <option th:each="goods : ${goodsList}" th:value="${goods.goodsId}" th:text="${goods.goodsName}"></option>
+                        </select>
+                    </div>
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">鉴定机构</label>
+                        <input type="text" class="turquoise-form-input" id="certificateOrg" name="certificateOrg" placeholder="请输入鉴定机构" required>
+                    </div>
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">检测结论</label>
+                        <textarea class="turquoise-form-input" id="certificateResult" name="certificateResult" placeholder="请输入检测结论" required></textarea>
+                    </div>
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">鉴定日期</label>
+                        <input type="date" class="turquoise-form-input" id="certificateDate" name="certificateDate" required>
+                    </div>
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">证书图片</label>
+                        <div class="turquoise-upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>点击或拖拽文件到此处上传</p>
+                            <input type="file" name="certificateImg" class="turquoise-file-input">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="turquoise-modal-footer">
+                <button id="cancelAddBtn" class="turquoise-btn-cancel">取消</button>
+                <button type="button" id="submitAddBtn" class="turquoise-btn-submit">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 查看详情弹窗 -->
+    <div class="turquoise-modal-overlay" id="detailModal">
+        <div class="turquoise-modal">
+            <div class="turquoise-modal-header">
+                <h3 class="turquoise-modal-title">证书详情</h3>
+            </div>
+            <div class="turquoise-modal-body">
+                <div class="certificate-detail">
+                    <div class="certificate-detail-row">
+                        <label class="certificate-detail-label">证书编号：</label>
+                        <span id="detailCertificateNo"></span>
+                    </div>
+                    <div class="certificate-detail-row">
+                        <label class="certificate-detail-label">关联商品：</label>
+                        <span id="detailGoodsName"></span>
+                    </div>
+                    <div class="certificate-detail-row">
+                        <label class="certificate-detail-label">鉴定机构：</label>
+                        <span id="detailCertificateOrg"></span>
+                    </div>
+                    <div class="certificate-detail-row">
+                        <label class="certificate-detail-label">检测结论：</label>
+                        <span id="detailCertificateResult"></span>
+                    </div>
+                    <div class="certificate-detail-row">
+                        <label class="certificate-detail-label">鉴定日期：</label>
+                        <span id="detailCertificateDate"></span>
+                    </div>
+                    <div class="certificate-detail-row">
+                        <label class="certificate-detail-label">证书图片：</label>
+                        <div id="detailCertificateImg" class="certificate-image-container">
+                            <!-- 图片将通过JavaScript动态添加 -->
+                        </div>
+                    </div>
+                    <div class="certificate-seal">
+                        <p>鉴定专用章</p>
+                    </div>
+                </div>
+            </div>
+            <div class="turquoise-modal-footer">
+                <button id="closeDetailBtn" class="turquoise-btn-cancel">关闭</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 编辑证书弹窗 -->
+    <div class="turquoise-modal-overlay" id="editModal">
+        <div class="turquoise-modal">
+            <div class="turquoise-modal-header">
+                <h3 class="turquoise-modal-title">编辑证书</h3>
+            </div>
+            <div class="turquoise-modal-body">
+                <form id="editCertificateForm">
+                    <input type="hidden" id="editCertificateId" name="certificateId">
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">证书编号</label>
+                        <input type="text" class="turquoise-form-input" id="editCertificateNo" name="certificateNo" disabled>
+                    </div>
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">关联商品</label>
+                        <input type="text" class="turquoise-form-input" id="editGoodsName" name="goodsName" disabled>
+                    </div>
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">鉴定机构</label>
+                        <input type="text" class="turquoise-form-input" id="editCertificateOrg" name="certificateOrg" required>
+                    </div>
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">检测结论</label>
+                        <textarea class="turquoise-form-input" id="editCertificateResult" name="certificateResult" required></textarea>
+                    </div>
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">鉴定日期</label>
+                        <input type="date" class="turquoise-form-input" id="editCertificateDate" name="certificateDate" required>
+                    </div>
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">证书图片</label>
+                        <div class="turquoise-upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>点击或拖拽文件到此处上传（覆盖旧图）</p>
+                            <input type="file" name="certificateImg" class="turquoise-file-input">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="turquoise-modal-footer">
+                <button id="cancelEditBtn" class="turquoise-btn-cancel">取消</button>
+                <button type="button" id="submitEditBtn" class="turquoise-btn-submit">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 查看图片弹窗 -->
+    <div class="turquoise-modal-overlay" id="imageModal">
+        <div class="turquoise-modal image-modal">
+            <div class="turquoise-modal-header">
+                <h3 class="turquoise-modal-title">证书图片</h3>
+            </div>
+            <div class="turquoise-modal-body">
+                <div class="image-container">
+                    <img id="viewImage" src="" alt="证书图片">
+                </div>
+            </div>
+            <div class="turquoise-modal-footer">
+                <button id="closeImageBtn" class="turquoise-btn-cancel">关闭</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 弹窗控制
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM加载完成');
+            
+            const addModal = document.getElementById('addModal');
+            const cancelAddBtn = document.getElementById('cancelAddBtn');
+            const submitAddBtn = document.getElementById('submitAddBtn');
+            
+            console.log('添加弹窗元素:', addModal);
+            console.log('取消按钮元素:', cancelAddBtn);
+            console.log('提交按钮元素:', submitAddBtn);
+            
+            // 关闭弹窗
+            if (cancelAddBtn) {
+                cancelAddBtn.addEventListener('click', function() {
+                    addModal.classList.remove('active');
+                });
+            }
+            
+            // 点击遮罩层关闭弹窗
+            if (addModal) {
+                addModal.addEventListener('click', function(e) {
+                    if (e.target === addModal) {
+                        addModal.classList.remove('active');
+                    }
+                });
+            }
+            
+            // 关闭详情弹窗
+            const closeDetailBtn = document.getElementById('closeDetailBtn');
+            const detailModal = document.getElementById('detailModal');
+            console.log('详情弹窗元素:', detailModal);
+            console.log('关闭详情按钮元素:', closeDetailBtn);
+            if (closeDetailBtn && detailModal) {
+                closeDetailBtn.addEventListener('click', function() {
+                    detailModal.classList.remove('active');
+                });
+                detailModal.addEventListener('click', function(e) {
+                    if (e.target === detailModal) {
+                        detailModal.classList.remove('active');
+                    }
+                });
+            }
+            
+            // 关闭编辑弹窗
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            const editModal = document.getElementById('editModal');
+            console.log('编辑弹窗元素:', editModal);
+            console.log('取消编辑按钮元素:', cancelEditBtn);
+            if (cancelEditBtn && editModal) {
+                cancelEditBtn.addEventListener('click', function() {
+                    editModal.classList.remove('active');
+                });
+                editModal.addEventListener('click', function(e) {
+                    if (e.target === editModal) {
+                        editModal.classList.remove('active');
+                    }
+                });
+            }
+            
+            // 关闭图片弹窗
+            const closeImageBtn = document.getElementById('closeImageBtn');
+            const imageModal = document.getElementById('imageModal');
+            console.log('图片弹窗元素:', imageModal);
+            console.log('关闭图片按钮元素:', closeImageBtn);
+            if (closeImageBtn && imageModal) {
+                closeImageBtn.addEventListener('click', function() {
+                    imageModal.classList.remove('active');
+                });
+                imageModal.addEventListener('click', function(e) {
+                    if (e.target === imageModal) {
+                        imageModal.classList.remove('active');
+                    }
+                });
+            }
+            
+            // 提交编辑表单
+            const submitEditBtn = document.getElementById('submitEditBtn');
+            if (submitEditBtn) {
+                submitEditBtn.addEventListener('click', function() {
+                    const certificateId = document.getElementById('editCertificateId').value;
+                    const certificateOrg = document.getElementById('editCertificateOrg').value;
+                    const certificateResult = document.getElementById('editCertificateResult').value;
+                    const certificateDate = document.getElementById('editCertificateDate').value;
+                    
+                    // 验证表单
+                    if (!certificateId || !certificateOrg || !certificateResult || !certificateDate) {
+                        alert('请填写所有必填字段');
+                        return;
+                    }
+                    
+                    // 构建表单数据
+                    const formData = new FormData();
+                    formData.append('certificateId', certificateId);
+                    formData.append('certificateOrg', certificateOrg);
+                    formData.append('certificateResult', certificateResult);
+                    formData.append('certificateDate', certificateDate);
+                    
+                    // 添加图片（如果有）
+                    const fileInput = document.getElementById('editModal').querySelector('input[type="file"]');
+                    if (fileInput && fileInput.files.length > 0) {
+                        formData.append('certificateImg', fileInput.files[0]);
+                    }
+                    
+                    fetch('/admin/certificates/update', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.resultCode === 200) {
+                            alert('保存成功');
+                            location.reload();
+                        } else {
+                            alert(data.message || '保存失败');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('保存失败：', error);
+                        alert('保存失败，请重试');
+                    });
+                });
+            }
+            
+            // 提交表单
+            if (submitAddBtn) {
+                submitAddBtn.addEventListener('click', function() {
+                    const goodsId = document.getElementById('goodsId').value;
+                    const certificateOrg = document.getElementById('certificateOrg').value;
+                    const certificateResult = document.getElementById('certificateResult').value;
+                    const certificateDate = document.getElementById('certificateDate').value;
+                    
+                    // 验证表单
+                    if (!goodsId || !certificateOrg || !certificateResult || !certificateDate) {
+                        alert('请填写所有必填字段');
+                        return;
+                    }
+                    
+                    // 构建表单数据
+                    const formData = new FormData();
+                    formData.append('goodsId', goodsId);
+                    formData.append('certificateOrg', certificateOrg);
+                    formData.append('certificateResult', certificateResult);
+                    formData.append('certificateDate', certificateDate);
+                    
+                    fetch('/admin/certificates/save', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.resultCode === 200) {
+                            alert('保存成功');
+                            location.reload();
+                        } else {
+                            alert(data.message || '保存失败');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('保存失败：', error);
+                        alert('保存失败，请重试');
+                    });
+                });
+            }
+            
+            // 上传区域点击事件
+            const uploadArea = document.querySelector('.turquoise-upload-area');
+            const fileInput = document.querySelector('input[type="file"]');
+            
+            if (uploadArea && fileInput) {
+                uploadArea.addEventListener('click', function() {
+                    fileInput.click();
+                });
+                
+                fileInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        alert('文件已选择：' + e.target.files[0].name);
+                    }
+                });
+                
+                // 拖拽上传
+                uploadArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#4A90E2';
+                });
+                
+                uploadArea.addEventListener('dragleave', function() {
+                    uploadArea.style.borderColor = '#d1d5db';
+                });
+                
+                uploadArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#d1d5db';
+                    if (e.dataTransfer.files.length > 0) {
+                        fileInput.files = e.dataTransfer.files;
+                        alert('文件已选择：' + e.dataTransfer.files[0].name);
+                    }
+                });
+            }
+        });
+        
+        // 打开添加弹窗
+        function openAddModal() {
+            const addModal = document.getElementById('addModal');
+            
+            // 清空表单
+            document.getElementById('addCertificateForm').reset();
+            
+            // 自动生成证书编号
+            fetch('/admin/certificates/generate-no', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.resultCode === 200) {
+                    document.getElementById('certificateNo').value = data.data;
+                } else {
+                    console.error('生成证书编号失败：', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('生成证书编号失败：', error);
+            });
+            
+            // 设置默认日期为当天
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('certificateDate').value = today;
+            
+            // 显示弹窗
+            addModal.classList.add('active');
+        }
+        
+        // 删除证书
+        function deleteCertificate(certificateId) {
+            if (confirm('确认删除该证书？')) {
+                const formData = new FormData();
+                formData.append('certificateId', certificateId);
+                
+                fetch('/admin/certificates/delete', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200) {
+                        alert('删除成功');
+                        location.reload();
+                    } else {
+                        alert(data.message || '删除失败');
+                    }
+                })
+                .catch(error => {
+                    console.error('删除失败：', error);
+                    alert('删除失败，请重试');
+                });
+            }
+        }
+        
+        // 查看证书详情
+        function viewCertificateDetail(certificateId) {
+            console.log('查看证书详情，ID:', certificateId);
+            // 模拟数据，用于测试
+            const mockData = {
+                resultCode: 200,
+                data: {
+                    certificateId: certificateId,
+                    certificateNo: 'NG202604270001',
+                    goodsName: '绿松石手把件',
+                    certificateOrg: '国家珠宝玉石质量监督检验中心',
+                    certificateResult: '天然绿松石',
+                    certificateDate: '2026-04-27',
+                    certificateImg: ''
+                }
+            };
+            
+            console.log('模拟数据:', mockData);
+            if (mockData.resultCode === 200) {
+                const certificate = mockData.data;
+                document.getElementById('detailCertificateNo').textContent = certificate.certificateNo;
+                document.getElementById('detailGoodsName').textContent = certificate.goodsName;
+                document.getElementById('detailCertificateOrg').textContent = certificate.certificateOrg;
+                document.getElementById('detailCertificateResult').textContent = certificate.certificateResult;
+                document.getElementById('detailCertificateDate').textContent = certificate.certificateDate;
+                
+                const imageContainer = document.getElementById('detailCertificateImg');
+                if (certificate.certificateImg) {
+                    imageContainer.innerHTML = `<img src="${certificate.certificateImg}" alt="证书图片" class="certificate-detail-image">`;
+                } else {
+                    imageContainer.innerHTML = '<span class="no-image-text">暂无图片</span>';
+                }
+                
+                const detailModal = document.getElementById('detailModal');
+                console.log('详情弹窗元素:', detailModal);
+                if (detailModal) {
+                    detailModal.classList.add('active');
+                    console.log('弹窗已显示');
+                } else {
+                    console.error('详情弹窗元素不存在');
+                }
+            } else {
+                alert('获取详情失败');
+            }
+        }
+        
+        // 编辑证书
+        function editCertificate(certificateId) {
+            console.log('编辑证书，ID:', certificateId);
+            // 模拟数据，用于测试
+            const mockData = {
+                resultCode: 200,
+                data: {
+                    certificateId: certificateId,
+                    certificateNo: 'NG202604270001',
+                    goodsName: '绿松石手把件',
+                    certificateOrg: '国家珠宝玉石质量监督检验中心',
+                    certificateResult: '天然绿松石',
+                    certificateDate: '2026-04-27',
+                    certificateImg: ''
+                }
+            };
+            
+            console.log('模拟数据:', mockData);
+            if (mockData.resultCode === 200) {
+                const certificate = mockData.data;
+                document.getElementById('editCertificateId').value = certificate.certificateId;
+                document.getElementById('editCertificateNo').value = certificate.certificateNo;
+                document.getElementById('editGoodsName').value = certificate.goodsName;
+                document.getElementById('editCertificateOrg').value = certificate.certificateOrg;
+                document.getElementById('editCertificateResult').value = certificate.certificateResult;
+                document.getElementById('editCertificateDate').value = certificate.certificateDate;
+                
+                const editModal = document.getElementById('editModal');
+                console.log('编辑弹窗元素:', editModal);
+                if (editModal) {
+                    editModal.classList.add('active');
+                    console.log('弹窗已显示');
+                } else {
+                    console.error('编辑弹窗元素不存在');
+                }
+            } else {
+                alert('获取详情失败');
+            }
+        }
+        
+        // 查看证书图片
+        function viewCertificateImage(imageUrl) {
+            document.getElementById('viewImage').src = imageUrl;
+            document.getElementById('imageModal').classList.add('active');
+        }
+    </script>
+    
+    <style>
+        /* 证书图片样式 */
+        .certificate-image-cell {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .certificate-thumbnail {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .no-image-text {
+            color: #999;
+            font-size: 12px;
+        }
+        
+        /* 证书详情样式 */
+        .certificate-detail {
+            padding: 20px;
+        }
+        
+        .certificate-detail-row {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .certificate-detail-label {
+            width: 100px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .certificate-image-container {
+            margin-top: 5px;
+        }
+        
+        .certificate-detail-image {
+            max-width: 400px;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+        
+        .certificate-seal {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: right;
+            font-size: 16px;
+            color: #666;
+        }
+        
+        /* 图片弹窗样式 */
+        .image-modal {
+            width: 500px;
+        }
+        
+        .image-container {
+            text-align: center;
+        }
+        
+        .image-container img {
+            max-width: 400px;
+            max-height: 300px;
+            object-fit: contain;
+        }
+        
+        /* 按钮样式 */
+        .turquoise-btn-blue {
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        .turquoise-btn-blue:hover {
+            background-color: #357ABD;
+        }
+        
+        .turquoise-btn-green {
+            background-color: #5CB85C;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        .turquoise-btn-green:hover {
+            background-color: #4CAE4C;
+        }
+        
+        .turquoise-btn-red {
+            background-color: #D9534F;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .turquoise-btn-red:hover {
+            background-color: #C9302C;
+        }
+    </style>
+    
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-script"></th:block>
+</body>
+</html>

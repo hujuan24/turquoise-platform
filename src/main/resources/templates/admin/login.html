@@ -1,120 +1,157 @@
-<!-- Copyright (c) 2019-2020 十三 all rights reserved. -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>十堰绿松石展销平台| Log in</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" th:href="@{/admin/dist/img/favicon.ico}"/>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" th:href="@{/admin/dist/css/font-awesome.min.css}">
-    <!-- Ionicons -->
-    <link rel="stylesheet" th:href="@{/admin/dist/css/ionicons.min.css}">
-    <!-- Theme style -->
-    <link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
-    <style>
-        canvas {
-            display: block;
-            vertical-align: bottom;
-        }
-        #particles {
-            background-color: #F7FAFC;
-            position: absolute;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>松石雅集 - 管理后台</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/admin-login.css}">
 </head>
-<body class="hold-transition login-page">
-<div id="particles">
-</div>
-<div class="login-box">
-    <div class="login-logo" style="color: #1baeae;">
-        <img th:src="@{/mall/image/new-bee-logo-3.png}" style="    height: 58px;float: left;margin-left: 10px;">
-        <h1>管理系统登陆</h1>
+<body>
+  <div class="login-card">
+    <div class="card-header">
+      <div class="brand-logo">
+        <i class="fas fa-gem"></i>
+        <span class="brand-name">松石雅集</span>
+      </div>
+      <p class="brand-subtitle">管理后台</p>
     </div>
-    <!-- /.login-logo -->
-    <div class="card">
-        <div class="card-body login-card-body">
-            <p class="login-box-msg"> 十堰绿松石, Let's Go !</p>
-            <form th:action="@{/admin/login}" method="post">
-                <div th:if="${not #strings.isEmpty(session.errorMsg)}" class="form-group">
-                    <div class="alert alert-danger" th:text="${session.errorMsg}"></div>
-                </div>
-                <div class="form-group has-feedback">
-                    <span class="fa fa-user form-control-feedback"></span>
-                    <input type="text" id="userName" name="userName" class="form-control" placeholder="请输入账号"
-                           required="true">
-                </div>
-                <div class="form-group has-feedback">
-                    <span class="fa fa-lock form-control-feedback"></span>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="请输入密码"
-                           required="true">
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <input type="text" class="form-control" name="verifyCode" placeholder="请输入验证码" required="true">
-                    </div>
-                    <div class="col-6">
-                        <img alt="单击图片刷新！" class="pointer" th:src="@{/common/kaptcha}"
-                             onclick="this.src='/common/kaptcha?d='+new Date()*1">
-                    </div>
-                </div>
-                <div class="form-group has-feedback"></div>
-                <div class="row">
-                    <div class="col-8">
-                    </div>
-                    <div class="col-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">登录
-                        </button>
-                    </div>
-                </div>
-            </form>
 
-        </div>
-        <!-- /.login-card-body -->
+    <div class="tab-container">
+      <button class="tab-btn active" data-tab="login" onclick="switchTab('login')">登录</button>
+      <button class="tab-btn" data-tab="register" onclick="switchTab('register')">注册</button>
     </div>
-</div>
-<!-- /.login-box -->
 
-<!-- jQuery -->
-<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
-<!-- Bootstrap 4 -->
-<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/admin/dist/js/plugins/particles.js}"></script>
-<script th:src="@{/admin/dist/js/plugins/login-bg-particles.js}"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        // 登录表单提交处理
-        $('form').on('submit', function(e) {
-            e.preventDefault();
-            
-            var userName = $('#userName').val();
-            var password = $('#password').val();
-            var verifyCode = $('input[name="verifyCode"]').val();
-            
-            // 简单验证
-            if (!userName) {
-                alert('请输入账号');
-                return;
-            }
-            if (!password) {
-                alert('请输入密码');
-                return;
-            }
-            if (!verifyCode) {
-                alert('请输入验证码');
-                return;
-            }
-            
-            // 提交表单
-            this.submit();
+    <div class="form-container">
+      <!-- 登录表单 -->
+      <div id="loginForm" class="form-panel">
+        <form th:action="@{/admin/login}" method="post">
+          <div class="input-group">
+            <i class="fas fa-user icon-prefix"></i>
+            <input type="text" name="username" placeholder="用户名" required>
+          </div>
+
+          <div class="input-group">
+            <i class="fas fa-lock icon-prefix"></i>
+            <input type="password" name="password" placeholder="密码" required>
+          </div>
+
+          <div class="input-group">
+            <i class="fas fa-user-tag icon-prefix"></i>
+            <select name="role" required>
+              <option value="admin">管理员</option>
+              <option value="appraiser">鉴定人员</option>
+            </select>
+            <i class="fas fa-chevron-down select-arrow"></i>
+          </div>
+
+          <button type="submit" class="submit-btn" id="loginBtn">登 录</button>
+
+          <div class="forgot-link">
+            <a href="#">忘记密码？</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- 注册表单 -->
+      <div id="registerForm" class="form-panel hidden">
+        <form onsubmit="handleRegister(event)">
+          <div class="input-group">
+            <i class="fas fa-user icon-prefix"></i>
+            <input type="text" name="username" placeholder="用户名" required>
+          </div>
+
+          <div class="input-group">
+            <i class="fas fa-phone icon-prefix"></i>
+            <input type="tel" name="phone" placeholder="手机号" required>
+          </div>
+
+          <div class="input-group">
+            <i class="fas fa-lock icon-prefix"></i>
+            <input type="password" name="password" placeholder="密码" required>
+          </div>
+
+          <div class="input-group">
+            <i class="fas fa-lock icon-prefix"></i>
+            <input type="password" name="confirmPassword" placeholder="确认密码" required>
+          </div>
+
+          <div class="input-group">
+            <i class="fas fa-user-tag icon-prefix"></i>
+            <select name="role" required>
+              <option value="admin">管理员</option>
+              <option value="appraiser">鉴定人员</option>
+            </select>
+            <i class="fas fa-chevron-down select-arrow"></i>
+          </div>
+
+          <button type="submit" class="submit-btn" id="registerBtn">注 册</button>
+
+          <div class="form-footer">
+            <span class="text-muted">已有账号？</span>
+            <button type="button" onclick="switchTab('login')">立即登录</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentTab = 'login';
+
+    function switchTab(tab) {
+      if (tab === currentTab) return;
+
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      const tabs = document.querySelectorAll('.turquoise-tab-btn');
+
+      tabs.forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+      if (tab === 'login') {
+        registerForm.classList.add('hidden');
+        loginForm.classList.remove('hidden');
+        loginForm.classList.add('slide-in-left');
+        setTimeout(() => loginForm.classList.remove('slide-in-left'), 300);
+      } else {
+        loginForm.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+        registerForm.classList.add('slide-in-right');
+        setTimeout(() => registerForm.classList.remove('slide-in-right'), 300);
+      }
+
+      currentTab = tab;
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const btn = document.getElementById('registerBtn');
+      const originalText = btn.innerHTML;
+      
+      const formData = new FormData(e.target);
+      if (formData.get('password') !== formData.get('confirmPassword')) {
+        alert('两次输入的密码不一致！');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="turquoise-spinner"><i class="fas fa-spinner"></i></span> 处理中...';
+
+      setTimeout(() => {
+        console.log('注册数据:', {
+          username: formData.get('username'),
+          phone: formData.get('phone'),
+          password: formData.get('password'),
+          role: formData.get('role')
         });
-    });
-</script>
+        
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        alert('注册成功！');
+        switchTab('login');
+      }, 1500);
+    }
+  </script>
 </body>
 </html>

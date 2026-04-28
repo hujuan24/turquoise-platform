@@ -13,6 +13,7 @@ import ltd.newbee.mall.util.PageQueryUtil;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MallUserMapper {
     int deleteByPrimaryKey(Long userId);
@@ -36,4 +37,8 @@ public interface MallUserMapper {
     int getTotalMallUsers(PageQueryUtil pageUtil);
 
     int lockUserBatch(@Param("ids") Integer[] ids, @Param("lockStatus") int lockStatus);
+
+    List<Map<String, Object>> findCollectList(PageQueryUtil pageUtil);
+
+    int getTotalCollects(PageQueryUtil pageUtil);
 }

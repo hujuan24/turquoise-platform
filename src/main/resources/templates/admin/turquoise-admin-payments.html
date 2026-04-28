@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-head"></th:block>
+</head>
+<body>
+    <th:block th:replace="admin/turquoise-admin-layout :: header"></th:block>
+    <th:block th:replace="admin/turquoise-admin-layout :: sidebar"></th:block>
+    
+    <main class="turquoise-content">
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">支付流水</h2>
+            </div>
+            
+            <!-- 统计信息 -->
+            <div class="turquoise-stats-container">
+                <div class="turquoise-stat-item">
+                    <h3>今日收款总额</h3>
+                    <p class="turquoise-stat-value" th:text="${todayTotalAmount}"></p>
+                </div>
+                <div class="turquoise-stat-item">
+                    <h3>总笔数</h3>
+                    <p class="turquoise-stat-value" th:text="${totalCount}"></p>
+                </div>
+            </div>
+            
+            <!-- 支付流水列表 -->
+            <div class="turquoise-table-container">
+                <table class="turquoise-table">
+                    <thead>
+                        <tr>
+                            <th>流水号</th>
+                            <th>关联订单</th>
+                            <th>支付金额</th>
+                            <th>支付方式</th>
+                            <th>支付状态</th>
+                            <th>支付时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="payment : ${paymentList}">
+                            <td th:text="${payment.flowId}"></td>
+                            <td th:text="${payment.orderId}"></td>
+                            <td th:text="${payment.payAmount}"></td>
+                            <td>
+                                <span th:switch="${payment.payType}">
+                                    <span th:case="1">支付宝</span>
+                                    <span th:case="2">微信</span>
+                                </span>
+                            </td>
+                            <td>
+                                <span th:switch="${payment.payStatus}">
+                                    <span th:case="1" class="payment-status-success">成功</span>
+                                    <span th:case="2" class="payment-status-failed">失败</span>
+                                </span>
+                            </td>
+                            <td th:text="${payment.payTime}"></td>
+                            <td>
+                                <button class="turquoise-btn turquoise-btn-blue" th:onclick="'viewPaymentDetail(' + ${payment.flowId} + ')'">查看详情</button>
+                            </td>
+                        </tr>
+                        <tr th:if="${paymentList == null or paymentList.size() == 0}">
+                            <td colspan="7" class="turquoise-table-empty">暂无支付流水数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 分页 -->
+            <div class="turquoise-pagination" th:if="${totalPages > 1}">
+                <ul>
+                    <li th:if="${currentPage > 1}">
+                        <a th:href="@{/admin/payments(page=${currentPage - 1})}">上一页</a>
+                    </li>
+                    <li th:each="page : ${#numbers.sequence(1, totalPages)}" th:class="${page == currentPage} ? 'active' : ''">
+                        <a th:href="@{/admin/payments(page=${page})}" th:text="${page}"></a>
+                    </li>
+                    <li th:if="${currentPage < totalPages}">
+                        <a th:href="@{/admin/payments(page=${currentPage + 1})}">下一页</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 支付详情弹窗 -->
+    <div id="paymentDetailModal" class="turquoise-modal-overlay">
+        <div class="turquoise-modal">
+            <div class="turquoise-modal-header">
+                <h3 class="turquoise-modal-title">支付详情</h3>
+                <button id="closePaymentDetailBtn" class="turquoise-modal-close">&times;</button>
+            </div>
+            <div class="turquoise-modal-body">
+                <div class="payment-detail-info">
+                    <p><strong>流水号：</strong><span id="detailFlowId"></span></p>
+                    <p><strong>关联订单：</strong><span id="detailOrderId"></span></p>
+                    <p><strong>支付金额：</strong><span id="detailPayAmount"></span></p>
+                    <p><strong>支付方式：</strong><span id="detailPayType"></span></p>
+                    <p><strong>支付状态：</strong><span id="detailPayStatus"></span></p>
+                    <p><strong>支付时间：</strong><span id="detailPayTime"></span></p>
+                    <p><strong>第三方支付流水号：</strong><span id="detailTransactionNo"></span></p>
+                    <p><strong>创建时间：</strong><span id="detailCreateTime"></span></p>
+                </div>
+            </div>
+            <div class="turquoise-modal-footer">
+                <button id="cancelPaymentDetailBtn" class="turquoise-btn-cancel">关闭</button>
+            </div>
+        </div>
+    </div>
+    
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-script"></th:block>
+    
+    <script>
+        // 查看支付详情
+        function viewPaymentDetail(flowId) {
+            fetch('/admin/payments/detail/' + flowId, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.resultCode === 200) {
+                    const payment = data.data;
+                    document.getElementById('detailFlowId').textContent = payment.flowId;
+                    document.getElementById('detailOrderId').textContent = payment.orderId;
+                    document.getElementById('detailPayAmount').textContent = payment.payAmount;
+                    
+                    // 支付方式
+                    let payTypeText = '';
+                    switch (payment.payType) {
+                        case 1: payTypeText = '支付宝'; break;
+                        case 2: payTypeText = '微信'; break;
+                    }
+                    document.getElementById('detailPayType').textContent = payTypeText;
+                    
+                    // 支付状态
+                    let payStatusText = '';
+                    switch (payment.payStatus) {
+                        case 1: payStatusText = '成功'; break;
+                        case 2: payStatusText = '失败'; break;
+                    }
+                    document.getElementById('detailPayStatus').textContent = payStatusText;
+                    
+                    document.getElementById('detailPayTime').textContent = payment.payTime;
+                    document.getElementById('detailTransactionNo').textContent = payment.transactionNo || '无';
+                    document.getElementById('detailCreateTime').textContent = payment.createTime;
+                    
+                    // 显示弹窗
+                    document.getElementById('paymentDetailModal').classList.add('active');
+                } else {
+                    alert(data.message || '获取详情失败');
+                }
+            })
+            .catch(error => {
+                console.error('获取详情失败：', error);
+                alert('获取详情失败，请重试');
+            });
+        }
+        
+        // 关闭支付详情弹窗
+        document.getElementById('closePaymentDetailBtn').addEventListener('click', function() {
+            document.getElementById('paymentDetailModal').classList.remove('active');
+        });
+        
+        document.getElementById('cancelPaymentDetailBtn').addEventListener('click', function() {
+            document.getElementById('paymentDetailModal').classList.remove('active');
+        });
+        
+        document.getElementById('paymentDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

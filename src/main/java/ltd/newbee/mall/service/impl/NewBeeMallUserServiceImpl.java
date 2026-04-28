@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
@@ -103,5 +104,18 @@ public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
             return false;
         }
         return mallUserMapper.lockUserBatch(ids, lockStatus) > 0;
+    }
+
+    @Override
+    public MallUser getUserById(Long userId) {
+        return mallUserMapper.selectByPrimaryKey(userId);
+    }
+
+    @Override
+    public PageResult getCollectList(PageQueryUtil pageUtil) {
+        List<Map<String, Object>> collectList = mallUserMapper.findCollectList(pageUtil);
+        int total = mallUserMapper.getTotalCollects(pageUtil);
+        PageResult pageResult = new PageResult(collectList, total, pageUtil.getLimit(), pageUtil.getPage());
+        return pageResult;
     }
 }

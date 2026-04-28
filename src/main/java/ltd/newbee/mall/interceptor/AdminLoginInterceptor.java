@@ -8,6 +8,7 @@
  */
 package ltd.newbee.mall.interceptor;
 
+import ltd.newbee.mall.common.Constants;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,7 +30,7 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         String requestServletPath = request.getServletPath();
-        if (requestServletPath.startsWith("/admin") && null == request.getSession().getAttribute("loginUser")) {
+        if (requestServletPath.startsWith("/admin") && null == request.getSession().getAttribute(Constants.ADMIN_SESSION_KEY)) {
             request.getSession().setAttribute("errorMsg", "请登陆");
             response.sendRedirect(request.getContextPath() + "/admin/login");
             return false;

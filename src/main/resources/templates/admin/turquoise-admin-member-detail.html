@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-head"></th:block>
+</head>
+<body>
+    <th:block th:replace="admin/turquoise-admin-layout :: header"></th:block>
+    <th:block th:replace="admin/turquoise-admin-layout :: sidebar"></th:block>
+    
+    <main class="turquoise-content">
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">用户详情</h2>
+                <a href="/admin/members" class="turquoise-btn turquoise-btn-primary">返回列表</a>
+            </div>
+            
+            <!-- 用户基本信息 -->
+            <div class="turquoise-card">
+                <h3 class="turquoise-card-title">基本信息</h3>
+                <div class="turquoise-card-content">
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">用户ID：</label>
+                            <span th:text="${user.userId}"></span>
+                        </div>
+                    </div>
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">用户昵称：</label>
+                            <span th:text="${user.nickName}"></span>
+                        </div>
+                    </div>
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">登录账号：</label>
+                            <span th:text="${user.loginName}"></span>
+                        </div>
+                    </div>
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">个性签名：</label>
+                            <span th:text="${user.introduceSign}"></span>
+                        </div>
+                    </div>
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">注册时间：</label>
+                            <span th:text="${user.createTime}"></span>
+                        </div>
+                    </div>
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">用户状态：</label>
+                            <span th:if="${user.lockedFlag == 0}" class="turquoise-status turquoise-status-up">正常</span>
+                            <span th:else class="turquoise-status turquoise-status-down">禁用</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 收货地址 -->
+            <div class="turquoise-card">
+                <h3 class="turquoise-card-title">收货地址</h3>
+                <div class="turquoise-card-content">
+                    <p th:text="${user.address != null ? user.address : '暂无收货地址'}"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-script"></th:block>
+</body>
+</html>

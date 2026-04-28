@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>松石雅集 - 帖子详情</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f5f3f0;
+      color: #3d3a36;
+      line-height: 1.6;
+    }
+
+    .font-serif {
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    /* 导航栏 */
+    .navbar {
+      background: #faf9f7;
+      border-bottom: 1px solid #e8e4df;
+      box-shadow: 0 2px 8px rgba(61, 58, 54, 0.04);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #2d8b7e, #1a6b5e);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .logo-text {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #3d3a36;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-link {
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #8a8580;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .nav-link:hover {
+      background: #f0ede8;
+      color: #3d3a36;
+    }
+
+    .nav-link.active {
+      background: #e8f5f3;
+      color: #2d8b7e;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-login {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #c9a961, #b8944f);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
+    }
+
+    /* 主内容区 */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 20px;
+    }
+
+    /* 面包屑 */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #8a8580;
+    }
+
+    .breadcrumb a {
+      color: #8a8580;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .breadcrumb a:hover {
+      color: #2d8b7e;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 32px;
+    }
+
+    /* 卡片样式 */
+    .card {
+      background: #faf9f7;
+      border: 1px solid #e8e4df;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(61, 58, 54, 0.08), 0 2px 8px rgba(61, 58, 54, 0.04);
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(61, 58, 54, 0.12), 0 4px 12px rgba(61, 58, 54, 0.06);
+    }
+
+    /* 楼主帖 */
+    .post-header {
+      padding: 24px;
+      border-bottom: 1px solid #e8e4df;
+      background: linear-gradient(to right, rgba(245, 240, 227, 0.3), transparent);
+    }
+
+    .post-author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid #c9a961;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .author-info h3 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #3d3a36;
+      margin-bottom: 4px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-senior {
+      background: #f5f0e3;
+      color: #c9a961;
+      border: 1px solid rgba(201, 169, 97, 0.3);
+    }
+
+    .post-time {
+      font-size: 13px;
+      color: #8a8580;
+      margin-top: 4px;
+    }
+
+    .post-content {
+      padding: 24px;
+    }
+
+    .post-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #3d3a36;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      padding: 4px 12px;
+      background: #e8f5f3;
+      color: #2d8b7e;
+      border-radius: 16px;
+      font-size: 13px;
+      border: 1px solid rgba(45, 139, 126, 0.2);
+    }
+
+    .post-body {
+      color: #3d3a36;
+      line-height: 1.8;
+    }
+
+    .post-body p {
+      margin-bottom: 12px;
+    }
+
+    .post-footer {
+      padding: 16px 24px;
+      background: rgba(245, 243, 240, 0.5);
+      border-top: 1px solid #e8e4df;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 24px;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #8a8580;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      background: none;
+      border: none;
+    }
+
+    .action-btn:hover {
+      color: #2d8b7e;
+    }
+
+    .action-btn.liked {
+      color: #ef4444;
+    }
+
+    .action-btn.collected {
+      color: #c9a961;
+    }
+
+    .views {
+      font-size: 13px;
+      color: #8a8580;
+    }
+
+    /* 回复区 */
+    .replies-section {
+      margin-top: 24px;
+    }
+
+    .section-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #3d3a36;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: #2d8b7e;
+      border-radius: 2px;
+    }
+
+    .reply-card {
+      padding: 16px;
+      background: rgba(245, 243, 240, 0.5);
+      border: 1px solid #e8e4df;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .reply-card:hover {
+      background: #faf9f7;
+      box-shadow: 0 4px 12px rgba(61, 58, 54, 0.08);
+    }
+
+    .reply-card.accepted {
+      background: rgba(245, 240, 227, 0.4);
+      border-color: rgba(201, 169, 97, 0.4);
+      position: relative;
+    }
+
+    .reply-card.accepted::before {
+      content: '已采纳';
+      position: absolute;
+      left: -1px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #2d8b7e;
+      color: white;
+      padding: 4px 8px;
+      font-size: 11px;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .reply-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .reply-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid #e8e4df;
+    }
+
+    .reply-author {
+      font-weight: 500;
+      color: #3d3a36;
+      font-size: 14px;
+    }
+
+    .badge-official {
+      background: linear-gradient(135deg, #c9a961, #d4af37);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 4px rgba(201, 169, 97, 0.3);
+    }
+
+    .reply-meta {
+      font-size: 12px;
+      color: #8a8580;
+    }
+
+    .reply-content {
+      color: #3d3a36;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-left: 52px;
+    }
+
+    .reply-actions {
+      display: flex;
+      gap: 16px;
+      margin-left: 52px;
+      margin-top: 8px;
+    }
+
+    .reply-action {
+      font-size: 12px;
+      color: #8a8580;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+    }
+
+    .reply-action:hover {
+      color: #2d8b7e;
+    }
+
+    /* 回复输入区 */
+    .reply-input-section {
+      margin-top: 24px;
+      padding: 24px;
+    }
+
+    .reply-textarea {
+      width: 100%;
+      height: 120px;
+      padding: 16px;
+      border: 1px solid #e8e4df;
+      border-radius: 8px;
+      background: #f5f3f0;
+      color: #3d3a36;
+      font-size: 14px;
+      resize: none;
+      transition: all 0.3s ease;
+    }
+
+    .reply-textarea:focus {
+      outline: none;
+      border-color: #2d8b7e;
+      box-shadow: 0 0 0 3px rgba(45, 139, 126, 0.1);
+    }
+
+    .reply-textarea::placeholder {
+      color: rgba(138, 133, 128, 0.6);
+    }
+
+    .submit-btn {
+      margin-top: 16px;
+      padding: 10px 24px;
+      background: linear-gradient(135deg, #2d8b7e, #1a6b5e);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      float: right;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(45, 139, 126, 0.3);
+    }
+
+    /* 侧边栏 */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .profile-card {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 4px solid #c9a961;
+      margin: 0 auto 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-name {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #3d3a36;
+      margin-bottom: 8px;
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .stat-item {
+      padding: 12px;
+      background: rgba(245, 243, 240, 0.5);
+      border-radius: 8px;
+    }
+
+    .stat-value {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #2d8b7e;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #8a8580;
+      margin-top: 4px;
+    }
+
+    .hot-posts {
+      padding: 20px;
+    }
+
+    .hot-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #3d3a36;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hot-list {
+      list-style: none;
+    }
+
+    .hot-item {
+      margin-bottom: 12px;
+    }
+
+    .hot-link {
+      display: block;
+      padding: 8px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #3d3a36;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .hot-link:hover {
+      background: rgba(245, 243, 240, 0.5);
+      color: #2d8b7e;
+    }
+
+    .hot-views {
+      font-size: 12px;
+      color: #8a8580;
+      margin-top: 4px;
+    }
+
+    /* 页脚 */
+    .footer {
+      background: #faf9f7;
+      border-top: 1px solid #e8e4df;
+      margin-top: 48px;
+      padding: 48px 0 24px;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 32px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-desc {
+      color: #8a8580;
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 320px;
+    }
+
+    .footer-links h4 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #3d3a36;
+      margin-bottom: 16px;
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 8px;
+    }
+
+    .footer-links a {
+      color: #8a8580;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: #2d8b7e;
+    }
+
+    .footer-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #8a8580;
+      font-size: 14px;
+    }
+
+    .contact-item i {
+      color: #2d8b7e;
+      width: 16px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #e8e4df;
+      padding-top: 24px;
+      text-align: center;
+      color: #8a8580;
+      font-size: 13px;
+    }
+
+    .footer-slogan {
+      font-family: 'Noto Serif SC', serif;
+      color: #3d3a36;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <div class="logo-icon">松</div>
+        <span class="logo-text">松石雅集</span>
+      </a>
+      
+      <div class="nav-links">
+        <a href="#" class="nav-link">首页</a>
+        <a href="#" class="nav-link active">文化论坛</a>
+        <a href="#" class="nav-link">鉴定中心</a>
+        <a href="#" class="nav-link">藏品库</a>
+        <a href="#" class="nav-link">关于我们</a>
+      </div>
+      
+      <div class="nav-actions">
+        <button class="action-btn" style="background: none; border: none;">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="btn-login">登录 / 注册</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主内容 -->
+  <main class="main-container">
+    <!-- 面包屑 -->
+    <div class="breadcrumb">
+      <a href="#">藏家论坛</a>
+      <i class="fas fa-chevron-right" style="font-size: 10px;"></i>
+      <span>帖子详情</span>
+    </div>
+
+    <div class="content-grid">
+      <!-- 左侧主内容 -->
+      <div class="main-content">
+        <!-- 楼主帖 -->
+        <div class="card">
+          <div class="post-header">
+            <div class="post-author">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=oldLi" alt="头像" class="avatar">
+              <div class="author-info">
+                <h3>老李爱松石 <span class="badge badge-senior">资深藏友</span></h3>
+                <p class="post-time">发布于 2026-04-25 14:30</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="post-content">
+            <h1 class="post-title">帮我看看这块料子，是云盖寺高瓷蓝还是丫角山果冻料？</h1>
+            
+            <div class="tags">
+              <span class="tag">#鉴定科普</span>
+              <span class="tag">#矿口鉴别</span>
+            </div>
+            
+            <div class="post-body">
+              <p>各位藏友好！最近入手了一块绿松石，卖家说是云盖寺的高瓷蓝，但我自己看不太准，想请各位行家帮忙掌掌眼。</p>
+              <p>这块料子整体呈现深蓝色，质地看起来很细腻，打灯看内部结构均匀，没有明显的杂质。重量约15克，尺寸大概是2.5cm x 1.8cm x 1.2cm。表面光泽度很好，摸起来手感温润。</p>
+              <p>我有几个疑问：从颜色上看确实很像云盖寺的高瓷蓝，但丫角山的果冻料也有类似的颜色，怎么区分？这块料子几乎没有铁线，这正常吗？证书上写的是"天然绿松石"，但没有标注具体矿口，这样的证书可信吗？希望各位大神不吝赐教！</p>
+            </div>
+          </div>
+          
+          <div class="post-footer">
+            <div class="post-actions">
+              <button class="action-btn" onclick="toggleLike(this)">
+                <i class="far fa-heart"></i>
+                <span>28</span>
+              </button>
+              <button class="action-btn" onclick="toggleCollect(this)">
+                <i class="far fa-star"></i>
+                <span>15</span>
+              </button>
+              <button class="action-btn">
+                <i class="fas fa-share-alt"></i>
+                <span>分享</span>
+              </button>
+            </div>
+            <span class="views">浏览 328</span>
+          </div>
+        </div>
+
+        <!-- 回复区 -->
+        <div class="replies-section">
+          <h2 class="section-title">全部回复（12条）</h2>
+          
+          <!-- 鉴定师回复（已采纳） -->
+          <div class="reply-card accepted">
+            <div class="reply-header">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user1" alt="头像" class="reply-avatar">
+              <span class="reply-author">李明远</span>
+              <span class="badge-official"><i class="fas fa-certificate"></i> 官方鉴定师</span>
+              <span class="reply-meta">资深专家 · #1楼 · 2026-04-25 15:20</span>
+            </div>
+            <p class="reply-content">从图片来看，这块料子的颜色非常正，呈现出典型的高瓷蓝特征。云盖寺矿口的料子通常具有这种深邃的蓝色调，且质地细腻。建议您可以观察一下是否有铁线分布，云盖寺的铁线通常比较细密。综合判断，这确实是云盖寺高瓷蓝的可能性较大。</p>
+            <div class="reply-actions">
+              <button class="reply-action"><i class="far fa-thumbs-up"></i> 18</button>
+              <button class="reply-action">回复</button>
+            </div>
+          </div>
+
+          <!-- 普通回复1 -->
+          <div class="reply-card">
+            <div class="reply-header">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user2" alt="头像" class="reply-avatar">
+              <span class="reply-author">绿松爱好者</span>
+              <span class="reply-meta">中级藏友 · #2楼 · 2026-04-25 16:05</span>
+            </div>
+            <p class="reply-content">同意楼上鉴定师的观点。我去年也收过一块类似的，确实是云盖寺的。不过丫角山的果冻料也有类似的颜色，主要看质感和透明度。</p>
+            <div class="reply-actions">
+              <button class="reply-action"><i class="far fa-thumbs-up"></i> 5</button>
+              <button class="reply-action">回复</button>
+            </div>
+          </div>
+
+          <!-- 普通回复2 -->
+          <div class="reply-card">
+            <div class="reply-header">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user3" alt="头像" class="reply-avatar">
+              <span class="reply-author">资深玩家老张</span>
+              <span class="reply-meta">资深藏友 · #3楼 · 2026-04-25 17:30</span>
+            </div>
+            <p class="reply-content">这块料子的光泽度很好，瓷度高。从证书上看应该是真品。如果担心矿口问题，可以找专业机构做进一步检测。我个人倾向于云盖寺，因为丫角山的料子通常更透一些。</p>
+            <div class="reply-actions">
+              <button class="reply-action"><i class="far fa-thumbs-up"></i> 12</button>
+              <button class="reply-action">回复</button>
+            </div>
+          </div>
+
+          <!-- 普通回复3 -->
+          <div class="reply-card">
+            <div class="reply-header">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user4" alt="头像" class="reply-avatar">
+              <span class="reply-author">新手小白</span>
+              <span class="reply-meta">初级藏友 · #4楼 · 2026-04-25 18:15</span>
+            </div>
+            <p class="reply-content">学习了！请问怎么区分云盖寺和丫角山的料子呢？有没有什么简单的方法？</p>
+            <div class="reply-actions">
+              <button class="reply-action"><i class="far fa-thumbs-up"></i> 3</button>
+              <button class="reply-action">回复</button>
+            </div>
+          </div>
+
+          <!-- 普通回复4 -->
+          <div class="reply-card">
+            <div class="reply-header">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user5" alt="头像" class="reply-avatar">
+              <span class="reply-author">松石收藏家</span>
+              <span class="reply-meta">高级藏友 · #5楼 · 2026-04-25 19:45</span>
+            </div>
+            <p class="reply-content">云盖寺的料子密度更高，手感更沉。你可以用手掂量一下，如果感觉比同体积的其他料子重，那大概率是云盖寺的。</p>
+            <div class="reply-actions">
+              <button class="reply-action"><i class="far fa-thumbs-up"></i> 8</button>
+              <button class="reply-action">回复</button>
+            </div>
+          </div>
+
+          <!-- 普通回复5 -->
+          <div class="reply-card">
+            <div class="reply-header">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user6" alt="头像" class="reply-avatar">
+              <span class="reply-author">文玩达人</span>
+              <span class="reply-meta">中级藏友 · #6楼 · 2026-04-25 20:30</span>
+            </div>
+            <p class="reply-content">建议用紫光灯照一下，云盖寺的料子在紫外线下会有特殊的荧光反应，这是鉴别的一个重要依据。</p>
+            <div class="reply-actions">
+              <button class="reply-action"><i class="far fa-thumbs-up"></i> 6</button>
+              <button class="reply-action">回复</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 回复输入区 -->
+        <div class="card reply-input-section">
+          <textarea class="reply-textarea" placeholder="写下你的见解，与其他藏友交流..."></textarea>
+          <button class="submit-btn">发送回复</button>
+        </div>
+      </div>
+
+      <!-- 右侧侧边栏 -->
+      <aside class="sidebar">
+        <!-- 楼主信息 -->
+        <div class="card profile-card">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=oldLi" alt="头像" class="profile-avatar">
+          <h3 class="profile-name">老李爱松石</h3>
+          <span class="badge badge-senior">资深藏友</span>
+          <div class="profile-stats">
+            <div class="stat-item">
+              <div class="stat-value">128</div>
+              <div class="stat-label">发帖数</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">356</div>
+              <div class="stat-label">回复数</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 热门帖子 -->
+        <div class="card hot-posts">
+          <h3 class="hot-title"><i class="fas fa-fire" style="color: #ef4444;"></i> 热门帖子</h3>
+          <ul class="hot-list">
+            <li class="hot-item">
+              <a href="#" class="hot-link">2026年最新绿松石市场行情分析</a>
+              <div class="hot-views">1256 次浏览</div>
+            </li>
+            <li class="hot-item">
+              <a href="#" class="hot-link">如何辨别注胶绿松石？专家详解</a>
+              <div class="hot-views">982 次浏览</div>
+            </li>
+            <li class="hot-item">
+              <a href="#" class="hot-link">我的云盖寺收藏分享</a>
+              <div class="hot-views">756 次浏览</div>
+            </li>
+            <li class="hot-item">
+              <a href="#" class="hot-link">丫角山矿口历史与特点</a>
+              <div class="hot-views">634 次浏览</div>
+            </li>
+            <li class="hot-item">
+              <a href="#" class="hot-link">绿松石保养技巧大全</a>
+              <div class="hot-views">521 次浏览</div>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-icon">松</div>
+            <span class="logo-text">松石雅集</span>
+          </div>
+          <p class="footer-desc">专注于绿松石文化的交流与分享，为藏友提供专业鉴定、矿口鉴别、文化交流的平台。</p>
+        </div>
+        
+        <div class="footer-links">
+          <h4>快速链接</h4>
+          <ul>
+            <li><a href="#">首页</a></li>
+            <li><a href="#">文化论坛</a></li>
+            <li><a href="#">鉴定中心</a></li>
+            <li><a href="#">藏品库</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links">
+          <h4>联系我们</h4>
+          <div class="footer-contact">
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>contact@songshi.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-phone"></i>
+              <span>400-888-8888</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>北京市朝阳区</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="footer-slogan">传承东方美学 · 每一块绿松石都值得被认真对待</p>
+        <p>© 2026 松石雅集. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleLike(btn) {
+      const icon = btn.querySelector('i');
+      const count = btn.querySelector('span');
+      let num = parseInt(count.textContent);
+      
+      if (btn.classList.contains('liked')) {
+        btn.classList.remove('liked');
+        icon.classList.remove('fas');
+        icon.classList.add('far');
+        count.textContent = num - 1;
+      } else {
+        btn.classList.add('liked');
+        icon.classList.remove('far');
+        icon.classList.add('fas');
+        count.textContent = num + 1;
+      }
+    }
+
+    function toggleCollect(btn) {
+      const icon = btn.querySelector('i');
+      const count = btn.querySelector('span');
+      let num = parseInt(count.textContent);
+      
+      if (btn.classList.contains('collected')) {
+        btn.classList.remove('collected');
+        icon.classList.remove('fas');
+        icon.classList.add('far');
+        count.textContent = num - 1;
+      } else {
+        btn.classList.add('collected');
+        icon.classList.remove('far');
+        icon.classList.add('fas');
+        count.textContent = num + 1;
+      }
+    }
+  </script>
+</body>
+</html>

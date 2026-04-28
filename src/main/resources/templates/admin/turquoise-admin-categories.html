@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-head"></th:block>
+    <style>
+        /* 按钮样式 */
+        .turquoise-btn {
+            padding: 3px 10px;
+            font-size: 12px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .turquoise-btn-primary {
+            padding: 6px 16px;
+            font-size: 12px;
+            background-color: #4A90E2;
+            color: white;
+        }
+
+        .turquoise-btn-primary:hover {
+            background-color: #357ABD;
+        }
+
+        .turquoise-btn-blue {
+            background-color: #4A90E2;
+            color: white;
+        }
+
+        .turquoise-btn-blue:hover {
+            background-color: #357ABD;
+        }
+
+        .turquoise-btn-red {
+            background-color: #D9534F;
+            color: white;
+        }
+
+        .turquoise-btn-red:hover {
+            background-color: #C9302C;
+        }
+
+        .turquoise-tab-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .turquoise-tab-header h3 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <th:block th:replace="admin/turquoise-admin-layout :: header"></th:block>
+    <th:block th:replace="admin/turquoise-admin-layout :: sidebar"></th:block>
+
+    <main class="turquoise-content">
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">属性字典管理</h2>
+            </div>
+
+            <!-- 标签页导航 -->
+            <div class="turquoise-tab-container">
+                <div class="turquoise-tab-nav">
+                    <button class="turquoise-tab-btn active" data-tab="origin">矿口管理</button>
+                    <button class="turquoise-tab-btn" data-tab="type">品类管理</button>
+                    <button class="turquoise-tab-btn" data-tab="color">颜色管理</button>
+                    <button class="turquoise-tab-btn" data-tab="density">瓷度管理</button>
+                </div>
+
+                <!-- 矿口管理 -->
+                <div class="turquoise-tab-content active" id="origin">
+                    <div class="turquoise-tab-header">
+                        <h3>矿口列表</h3>
+                        <button class="turquoise-btn turquoise-btn-primary btn-add" data-type="origin">添加矿口</button>
+                    </div>
+                    <div class="turquoise-table-container">
+                        <table class="turquoise-table">
+                            <thead>
+                                <tr>
+                                    <th>属性名称</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="attr : ${originList}">
+                                    <td th:text="${attr.attrName}"></td>
+                                    <td>
+                                        <button class="turquoise-btn turquoise-btn-blue btn-edit" th:data-id="${attr.attrId}" th:data-name="${attr.attrName}" th:data-type="${attr.attrType}">编辑</button>
+                                        <button class="turquoise-btn turquoise-btn-red btn-delete" th:data-id="${attr.attrId}">删除</button>
+                                    </td>
+                                </tr>
+                                <tr th:if="${originList == null or originList.size() == 0}">
+                                    <td colspan="2" class="turquoise-table-empty">暂无矿口数据</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 品类管理 -->
+                <div class="turquoise-tab-content" id="type">
+                    <div class="turquoise-tab-header">
+                        <h3>品类列表</h3>
+                        <button class="turquoise-btn turquoise-btn-primary btn-add" data-type="type">添加品类</button>
+                    </div>
+                    <div class="turquoise-table-container">
+                        <table class="turquoise-table">
+                            <thead>
+                                <tr>
+                                    <th>属性名称</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="category : ${typeList}">
+                                    <td th:text="${category.categoryName}"></td>
+                                    <td>
+                                        <button class="turquoise-btn turquoise-btn-blue btn-edit-category" th:data-id="${category.categoryId}" th:data-name="${category.categoryName}">编辑</button>
+                                        <button class="turquoise-btn turquoise-btn-red btn-delete-category" th:data-id="${category.categoryId}">删除</button>
+                                    </td>
+                                </tr>
+                                <tr th:if="${typeList == null or typeList.size() == 0}">
+                                    <td colspan="2" class="turquoise-table-empty">暂无品类数据</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 颜色管理 -->
+                <div class="turquoise-tab-content" id="color">
+                    <div class="turquoise-tab-header">
+                        <h3>颜色列表</h3>
+                        <button class="turquoise-btn turquoise-btn-primary btn-add" data-type="color">添加颜色</button>
+                    </div>
+                    <div class="turquoise-table-container">
+                        <table class="turquoise-table">
+                            <thead>
+                                <tr>
+                                    <th>属性名称</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="attr : ${colorList}">
+                                    <td th:text="${attr.attrName}"></td>
+                                    <td>
+                                        <button class="turquoise-btn turquoise-btn-blue btn-edit" th:data-id="${attr.attrId}" th:data-name="${attr.attrName}" th:data-type="${attr.attrType}">编辑</button>
+                                        <button class="turquoise-btn turquoise-btn-red btn-delete" th:data-id="${attr.attrId}">删除</button>
+                                    </td>
+                                </tr>
+                                <tr th:if="${colorList == null or colorList.size() == 0}">
+                                    <td colspan="2" class="turquoise-table-empty">暂无颜色数据</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 瓷度管理 -->
+                <div class="turquoise-tab-content" id="density">
+                    <div class="turquoise-tab-header">
+                        <h3>瓷度列表</h3>
+                        <button class="turquoise-btn turquoise-btn-primary btn-add" data-type="density">添加瓷度</button>
+                    </div>
+                    <div class="turquoise-table-container">
+                        <table class="turquoise-table">
+                            <thead>
+                                <tr>
+                                    <th>属性名称</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="attr : ${densityList}">
+                                    <td th:text="${attr.attrName}"></td>
+                                    <td>
+                                        <button class="turquoise-btn turquoise-btn-blue btn-edit" th:data-id="${attr.attrId}" th:data-name="${attr.attrName}" th:data-type="${attr.attrType}">编辑</button>
+                                        <button class="turquoise-btn turquoise-btn-red btn-delete" th:data-id="${attr.attrId}">删除</button>
+                                    </td>
+                                </tr>
+                                <tr th:if="${densityList == null or densityList.size() == 0}">
+                                    <td colspan="2" class="turquoise-table-empty">暂无瓷度数据</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 添加属性弹窗 -->
+    <div class="turquoise-modal-overlay" id="addModal">
+        <div class="turquoise-modal">
+            <div class="turquoise-modal-header">
+                <h3 class="turquoise-modal-title" id="modalTitle">添加属性</h3>
+            </div>
+            <div class="turquoise-modal-body">
+                <form id="addAttrForm">
+                    <input type="hidden" id="attrType" name="attrType">
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">属性名称</label>
+                        <input type="text" class="turquoise-form-input" id="attrNameInput" name="attrNameInput" placeholder="请输入属性名称">
+                    </div>
+                </form>
+            </div>
+            <div class="turquoise-modal-footer">
+                <button id="cancelAddBtn" class="turquoise-btn-cancel">取消</button>
+                <button type="button" id="submitAddBtn" class="turquoise-btn-submit">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑属性弹窗 -->
+    <div class="turquoise-modal-overlay" id="editModal">
+        <div class="turquoise-modal">
+            <div class="turquoise-modal-header">
+                <h3 class="turquoise-modal-title">编辑属性</h3>
+            </div>
+            <div class="turquoise-modal-body">
+                <form id="editAttrForm">
+                    <input type="hidden" id="editAttrId" name="editAttrId">
+                    <input type="hidden" id="editAttrType" name="editAttrType">
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label">属性名称</label>
+                        <input type="text" class="turquoise-form-input" id="editAttrName" name="editAttrName" placeholder="请输入属性名称" required>
+                    </div>
+                </form>
+            </div>
+            <div class="turquoise-modal-footer">
+                <button id="cancelEditBtn" class="turquoise-btn-cancel">取消</button>
+                <button type="button" id="submitEditBtn" class="turquoise-btn-submit">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 当前活动标签页
+        let currentTab = 'origin';
+
+        // 删除属性
+        function deleteAttr(attrId) {
+            const requestData = {
+                attrId: attrId
+            };
+
+            fetch('/admin/attr-dict/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.resultCode === 200) {
+                    refreshCurrentTab();
+                } else {
+                    alert(data.message || '删除失败');
+                }
+            })
+            .catch(error => {
+                console.error('删除失败：', error);
+                alert('删除失败，请重试');
+            });
+        }
+
+        // 刷新当前标签页
+        function refreshCurrentTab() {
+            const tabContent = document.getElementById(currentTab);
+            const tbody = tabContent.querySelector('tbody');
+
+            const typeMap = {
+                'origin': 'origin',
+                'type': 'type',
+                'color': 'color',
+                'density': 'grade'
+            };
+
+            const paramType = typeMap[currentTab] || currentTab;
+
+            fetch('/admin/categories/list?type=' + paramType)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200 && data.data) {
+                        let html = '';
+                        data.data.forEach(function(item) {
+                            if (currentTab === 'type') {
+                                html += '<tr><td>' + item.categoryName + '</td><td>';
+                                html += '<button class="turquoise-btn turquoise-btn-blue btn-edit-category" data-id="' + item.categoryId + '" data-name="' + item.categoryName + '">编辑</button>';
+                                html += '<button class="turquoise-btn turquoise-btn-red btn-delete-category" data-id="' + item.categoryId + '">删除</button>';
+                                html += '</td></tr>';
+                            } else {
+                                html += '<tr><td>' + item.attrName + '</td><td>';
+                                html += '<button class="turquoise-btn turquoise-btn-blue btn-edit" data-id="' + item.attrId + '" data-name="' + item.attrName + '" data-type="' + item.attrType + '">编辑</button>';
+                                html += '<button class="turquoise-btn turquoise-btn-red btn-delete" data-id="' + item.attrId + '">删除</button>';
+                                html += '</td></tr>';
+                            }
+                        });
+                        if (html === '') {
+                            html = '<tr><td colspan="2" class="turquoise-table-empty">暂无数据</td></tr>';
+                        }
+                        tbody.innerHTML = html;
+
+                        rebindEvents();
+                    }
+                })
+                .catch(error => {
+                    console.error('刷新失败：', error);
+                });
+        }
+
+        // 重新绑定事件
+        function rebindEvents() {
+            document.querySelectorAll('.btn-edit').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    var name = this.getAttribute('data-name');
+                    var type = this.getAttribute('data-type');
+                    openEditModal(id, name, type);
+                });
+            });
+
+            document.querySelectorAll('.btn-delete').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    if (confirm('确认删除该属性？')) {
+                        deleteAttr(id);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.btn-edit-category').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    var name = this.getAttribute('data-name');
+                    openCategoryEditModal(id, name);
+                });
+            });
+
+            document.querySelectorAll('.btn-delete-category').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    if (confirm('确认删除该品类？')) {
+                        deleteCategory(id);
+                    }
+                });
+            });
+        }
+
+        // 删除品类
+        function deleteCategory(categoryId) {
+            const formData = new FormData();
+            formData.append('categoryId', categoryId);
+
+            fetch('/admin/category/delete', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.resultCode === 200) {
+                    refreshCurrentTab();
+                } else {
+                    alert(data.message || '删除失败');
+                }
+            })
+            .catch(error => {
+                console.error('删除失败：', error);
+                alert('删除失败，请重试');
+            });
+        }
+
+        // 打开品类编辑弹窗
+        function openCategoryEditModal(categoryId, categoryName) {
+            const editModal = document.getElementById('editModal');
+            document.getElementById('editAttrId').value = categoryId;
+            document.getElementById('editAttrName').value = categoryName;
+            document.getElementById('editAttrType').value = 'category';
+
+            const submitBtn = document.getElementById('submitEditBtn');
+            const newSubmitBtn = submitBtn.cloneNode(true);
+            submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
+
+            newSubmitBtn.addEventListener('click', function() {
+                const newCategoryId = document.getElementById('editAttrId').value;
+                const newCategoryName = document.getElementById('editAttrName').value;
+
+                if (!newCategoryName) {
+                    alert('请输入品类名称');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('categoryId', newCategoryId);
+                formData.append('categoryName', newCategoryName);
+
+                fetch('/admin/category/update', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200) {
+                        editModal.classList.remove('active');
+                        refreshCurrentTab();
+                    } else {
+                        alert(data.message || '更新失败');
+                    }
+                })
+                .catch(error => {
+                    console.error('更新失败：', error);
+                    alert('更新失败，请重试');
+                });
+            });
+
+            editModal.classList.add('active');
+        }
+
+        // 打开添加弹窗
+        function openAddModal(attrType) {
+            const addModal = document.getElementById('addModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const attrTypeInput = document.getElementById('attrType');
+            const attrNameInput = document.getElementById('attrNameInput');
+
+            let title = '添加';
+            switch(attrType) {
+                case 'origin': title += '矿口'; break;
+                case 'type': title += '品类'; break;
+                case 'color': title += '颜色'; break;
+                case 'density': title += '瓷度'; break;
+            }
+            modalTitle.textContent = title;
+
+            attrTypeInput.value = attrType;
+
+            if (attrNameInput) {
+                attrNameInput.value = '';
+            }
+
+            addModal.classList.add('active');
+        }
+
+        // 打开编辑弹窗
+        function openEditModal(attrId, attrName, attrType) {
+            const editModal = document.getElementById('editModal');
+            document.getElementById('editAttrId').value = attrId;
+            document.getElementById('editAttrName').value = attrName;
+            document.getElementById('editAttrType').value = attrType;
+
+            editModal.classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabBtns = document.querySelectorAll('.turquoise-tab-btn');
+            const tabContents = document.querySelectorAll('.turquoise-tab-content');
+
+            document.querySelectorAll('.btn-edit').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    var name = this.getAttribute('data-name');
+                    var type = this.getAttribute('data-type');
+                    openEditModal(id, name, type);
+                });
+            });
+
+            document.querySelectorAll('.btn-delete').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    if (confirm('确认删除该属性？')) {
+                        deleteAttr(id);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.btn-add').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var type = this.getAttribute('data-type');
+                    openAddModal(type);
+                });
+            });
+
+            document.querySelectorAll('.btn-delete-category').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    alert('品类删除功能暂未开放');
+                });
+            });
+
+            document.querySelectorAll('.btn-edit-category').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var id = this.getAttribute('data-id');
+                    var name = this.getAttribute('data-name');
+                    openCategoryEditModal(id, name);
+                });
+            });
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+
+                    this.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+
+                    currentTab = tabId;
+                });
+            });
+
+            const addModal = document.getElementById('addModal');
+            const editModal = document.getElementById('editModal');
+            const cancelAddBtn = document.getElementById('cancelAddBtn');
+            const submitAddBtn = document.getElementById('submitAddBtn');
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            const submitEditBtn = document.getElementById('submitEditBtn');
+
+            if (cancelAddBtn) {
+                cancelAddBtn.addEventListener('click', function() {
+                    addModal.classList.remove('active');
+                });
+            }
+
+            if (cancelEditBtn) {
+                cancelEditBtn.addEventListener('click', function() {
+                    editModal.classList.remove('active');
+                });
+            }
+
+            if (addModal) {
+                addModal.addEventListener('click', function(e) {
+                    if (e.target === addModal) {
+                        addModal.classList.remove('active');
+                    }
+                });
+            }
+
+            if (editModal) {
+                editModal.addEventListener('click', function(e) {
+                    if (e.target === editModal) {
+                        editModal.classList.remove('active');
+                    }
+                });
+            }
+
+            if (submitAddBtn) {
+                submitAddBtn.addEventListener('click', function() {
+                    const attrType = document.getElementById('attrType').value;
+                    const attrNameInput = document.getElementById('attrNameInput');
+                    const attrName = attrNameInput ? attrNameInput.value.trim() : '';
+
+                    if (!attrName) {
+                        alert('请输入属性名称');
+                        return;
+                    }
+
+                    let saveAttrType = attrType;
+                    if (attrType === 'density') {
+                        saveAttrType = 'grade';
+                    }
+
+                    const formData = new FormData();
+                    formData.append('attrType', saveAttrType);
+                    formData.append('attrName', attrName);
+
+                    fetch('/admin/categories/save', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.resultCode === 200) {
+                            addModal.classList.remove('active');
+                            refreshCurrentTab();
+                        } else {
+                            alert(data.message || '保存失败');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('保存失败：', error);
+                        alert('保存失败，请重试');
+                    });
+                });
+            }
+
+            if (submitEditBtn) {
+                submitEditBtn.addEventListener('click', function() {
+                    const attrId = parseInt(document.getElementById('editAttrId').value);
+                    const attrName = document.getElementById('editAttrName').value;
+                    const attrType = document.getElementById('editAttrType').value;
+
+                    if (!attrName) {
+                        alert('请输入属性名称');
+                        return;
+                    }
+
+                    if (isNaN(attrId)) {
+                        alert('无效的属性ID');
+                        return;
+                    }
+
+                    const requestData = {
+                        attrId: attrId,
+                        attrName: attrName,
+                        attrType: attrType
+                    };
+
+                    fetch('/admin/attr-dict/update', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.resultCode === 200) {
+                            editModal.classList.remove('active');
+                            refreshCurrentTab();
+                        } else {
+                            alert(data.message || '更新失败');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('更新失败：', error);
+                        alert('更新失败，请重试');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

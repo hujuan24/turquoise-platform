@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>属性字典管理 - 绿松石商城后台</title>
+    <link rel="stylesheet" href="/css/turquoise-admin.css">
+    <style>
+        /* 容器样式 */
+        .turquoise-container {
+            padding: 20px;
+        }
+        
+        /* 页面标题 */
+        .turquoise-page-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        /* 操作按钮 */
+        .turquoise-btn {
+            margin-right: 10px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .turquoise-btn-primary {
+            background-color: #4A90E2;
+            color: white;
+        }
+        
+        .turquoise-btn-primary:hover {
+            background-color: #357ABD;
+        }
+        
+        /* 卡片样式 */
+        .turquoise-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .turquoise-card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        /* 表格样式 */
+        .turquoise-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .turquoise-table th,
+        .turquoise-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .turquoise-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        
+        /* 操作按钮组 */
+        .turquoise-action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .turquoise-btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+            border-radius: 3px;
+        }
+        
+        .turquoise-btn-blue {
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .turquoise-btn-blue:hover {
+            background-color: #357ABD;
+        }
+        
+        .turquoise-btn-red {
+            background-color: #D9534F;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .turquoise-btn-red:hover {
+            background-color: #C9302C;
+        }
+        
+        /* 表单样式 */
+        .turquoise-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .turquoise-form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .turquoise-form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .turquoise-form-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .turquoise-form-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        /* 模态框样式 */
+        .turquoise-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .turquoise-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        .turquoise-modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .turquoise-modal-footer {
+            margin-top: 20px;
+            text-align: right;
+        }
+        
+        /* 提示信息 */
+        .turquoise-message {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .turquoise-message-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .turquoise-message-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="turquoise-nav">
+        <div class="turquoise-nav-left">
+            <a href="/admin/dashboard" class="turquoise-nav-brand">
+                <img src="/images/turquoise-logo.png" alt="绿松石商城" class="turquoise-nav-logo">
+                <span class="turquoise-nav-title">绿松石商城管理后台</span>
+            </a>
+        </div>
+        <div class="turquoise-nav-right">
+            <a href="/admin/dashboard" class="turquoise-nav-item">仪表盘</a>
+            <a href="/admin/products" class="turquoise-nav-item">商品管理</a>
+            <a href="/admin/attr-dict" class="turquoise-nav-item active">属性管理</a>
+            <a href="/admin/members" class="turquoise-nav-item">会员管理</a>
+            <a href="/admin/logout" class="turquoise-nav-item">退出</a>
+        </div>
+    </nav>
+    
+    <!-- 侧边栏 -->
+    <div class="turquoise-sidebar">
+        <ul class="turquoise-sidebar-menu">
+            <li class="turquoise-sidebar-item">
+                <a href="/admin/dashboard" class="turquoise-sidebar-link">
+                    <i class="turquoise-sidebar-icon">📊</i>
+                    <span class="turquoise-sidebar-text">数据驾驶舱</span>
+                </a>
+            </li>
+            <li class="turquoise-sidebar-item">
+                <a href="/admin/products" class="turquoise-sidebar-link">
+                    <i class="turquoise-sidebar-icon">📦</i>
+                    <span class="turquoise-sidebar-text">商品管理</span>
+                </a>
+            </li>
+            <li class="turquoise-sidebar-item active">
+                <a href="/admin/attr-dict" class="turquoise-sidebar-link">
+                    <i class="turquoise-sidebar-icon">🏷️</i>
+                    <span class="turquoise-sidebar-text">属性管理</span>
+                </a>
+            </li>
+            <li class="turquoise-sidebar-item">
+                <a href="/admin/members" class="turquoise-sidebar-link">
+                    <i class="turquoise-sidebar-icon">👥</i>
+                    <span class="turquoise-sidebar-text">会员管理</span>
+                </a>
+            </li>
+            <li class="turquoise-sidebar-item">
+                <a href="/admin/content" class="turquoise-sidebar-link">
+                    <i class="turquoise-sidebar-icon">📝</i>
+                    <span class="turquoise-sidebar-text">内容管理</span>
+                </a>
+            </li>
+            <li class="turquoise-sidebar-item">
+                <a href="/admin/appraisals" class="turquoise-sidebar-link">
+                    <i class="turquoise-sidebar-icon">🔍</i>
+                    <span class="turquoise-sidebar-text">鉴定管理</span>
+                </a>
+            </li>
+            <li class="turquoise-sidebar-item">
+                <a href="/admin/settings" class="turquoise-sidebar-link">
+                    <i class="turquoise-sidebar-icon">⚙️</i>
+                    <span class="turquoise-sidebar-text">系统设置</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- 主内容区 -->
+    <div class="turquoise-main">
+        <div class="turquoise-container">
+            <h1 class="turquoise-page-title">属性字典管理</h1>
+            
+            <!-- 新增属性按钮 -->
+            <button class="turquoise-btn turquoise-btn-primary" onclick="openAddModal()">新增属性</button>
+            
+            <!-- 矿口属性 -->
+            <div class="turquoise-card">
+                <h2 class="turquoise-card-title">矿口属性</h2>
+                <table class="turquoise-table">
+                    <thead>
+                        <tr>
+                            <th>属性ID</th>
+                            <th>属性名称</th>
+                            <th>排序</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="origin : ${originList}">
+                            <td th:text="${origin.attrId}"></td>
+                            <td th:text="${origin.attrName}"></td>
+                            <td th:text="${origin.sortOrder}"></td>
+                            <td>
+                                <div class="turquoise-action-buttons">
+                                    <button class="turquoise-btn turquoise-btn-sm turquoise-btn-blue" th:onclick="openEditModal(${origin.attrId})">编辑</button>
+                                    <button class="turquoise-btn turquoise-btn-sm turquoise-btn-red" th:onclick="deleteAttr(${origin.attrId})">删除</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(originList)}">
+                            <td colspan="4" style="text-align: center;">暂无矿口属性</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 颜色属性 -->
+            <div class="turquoise-card">
+                <h2 class="turquoise-card-title">颜色属性</h2>
+                <table class="turquoise-table">
+                    <thead>
+                        <tr>
+                            <th>属性ID</th>
+                            <th>属性名称</th>
+                            <th>排序</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="color : ${colorList}">
+                            <td th:text="${color.attrId}"></td>
+                            <td th:text="${color.attrName}"></td>
+                            <td th:text="${color.sortOrder}"></td>
+                            <td>
+                                <div class="turquoise-action-buttons">
+                                    <button class="turquoise-btn turquoise-btn-sm turquoise-btn-blue" th:onclick="openEditModal(${color.attrId})">编辑</button>
+                                    <button class="turquoise-btn turquoise-btn-sm turquoise-btn-red" th:onclick="deleteAttr(${color.attrId})">删除</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(colorList)}">
+                            <td colspan="4" style="text-align: center;">暂无颜色属性</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 瓷度属性 -->
+            <div class="turquoise-card">
+                <h2 class="turquoise-card-title">瓷度属性</h2>
+                <table class="turquoise-table">
+                    <thead>
+                        <tr>
+                            <th>属性ID</th>
+                            <th>属性名称</th>
+                            <th>排序</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="grade : ${gradeList}">
+                            <td th:text="${grade.attrId}"></td>
+                            <td th:text="${grade.attrName}"></td>
+                            <td th:text="${grade.sortOrder}"></td>
+                            <td>
+                                <div class="turquoise-action-buttons">
+                                    <button class="turquoise-btn turquoise-btn-sm turquoise-btn-blue" th:onclick="openEditModal(${grade.attrId})">编辑</button>
+                                    <button class="turquoise-btn turquoise-btn-sm turquoise-btn-red" th:onclick="deleteAttr(${grade.attrId})">删除</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(gradeList)}">
+                            <td colspan="4" style="text-align: center;">暂无瓷度属性</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 新增/编辑属性模态框 -->
+    <div id="attrModal" class="turquoise-modal">
+        <div class="turquoise-modal-content">
+            <h3 id="modalTitle" class="turquoise-modal-title">新增属性</h3>
+            <form id="attrForm">
+                <input type="hidden" id="attrId" name="attrId">
+                <div class="turquoise-form-group">
+                    <label for="attrName" class="turquoise-form-label">属性名称</label>
+                    <input type="text" id="attrName" name="attrName" class="turquoise-form-input" required>
+                </div>
+                <div class="turquoise-form-group">
+                    <label for="attrType" class="turquoise-form-label">属性类型</label>
+                    <select id="attrType" name="attrType" class="turquoise-form-select" required>
+                        <option value="origin">矿口</option>
+                        <option value="color">颜色</option>
+                        <option value="grade">瓷度</option>
+                    </select>
+                </div>
+                <div class="turquoise-form-group">
+                    <label for="sortOrder" class="turquoise-form-label">排序值</label>
+                    <input type="number" id="sortOrder" name="sortOrder" class="turquoise-form-input" min="1" value="1" required>
+                </div>
+                <div class="turquoise-modal-footer">
+                    <button type="button" class="turquoise-btn" onclick="closeModal()">取消</button>
+                    <button type="submit" class="turquoise-btn turquoise-btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 提示信息容器 -->
+    <div id="messageContainer"></div>
+    
+    <script>
+        // 打开新增模态框
+        function openAddModal() {
+            document.getElementById('attrId').value = '';
+            document.getElementById('attrName').value = '';
+            document.getElementById('attrType').value = 'origin';
+            document.getElementById('sortOrder').value = '1';
+            document.getElementById('modalTitle').textContent = '新增属性';
+            document.getElementById('attrModal').style.display = 'block';
+        }
+        
+        // 打开编辑模态框
+        function openEditModal(attrId) {
+            fetch(`/admin/attr-dict/${attrId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200) {
+                        const attr = data.data;
+                        document.getElementById('attrId').value = attr.attrId;
+                        document.getElementById('attrName').value = attr.attrName;
+                        document.getElementById('attrType').value = attr.attrType;
+                        document.getElementById('sortOrder').value = attr.sortOrder;
+                        document.getElementById('modalTitle').textContent = '编辑属性';
+                        document.getElementById('attrModal').style.display = 'block';
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showMessage('加载属性失败', 'error');
+                });
+        }
+        
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('attrModal').style.display = 'none';
+        }
+        
+        // 显示提示信息
+        function showMessage(message, type) {
+            const container = document.getElementById('messageContainer');
+            container.innerHTML = `
+                <div class="turquoise-message turquoise-message-${type}">
+                    ${message}
+                </div>
+            `;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+        
+        // 删除属性
+        function deleteAttr(attrId) {
+            if (confirm('确定要删除这个属性吗？')) {
+                fetch('/admin/attr-dict/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `attrId=${attrId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200) {
+                        showMessage('删除成功', 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showMessage('删除失败', 'error');
+                });
+            }
+        }
+        
+        // 表单提交
+        document.getElementById('attrForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const attrId = document.getElementById('attrId').value;
+            const url = attrId ? '/admin/attr-dict/update' : '/admin/attr-dict/save';
+            
+            const formData = {
+                attrId: attrId,
+                attrName: document.getElementById('attrName').value,
+                attrType: document.getElementById('attrType').value,
+                sortOrder: parseInt(document.getElementById('sortOrder').value)
+            };
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.resultCode === 200) {
+                    showMessage(attrId ? '更新成功' : '保存成功', 'success');
+                    closeModal();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('操作失败', 'error');
+            });
+        });
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('attrModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

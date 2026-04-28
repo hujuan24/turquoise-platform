@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <!-- 页脚 -->
 <footer class="turquoise-footer" th:fragment="footer">
+  <th:block th:fragment="footer-fragment">
+
   <div class="turquoise-footer-content">
     <!-- 左侧：Logo + 简介 + 社交媒体 -->
     <div class="turquoise-footer-brand">
@@ -54,5 +56,6 @@
     <div class="turquoise-footer-slogan">传承东方美学 · 每一块绿松石都值得被认真对待</div>
     <div class="turquoise-footer-copy">© 2024 松石雅集 版权所有 | 鄂ICP备XXXXXXXX号</div>
   </div>
+  </th:block>
 </footer>
 </html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-head"></th:block>
+</head>
+<body>
+    <th:block th:replace="admin/turquoise-admin-layout :: header"></th:block>
+    <th:block th:replace="admin/turquoise-admin-layout :: sidebar"></th:block>
+    
+    <main class="turquoise-content">
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">鉴定申请详情</h2>
+                <a href="/admin/appraisal" class="turquoise-btn turquoise-btn-primary">返回列表</a>
+            </div>
+            
+            <!-- 鉴定申请信息 -->
+            <div class="turquoise-card">
+                <h3 class="turquoise-card-title">申请信息</h3>
+                <div class="turquoise-card-content">
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">申请ID：</label>
+                            <span th:text="${appraisal.appraisalId}"></span>
+                        </div>
+                    </div>
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">用户：</label>
+                            <span th:text="${appraisal.userName}"></span>
+                        </div>
+                    </div>
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">商品名称：</label>
+                            <span th:text="${appraisal.goodsName}"></span>
+                        </div>
+                    </div>
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">商品图片：</label>
+                            <img th:if="${appraisal.goodsImage != null}" th:src="@{${appraisal.goodsImage}}" width="200" height="200" alt="商品图片">
+                            <span th:else>无图片</span>
+                        </div>
+                    </div>
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">申请描述：</label>
+                            <p th:text="${appraisal.description}"></p>
+                        </div>
+                    </div>
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">申请时间：</label>
+                            <span th:text="${appraisal.createTime}"></span>
+                        </div>
+                    </div>
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-item">
+                            <label class="turquoise-form-label">状态：</label>
+                            <span th:if="${appraisal.status == 0}" class="turquoise-status turquoise-status-up">待鉴定</span>
+                            <span th:else class="turquoise-status turquoise-status-down">已鉴定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 鉴定结果 -->
+            <div class="turquoise-card">
+                <h3 class="turquoise-card-title">鉴定结果</h3>
+                <div class="turquoise-card-content">
+                    <form id="appraisalForm">
+                        <input type="hidden" id="appraisalId" name="appraisalId" th:value="${appraisal.appraisalId}">
+                        <div class="turquoise-form-row">
+                            <div class="turquoise-form-item">
+                                <label class="turquoise-form-label">鉴定结果：</label>
+                                <label class="turquoise-radio">
+                                    <input type="radio" name="result" value="真" th:checked="${appraisal.result == '真'}"> 真
+                                </label>
+                                <label class="turquoise-radio">
+                                    <input type="radio" name="result" value="假" th:checked="${appraisal.result == '假'}"> 假
+                                </label>
+                                <label class="turquoise-radio">
+                                    <input type="radio" name="result" value="待定" th:checked="${appraisal.result == '待定'}"> 待定
+                                </label>
+                            </div>
+                        </div>
+                        <div class="turquoise-form-row">
+                            <div class="turquoise-form-item">
+                                <label class="turquoise-form-label">鉴定说明：</label>
+                                <textarea id="resultDescription" name="resultDescription" class="turquoise-textarea" rows="5" placeholder="请输入鉴定说明" th:text="${appraisal.resultDescription}"></textarea>
+                            </div>
+                        </div>
+                        <div class="turquoise-form-row">
+                            <div class="turquoise-form-item">
+                                <button type="button" id="processBtn" class="turquoise-btn turquoise-btn-primary" th:if="${appraisal.status == 0}">处理鉴定</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-script"></th:block>
+    
+    <script>
+        // 处理鉴定
+        document.getElementById('processBtn')?.addEventListener('click', function() {
+            const appraisalId = document.getElementById('appraisalId').value;
+            const result = document.querySelector('input[name="result"]:checked')?.value;
+            const resultDescription = document.getElementById('resultDescription').value;
+            
+            if (!result) {
+                alert('请选择鉴定结果');
+                return;
+            }
+            
+            if (!resultDescription) {
+                alert('请输入鉴定说明');
+                return;
+            }
+            
+            const formData = {
+                appraisalId: parseInt(appraisalId),
+                result: result,
+                resultDescription: resultDescription,
+                status: 1
+            };
+            
+            fetch('/admin/appraisal/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.resultCode === 200) {
+                    alert(data.message || '处理成功');
+                    location.href = '/admin/appraisal';
+                } else {
+                    alert(data.message || '处理失败');
+                }
+            })
+            .catch(error => {
+                console.error('处理失败：', error);
+                alert('处理失败，请重试');
+            });
+        });
+    </script>
+</body>
+</html>

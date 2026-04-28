@@ -1,181 +1,364 @@
 <!-- Copyright (c) 2019-2020 十三 all rights reserved. -->
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="mall/header::head-fragment('NewBee商城-商品详情','detail')">
     <link rel="stylesheet" th:href="@{/mall/styles/detail.css}">
 </head>
 <body>
-<header th:replace="mall/header::header-fragment"></header>
+<header th:replace="mall/header::header"></header>
 
-<div id="detail-container">
-    <!-- nav -->
-    <nav th:replace="mall/header::nav-fragment"></nav>
-
-    <div class="dc">
-        <div class="content w">
-            <div class="title fl">商品详情</div>
-            <div class="clear"></div>
-        </div>
+<!-- 面包屑导航 -->
+<section class="breadcrumb">
+    <div class="breadcrumb-content">
+        <a href="/">首页</a>
+        <span>></span>
+        <a href="/treasure">珍宝馆</a>
+        <span>></span>
+        <span class="current">商品详情</span>
     </div>
+</section>
 
-    <div id="goods-info">
-        <div id="goods-image">
-            <div id="main-image">
-                <img th:src="@{${goodsDetail.goodsCoverImg}}">
+<!-- 商品核心展示区 -->
+<section class="product-section">
+    <div class="product-container">
+        <!-- 左侧图片区 -->
+        <div class="product-gallery">
+            <div class="main-image-container">
+                <img th:src="@{${goodsDetail.goodsCoverImg}}" th:alt="${goodsDetail.goodsName}" class="main-image" id="mainImage">
+                <button class="favorite-btn" id="favoriteBtn" th:classappend="${isCollected ? 'active' : ''}" th:onclick="'addFavorite('+${goodsDetail.goodsId}+')'">
+                    <i th:classappend="${isCollected ? 'fas fa-heart' : 'far fa-heart'}"></i>
+                </button>
             </div>
-            <div id="thumbnails">
-                <div class="thumbnail-item active">
-                    <img th:src="@{${goodsDetail.goodsCoverImg}}">
+            <div class="thumbnail-list">
+                <div class="thumbnail active" onclick="changeImage(0)">
+                    <img th:src="@{${goodsDetail.goodsCoverImg}}" th:alt="${goodsDetail.goodsName}">
                 </div>
                 <!-- 可以根据实际情况添加更多缩略图 -->
             </div>
         </div>
-        <div id="goods-details">
-            <div id="goods-title" th:text="${goodsDetail.goodsName}">商品名称</div>
-            <div id="goods-desc" th:text="${goodsDetail.goodsIntro}">商品描述</div>
-            <div id="price-info">
-                <span class="price-label">价格：</span>
-                <span class="price-value" th:text="${goodsDetail.sellingPrice}+'.00 元'"></span>
-                <span class="original-price" th:text="${goodsDetail.originalPrice}+'.00 元'"></span>
+
+        <!-- 右侧信息区 -->
+        <div class="product-info">
+            <h1 class="product-name" th:text="${goodsDetail.goodsName}">商品名称</h1>
+            <div class="product-price">
+                <span class="current-price" th:text="'¥' + ${goodsDetail.sellingPrice}+'.00'">¥0.00</span>
+                <span class="original-price" th:text="'¥' + ${goodsDetail.originalPrice}+'.00'">¥0.00</span>
             </div>
-            <div id="sales-info">
-                <span>销量：100</span>
-                <span>评价：50</span>
+            <div class="product-tags">
+                <span class="tag">云盖寺矿口</span>
+                <span class="tag">高瓷级</span>
+                <span class="tag">天蓝色</span>
+                <span class="tag">吊坠</span>
+                <span class="tag">12.5g</span>
             </div>
-            <div id="specification">
-                <div class="spec-title">规格：</div>
-                <div class="spec-options">
-                    <div class="spec-option active">默认</div>
-                </div>
-            </div>
-            <div id="quantity">
-                <span class="quantity-label">数量：</span>
+            <div class="quantity-selector">
+                <span class="quantity-label">数量</span>
                 <div class="quantity-control">
-                    <div class="quantity-btn" onclick="decreaseQuantity()">-</div>
-                    <input type="number" class="quantity-input" id="quantityInput" value="1" min="1">
-                    <div class="quantity-btn" onclick="increaseQuantity()">+</div>
+                    <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                    <input type="number" class="quantity-input" value="1" min="1" id="quantityInput">
+                    <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
                 </div>
             </div>
-            <div id="buy-area">
-                <button class="btn btn-add-cart" th:onclick="'saveToCart('+${goodsDetail.goodsId}+')'">加入购物车</button>
-                <button class="btn btn-buy-now" th:onclick="'saveAndGoCart('+${goodsDetail.goodsId}+')'">立即购买</button>
-                <button class="btn btn-favorite" id="favoriteBtn" th:classappend="${isCollected ? 'active' : ''}" th:onclick="'addFavorite('+${goodsDetail.goodsId}+')'" th:text="${isCollected ? '❤️ 已收藏' : '❤️ 加入收藏'}"></button>
+            <div class="action-buttons">
+                <button class="btn-add-cart" id="addToCartBtn" th:onclick="'saveToCart('+${goodsDetail.goodsId}+')'">加入购物车</button>
+                <button class="btn-buy-now" th:onclick="'saveAndGoCart('+${goodsDetail.goodsId}+')'">立即购买</button>
+                <div class="login-tip">登录后可加购</div>
             </div>
-            <div class="tb-extra" id="J_tbExtra">
-                <dl>
-                    <dt>承诺</dt>
-                    <dd><a class="J_Cont" title="满足7天无理由退换货申请的前提下，包邮商品需要买家承担退货邮费，非包邮商品需要买家承担发货和退货邮费。" href="#"
-                           target="_blank"><img th:src="@{/mall/image/7d.jpg}">7天无理由</a></dd>
-                </dl>
-                <dl>
-                    <dt>支付</dt>
-                    <dd><a href="##" target="_blank"><img th:src="@{/mall/image/hua.png}">蚂蚁花呗</a><a href="##"
-                                                                                                     target="_blank"><img
-                            th:src="@{/mall/image/card.png}">信用卡支付</a><a href="##" target="_blank"><img
-                            th:src="@{/mall/image/ji.png}">集分宝</a></dd>
-                </dl>
-                <dl>
-                    <dt>支持</dt>
-                    <dd>折旧变现，买新更省钱。<a style="float:none;text-decoration: underline;" href="##">详情</a></dd>
-                </dl>
+
+            <!-- 服务承诺 -->
+            <div class="service-promise">
+                <div class="promise-item">
+                    <i class="fas fa-shipping-fast"></i>
+                    <span>顺丰包邮</span>
+                </div>
+                <div class="promise-item">
+                    <i class="fas fa-undo-alt"></i>
+                    <span>7天退换</span>
+                </div>
+                <div class="promise-item">
+                    <i class="fas fa-check-double"></i>
+                    <span>支持复检</span>
+                </div>
+                <div class="promise-item">
+                    <i class="fas fa-gift"></i>
+                    <span>赠送礼盒</span>
+                </div>
+            </div>
+
+            <div class="guarantee-bar">
+                <div class="guarantee-item">
+                    <i class="fas fa-certificate"></i>
+                    <span>一物一证</span>
+                </div>
+                <div class="guarantee-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>支持核验</span>
+                </div>
+                <div class="guarantee-item">
+                    <i class="fas fa-undo"></i>
+                    <span>7天退换</span>
+                </div>
+            </div>
+
+            <!-- 证书+矿口溯源整合区域 -->
+            <div class="cert-origin-section">
+                <div class="cert-origin-content">
+                    <div class="cert-origin-left">
+                        <h3 class="cert-origin-title">权威鉴定证书</h3>
+                        <div class="cert-content">
+                            <div class="certificate-thumb" onclick="showCertificate()">
+                                <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=200&q=80" alt="鉴定证书">
+                            </div>
+                            <div class="cert-info">
+                                <div class="cert-row">
+                                    <span class="cert-label">证书编号</span>
+                                    <span class="cert-value">SGS-2024-0125-0088</span>
+                                </div>
+                                <div class="cert-row">
+                                    <span class="cert-label">鉴定机构</span>
+                                    <span class="cert-value">国家珠宝玉石质量监督检验中心</span>
+                                </div>
+                                <div class="cert-row">
+                                    <span class="cert-label">检测结论</span>
+                                    <span class="cert-value">天然绿松石（高瓷蓝）</span>
+                                </div>
+                                <button class="verify-btn" onclick="verifyCertificate()">核验证书</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cert-origin-right">
+                        <h3 class="cert-origin-title">矿口溯源</h3>
+                        <div class="origin-content-compact">
+                            <div class="origin-map-compact">
+                                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400&q=80" alt="矿口地图">
+                                <div class="origin-marker"></div>
+                            </div>
+                            <div class="origin-text-compact">
+                                <h4>云盖寺矿口 · 湖北十堰</h4>
+                                <p>中国历史最悠久的绿松石矿口之一，以高瓷蓝著称，质地细腻，色泽纯正。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
-    <!-- 评价功能板块 -->
-    <div class="turquoise-review-section">
-        <h2 class="turquoise-review-title">商品评价</h2>
-        
-        <!-- 评价统计 -->
-        <div class="turquoise-review-stats">
-            <div class="turquoise-review-overall">
-                <div class="turquoise-review-score" id="reviewScore">0.0</div>
-                <div class="turquoise-review-stars" id="reviewStars">
-                    <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-                </div>
-                <div class="turquoise-review-count" id="reviewCount">0 条评价</div>
+</section>
+
+<!-- 商品详情图文区 - 杂志式排版 -->
+<section class="detail-section">
+    <div class="detail-container">
+        <h2 class="detail-title">商品详情</h2>
+
+        <!-- 全宽大图+文字叠加 -->
+        <div class="detail-hero">
+            <img src="https://images.unsplash.com/photo-1608371945643-2807b5b1d2f3?w=1200&q=80" alt="矿口展示">
+            <div class="detail-hero-overlay">
+                <h3>云盖寺矿口</h3>
+                <p>云盖寺矿口位于湖北省十堰市郧阳区，开采历史可追溯至明清时期。这里产出的绿松石以高瓷蓝闻名于世，质地致密，色泽浓郁，是绿松石中的极品。每一件出自云盖寺的绿松石，都承载着数百年的矿脉精华。</p>
             </div>
-            <div class="turquoise-review-distribution">
-                <div class="turquoise-review-distribution-item">
-                    <div class="turquoise-review-distribution-star">5星</div>
-                    <div class="turquoise-review-distribution-count" id="fiveStarCount">0</div>
-                    <div class="turquoise-review-distribution-percent" id="fiveStarPercent">0%</div>
+        </div>
+
+        <!-- 左右错位排版 - 工艺说明 -->
+        <div class="detail-split">
+            <div class="detail-split-text">
+                <h3>匠心工艺</h3>
+                <p>本件水滴吊坠采用传统手工雕刻工艺，由经验丰富的匠人精心打磨而成。从选料到成品，历经六道工序，每一刀都凝聚着匠人的心血。水滴造型寓意"上善若水"，线条流畅自然，尽显东方美学。匠人运用"以刀代笔"的技法，在方寸之间展现山水意境，使每一件作品都成为独一无二的艺术品。</p>
+            </div>
+            <div class="detail-split-image">
+                <img src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=600&q=80" alt="工艺展示">
+            </div>
+        </div>
+
+        <!-- 三图横向铺满 - 多角度展示 -->
+        <div class="detail-triple">
+            <div class="detail-triple-item">
+                <img th:src="@{${goodsDetail.goodsCoverImg}}" th:alt="${goodsDetail.goodsName}">
+            </div>
+            <div class="detail-triple-item">
+                <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab79008?w=400&q=80" alt="侧面展示">
+            </div>
+            <div class="detail-triple-item">
+                <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80" alt="细节展示">
+            </div>
+        </div>
+
+        <!-- 全宽大图 - 佩戴效果 -->
+        <div class="detail-full">
+            <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=1200&q=80" alt="佩戴效果">
+        </div>
+
+        <!-- 养护小贴士 - 直接平铺 -->
+        <div class="care-section">
+            <h3 class="care-title">养护小贴士</h3>
+            <div class="care-grid">
+                <div class="care-item">
+                    <div class="care-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h4>避酸碱</h4>
+                    <p>远离化学物品</p>
                 </div>
-                <div class="turquoise-review-distribution-item">
-                    <div class="turquoise-review-distribution-star">4星</div>
-                    <div class="turquoise-review-distribution-count" id="fourStarCount">0</div>
-                    <div class="turquoise-review-distribution-percent" id="fourStarPercent">0%</div>
+                <div class="care-item">
+                    <div class="care-icon">
+                        <i class="fas fa-temperature-high"></i>
+                    </div>
+                    <h4>避高温</h4>
+                    <p>避免暴晒高温</p>
                 </div>
-                <div class="turquoise-review-distribution-item">
-                    <div class="turquoise-review-distribution-star">3星</div>
-                    <div class="turquoise-review-distribution-count" id="threeStarCount">0</div>
-                    <div class="turquoise-review-distribution-percent" id="threeStarPercent">0%</div>
+                <div class="care-item">
+                    <div class="care-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <h4>定期补水</h4>
+                    <p>保持玉石活性</p>
                 </div>
-                <div class="turquoise-review-distribution-item">
-                    <div class="turquoise-review-distribution-star">2星</div>
-                    <div class="turquoise-review-distribution-count" id="twoStarCount">0</div>
-                    <div class="turquoise-review-distribution-percent" id="twoStarPercent">0%</div>
-                </div>
-                <div class="turquoise-review-distribution-item">
-                    <div class="turquoise-review-distribution-star">1星</div>
-                    <div class="turquoise-review-distribution-count" id="oneStarCount">0</div>
-                    <div class="turquoise-review-distribution-percent" id="oneStarPercent">0%</div>
+                <div class="care-item">
+                    <div class="care-icon">
+                        <i class="fas fa-hand-sparkles"></i>
+                    </div>
+                    <h4>软布擦拭</h4>
+                    <p>保持光洁如新</p>
                 </div>
             </div>
         </div>
-        
-        <!-- 评价筛选 -->
-        <div class="turquoise-review-filter">
-            <button class="turquoise-review-filter-btn active" data-type="all">全部评价</button>
-            <button class="turquoise-review-filter-btn" data-type="5">好评</button>
-            <button class="turquoise-review-filter-btn" data-type="3">中评</button>
-            <button class="turquoise-review-filter-btn" data-type="1">差评</button>
+    </div>
+</section>
+
+<!-- 问大家模块 -->
+<section class="qa-section">
+    <div class="qa-container">
+        <div class="qa-header">
+            <h2 class="qa-title">问大家</h2>
+            <button class="ask-btn">我要提问</button>
         </div>
-        
-        <!-- 评价列表 -->
-        <div class="turquoise-review-list" id="reviewList">
+        <div class="qa-list">
+            <div class="qa-card">
+                <div class="qa-question">
+                    <div class="qa-avatar">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ask1" alt="提问者">
+                    </div>
+                    <div class="qa-content">
+                        <div class="qa-user">玉石新手</div>
+                        <div class="qa-text">这块料子上手效果怎么样？颜色会不会比图片深一些？</div>
+                    </div>
+                </div>
+                <div class="qa-answer">
+                    <div class="qa-avatar">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=answer1" alt="回答者">
+                    </div>
+                    <div class="qa-content">
+                        <span class="qa-answer-badge">已购用户</span>
+                        <div class="qa-user">资深藏友</div>
+                        <div class="qa-text">颜色和图片基本一致，实物甚至更漂亮，上手效果很好，值得入手。</div>
+                    </div>
+                </div>
+            </div>
+            <div class="qa-card">
+                <div class="qa-question">
+                    <div class="qa-avatar">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ask2" alt="提问者">
+                    </div>
+                    <div class="qa-content">
+                        <div class="qa-user">收藏爱好者</div>
+                        <div class="qa-text">证书是权威机构的吗？支持复检吗？</div>
+                    </div>
+                </div>
+                <div class="qa-answer">
+                    <div class="qa-avatar">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=answer2" alt="回答者">
+                    </div>
+                    <div class="qa-content">
+                        <span class="qa-answer-badge">商家</span>
+                        <div class="qa-user">松石雅集</div>
+                        <div class="qa-text">您好，我们的所有商品都配有国家珠宝玉石质量监督检验中心的权威证书，支持任何权威机构复检，假一赔十。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 用户评价区 -->
+<section class="reviews-section">
+    <div class="reviews-container">
+        <div class="reviews-header">
+            <h2 class="reviews-title">用户评价</h2>
+            <div class="reviews-summary">
+                <div class="rating-score" id="reviewScore">4.8</div>
+                <div class="rating-stars" id="reviewStars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <div class="rating-count" id="reviewCount">24 条评价</div>
+            </div>
+        </div>
+        <div class="review-filters">
+            <button class="filter-btn active" data-type="all">全部</button>
+            <button class="filter-btn" data-type="5">5星</button>
+            <button class="filter-btn" data-type="4">4星</button>
+            <button class="filter-btn" data-type="3">3星</button>
+            <button class="filter-btn" data-type="2">2星</button>
+            <button class="filter-btn" data-type="1">1星</button>
+        </div>
+        <div class="reviews-list" id="reviewList">
             <!-- 评价项将通过JavaScript动态加载 -->
         </div>
-        
-        <!-- 分页 -->
-        <div class="turquoise-review-pagination" id="reviewPagination">
+        <div class="pagination" id="reviewPagination">
             <!-- 分页按钮将通过JavaScript动态加载 -->
         </div>
-        
-        <!-- 写评价 -->
-        <div class="turquoise-review-write">
-            <h3 class="turquoise-review-write-title">写评价</h3>
-            <form class="turquoise-review-write-form" id="reviewForm">
-                <input type="hidden" id="goodsId" th:value="${goodsDetail.goodsId}">
-                <div class="turquoise-review-write-rating">
-                    <label for="rating">评分：</label>
-                    <div class="turquoise-review-write-stars" id="writeStars">
-                        <span class="star" data-score="1">☆</span>
-                        <span class="star" data-score="2">☆</span>
-                        <span class="star" data-score="3">☆</span>
-                        <span class="star" data-score="4">☆</span>
-                        <span class="star" data-score="5">☆</span>
-                    </div>
-                    <input type="hidden" id="rating" value="5">
-                </div>
-                <div class="turquoise-review-write-content">
-                    <label for="content">评价内容：</label>
-                    <textarea class="turquoise-review-write-textarea" id="content" placeholder="请输入您的评价..."></textarea>
-                </div>
-                <button type="button" class="turquoise-review-write-submit" onclick="submitReview()">提交评价</button>
-            </form>
-        </div>
     </div>
-    
-    <!-- 这里使用的是 th:utext 标签，用 th:text 不会解析 html，用 th:utext 会解析 html -->
-    <div id="goods-intro">
-        <div class="intro-title">商品详情</div>
-        <div class="intro-content" th:utext="${goodsDetail.goodsDetailContent}">
-        </div>
-    </div>
-</div>
+</section>
 
-<div th:replace="mall/footer::footer-fragment"></div>
+<!-- 馆藏推荐区 -->
+<section class="recommend-section">
+    <div class="recommend-container">
+        <h2 class="recommend-title">馆藏推荐</h2>
+        <div class="recommend-slider">
+            <div class="recommend-card">
+                <div class="recommend-image">
+                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80" alt="推荐商品1">
+                </div>
+                <div class="recommend-info">
+                    <h3 class="recommend-name">云盖寺高瓷蓝手串</h3>
+                    <div class="recommend-price">¥8,800</div>
+                </div>
+            </div>
+            <div class="recommend-card">
+                <div class="recommend-image">
+                    <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab79008?w=400&q=80" alt="推荐商品2">
+                </div>
+                <div class="recommend-info">
+                    <h3 class="recommend-name">丫角山果冻料挂件</h3>
+                    <div class="recommend-price">¥6,500</div>
+                </div>
+            </div>
+            <div class="recommend-card">
+                <div class="recommend-image">
+                    <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80" alt="推荐商品3">
+                </div>
+                <div class="recommend-info">
+                    <h3 class="recommend-name">秦古唐三彩山水牌</h3>
+                    <div class="recommend-price">¥12,800</div>
+                </div>
+            </div>
+            <div class="recommend-card">
+                <div class="recommend-image">
+                    <img src="https://images.unsplash.com/photo-1608371945643-2807b5b1d2f3?w=400&q=80" alt="推荐商品4">
+                </div>
+                <div class="recommend-info">
+                    <h3 class="recommend-name">郧西菜籽黄平安扣</h3>
+                    <div class="recommend-price">¥4,200</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="mall/footer::footer"></div>
 
 <!-- jQuery -->
 <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
@@ -217,7 +400,7 @@
                 if (result.resultCode == 200) {
                     Swal.fire({
                         title: "确认框",
-                        text: "添加成功",
+                        text: "已成功加入购物车",
                         icon: "success",iconColor:"#1d953f",
                         showCancelButton: true,
                         confirmButtonText: '确认',
@@ -228,6 +411,18 @@
                             }
                         }
                     );
+                } else if (result.message === '用户未登录') {
+                    Swal.fire({
+                        text: "请先登录，登录后即可将藏品加入购物车",
+                        icon: "info",iconColor:"#3b82f6",
+                        showCancelButton: true,
+                        confirmButtonText: '立即登录',
+                        cancelButtonText: '取消'
+                    }).then((flag) => {
+                        if (flag.value) {
+                            window.location.href = '/login';
+                        }
+                    });
                 } else {
                     Swal.fire({
                         text: result.message,
@@ -235,11 +430,25 @@
                     });
                 }
             },
-            error: function () {
-                Swal.fire({
-                    text: "操作失败",
-                    icon: "error",iconColor:"#f05b72",
-                });
+            error: function (xhr, status, error) {
+                if (xhr.status === 302) {
+                    Swal.fire({
+                        text: "请先登录，登录后即可将藏品加入购物车",
+                        icon: "info",iconColor:"#3b82f6",
+                        showCancelButton: true,
+                        confirmButtonText: '立即登录',
+                        cancelButtonText: '取消'
+                    }).then((flag) => {
+                        if (flag.value) {
+                            window.location.href = '/login';
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        text: "操作失败",
+                        icon: "error",iconColor:"#f05b72",
+                    });
+                }
             }
         });
     }
@@ -262,7 +471,7 @@
                 if (result.resultCode == 200) {
                     Swal.fire({
                         title: "确认框",
-                        text: "已将商品加入购物车",
+                        text: "已成功加入购物车",
                         icon: "success",iconColor:"#1d953f",
                         showCancelButton: true,
                         confirmButtonText: '去购物车结算',
@@ -273,6 +482,18 @@
                             }
                         }
                     );
+                } else if (result.message === '用户未登录') {
+                    Swal.fire({
+                        text: "请先登录，登录后即可将藏品加入购物车",
+                        icon: "info",iconColor:"#3b82f6",
+                        showCancelButton: true,
+                        confirmButtonText: '立即登录',
+                        cancelButtonText: '取消'
+                    }).then((flag) => {
+                        if (flag.value) {
+                            window.location.href = '/login';
+                        }
+                    });
                 } else {
                     Swal.fire({
                         text: result.message,
@@ -280,11 +501,25 @@
                     });
                 }
             },
-            error: function () {
-                Swal.fire({
-                    text: "操作失败",
-                    icon: "error",iconColor:"#f05b72",
-                });
+            error: function (xhr, status, error) {
+                if (xhr.status === 302) {
+                    Swal.fire({
+                        text: "请先登录，登录后即可将藏品加入购物车",
+                        icon: "info",iconColor:"#3b82f6",
+                        showCancelButton: true,
+                        confirmButtonText: '立即登录',
+                        cancelButtonText: '取消'
+                    }).then((flag) => {
+                        if (flag.value) {
+                            window.location.href = '/login';
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        text: "操作失败",
+                        icon: "error",iconColor:"#f05b72",
+                    });
+                }
             }
         });
     }

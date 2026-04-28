@@ -27,7 +27,7 @@ body::before {
 
 /* 页面标题区 */
 .turquoise-page-header {
-  padding: 160px 60px 60px;
+  padding: 120px 60px 40px;
   text-align: center;
   position: relative;
   z-index: 1;
@@ -178,8 +178,9 @@ body::before {
 
 .turquoise-filter-tab.turquoise-active {
   border-color: #c9a227;
-  color: #c9a227;
-  background: rgba(201, 162, 39, 0.08);
+  color: #fff;
+  background: linear-gradient(135deg, #c9a227, #d4af37);
+  box-shadow: 0 4px 15px rgba(201, 162, 39, 0.3);
 }
 
 .turquoise-filter-tab.turquoise-active::before {
@@ -321,7 +322,7 @@ body::before {
 .turquoise-product-section {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 60px 80px;
+  padding: 0 60px 40px;
   position: relative;
   z-index: 1;
 }
@@ -405,7 +406,7 @@ body::before {
 
 .turquoise-product-image {
   width: 100%;
-  height: 260px;
+  height: 300px;
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, rgba(26, 122, 122, 0.05), rgba(201, 162, 39, 0.03));
@@ -470,6 +471,78 @@ body::before {
   color: #fff;
 }
 
+/* 矿口标签 */
+.turquoise-mine-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  border-radius: 12px;
+  background: rgba(26, 122, 122, 0.9);
+  color: #fff;
+  font-weight: 500;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 空状态 */
+.turquoise-empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 12px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+}
+
+.turquoise-empty-icon {
+  font-size: 64px;
+  color: #c9a227;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.turquoise-empty-title {
+  font-size: 24px;
+  color: #0d5c5c;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.turquoise-empty-desc {
+  font-size: 16px;
+  color: #5a5a5a;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
+}
+
+.turquoise-back-home-btn {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #1a7a7a, #0d5c5c);
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: 2px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.turquoise-back-home-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(26, 122, 122, 0.3);
+}
+
 .turquoise-product-info {
   padding: 20px;
   position: relative;
@@ -521,9 +594,9 @@ body::before {
 }
 
 .turquoise-product-price {
-  font-size: 18px;
+  font-size: 20px;
   color: #c9a227;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 1px;
 }
 
@@ -589,7 +662,7 @@ body::before {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  padding: 40px 0 60px;
+  padding: 30px 0 40px;
   position: relative;
   z-index: 1;
 }

@@ -4,7 +4,7 @@
 <head th:replace="mall/header::head-fragment('珍宝馆 - 松石雅集','treasure')">
 </head>
 <body class="turquoise-homepage">
-<header th:replace="mall/header::header-fragment"></header>
+<header th:replace="mall/header::header"></header>
 
   <!-- 页面标题区 -->
   <header class="turquoise-page-header">
@@ -100,221 +100,50 @@
   <!-- 商品列表 -->
   <section class="turquoise-product-section">
     <div class="turquoise-product-grid" id="productGrid">
-      <!-- 商品卡片 1 - 馆藏级 -->
-      <div class="turquoise-product-card" data-id="1" data-category="wulanhua" data-mine="yungai" data-color="tianlan" data-porcelain="gaoci" data-hot="true" data-collection="true">
-        <div class="turquoise-product-image">
-          <img src="https://images.unsplash.com/photo-1617038260897-41a1f14cd8cd?w=600&q=80" alt="高瓷蓝观音">
-          <span class="turquoise-product-badge turquoise-collection"><i class="fas fa-gem"></i> 馆藏</span>
-        </div>
-        <div class="turquoise-product-info">
-          <h3 class="turquoise-product-name">
-            <span class="turquoise-origin">云盖寺</span>
-            <span class="turquoise-divider">·</span>
-            <span>高瓷蓝观音挂件</span>
-          </h3>
-          <div class="turquoise-product-meta">
-            <div class="turquoise-product-specs">
-              <span>高瓷</span>
-              <span>天蓝</span>
+      <!-- 动态商品卡片 -->
+      <th:block th:if="${not #lists.isEmpty(goodsList)}">
+        <th:block th:each="goods : ${goodsList}">
+          <a th:href="@{'/turquoise/goods/detail/' + ${goods.goodsId}}" class="turquoise-product-link">
+            <div class="turquoise-product-card" th:attr="data-id=${goods.goodsId}">
+              <div class="turquoise-product-image">
+                <img th:src="@{${goods.goodsCoverImg}}" th:alt="${goods.goodsName}">
+                <span class="turquoise-product-badge turquoise-normal">精品</span>
+                <span class="turquoise-mine-tag" th:text="${goods.turquoiseOrigin}"></span>
+              </div>
+              <div class="turquoise-product-info">
+                <h3 class="turquoise-product-name">
+                  <span class="turquoise-origin">湖北十堰</span>
+                  <span class="turquoise-divider">·</span>
+                  <span th:text="${goods.goodsName}"></span>
+                </h3>
+                <div class="turquoise-product-meta">
+                  <div class="turquoise-product-specs">
+                    <span>高瓷</span>
+                    <span>蓝绿</span>
+                  </div>
+                  <div class="turquoise-product-price" th:text="|¥ ${#numbers.formatDecimal(goods.sellingPrice/100, 2, 'COMMA', 2, 'POINT')}|"></div>
+                </div>
+                <div class="turquoise-product-guarantee">
+                  <i class="fas fa-shield-alt"></i>
+                  <span>一物一证</span>
+                  <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
+                </div>
+              </div>
             </div>
-            <div class="turquoise-product-price">¥28,800</div>
+          </a>
+        </th:block>
+      </th:block>
+      <!-- 空状态 -->
+      <th:block th:if="${#lists.isEmpty(goodsList)}">
+        <div class="turquoise-empty-state">
+          <div class="turquoise-empty-icon">
+            <i class="fas fa-gem"></i>
           </div>
-          <div class="turquoise-product-guarantee">
-            <i class="fas fa-shield-alt"></i>
-            <span>一物一证</span>
-            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
-          </div>
+          <h3 class="turquoise-empty-title">珍宝馆正在筹备中</h3>
+          <p class="turquoise-empty-desc">先去首页看看吧</p>
+          <a href="/" class="turquoise-back-home-btn">返回首页</a>
         </div>
-      </div>
-
-      <!-- 商品卡片 2 - 热门 -->
-      <div class="turquoise-product-card" data-id="2" data-category="gaocilan" data-mine="yajiao" data-color="lvse" data-porcelain="zhongci" data-hot="true">
-        <div class="turquoise-product-image">
-          <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80" alt="果冻料弥勒">
-          <span class="turquoise-product-badge turquoise-hot"><i class="fas fa-fire"></i> 热门</span>
-        </div>
-        <div class="turquoise-product-info">
-          <h3 class="turquoise-product-name">
-            <span class="turquoise-origin">丫角山</span>
-            <span class="turquoise-divider">·</span>
-            <span>果冻料弥勒佛</span>
-          </h3>
-          <div class="turquoise-product-meta">
-            <div class="turquoise-product-specs">
-              <span>果冻</span>
-              <span>翠绿</span>
-            </div>
-            <div class="turquoise-product-price">¥15,600</div>
-          </div>
-          <div class="turquoise-product-guarantee">
-            <i class="fas fa-shield-alt"></i>
-            <span>一物一证</span>
-            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 商品卡片 3 - 馆藏级+热门 -->
-      <div class="turquoise-product-card" data-id="3" data-category="wulanhua" data-mine="yungai" data-color="tianlan" data-porcelain="gaoci" data-hot="true" data-collection="true">
-        <div class="turquoise-product-image">
-          <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80" alt="乌兰花手串">
-          <span class="turquoise-product-badge turquoise-collection"><i class="fas fa-gem"></i> 馆藏</span>
-        </div>
-        <div class="turquoise-product-info">
-          <h3 class="turquoise-product-name">
-            <span class="turquoise-origin">云盖寺</span>
-            <span class="turquoise-divider">·</span>
-            <span>乌兰花108佛珠</span>
-          </h3>
-          <div class="turquoise-product-meta">
-            <div class="turquoise-product-specs">
-              <span>高瓷</span>
-              <span>深蓝</span>
-            </div>
-            <div class="turquoise-product-price">¥68,000</div>
-          </div>
-          <div class="turquoise-product-guarantee">
-            <i class="fas fa-shield-alt"></i>
-            <span>一物一证</span>
-            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 商品卡片 4 -->
-      <div class="turquoise-product-card" data-id="4" data-category="caizihuang" data-mine="yunxi" data-color="huangse" data-porcelain="zhongci">
-        <div class="turquoise-product-image">
-          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="菜籽黄平安扣">
-          <span class="turquoise-product-badge turquoise-normal">精品</span>
-        </div>
-        <div class="turquoise-product-info">
-          <h3 class="turquoise-product-name">
-            <span class="turquoise-origin">郧西</span>
-            <span class="turquoise-divider">·</span>
-            <span>菜籽黄平安扣</span>
-          </h3>
-          <div class="turquoise-product-meta">
-            <div class="turquoise-product-specs">
-              <span>中瓷</span>
-              <span>柠檬黄</span>
-            </div>
-            <div class="turquoise-product-price">¥8,800</div>
-          </div>
-          <div class="turquoise-product-guarantee">
-            <i class="fas fa-shield-alt"></i>
-            <span>一物一证</span>
-            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 商品卡片 5 - 热门 -->
-      <div class="turquoise-product-card" data-id="5" data-category="tangsancai" data-mine="qinggu" data-color="lanlv" data-porcelain="gaoci" data-hot="true">
-        <div class="turquoise-product-image">
-          <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&q=80" alt="唐三彩山水">
-          <span class="turquoise-product-badge turquoise-hot"><i class="fas fa-fire"></i> 热门</span>
-        </div>
-        <div class="turquoise-product-info">
-          <h3 class="turquoise-product-name">
-            <span class="turquoise-origin">秦古</span>
-            <span class="turquoise-divider">·</span>
-            <span>唐三彩山水牌</span>
-          </h3>
-          <div class="turquoise-product-meta">
-            <div class="turquoise-product-specs">
-              <span>高瓷</span>
-              <span>多彩</span>
-            </div>
-            <div class="turquoise-product-price">¥32,000</div>
-          </div>
-          <div class="turquoise-product-guarantee">
-            <i class="fas fa-shield-alt"></i>
-            <span>一物一证</span>
-            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 商品卡片 6 - 馆藏级 -->
-      <div class="turquoise-product-card" data-id="6" data-category="gaocilan" data-mine="yungai" data-color="lvse" data-porcelain="gaoci" data-collection="true">
-        <div class="turquoise-product-image">
-          <img src="https://images.unsplash.com/photo-1612817288484-6fbd1e8e5e5e?w=600&q=80" alt="老油绿把件">
-          <span class="turquoise-product-badge turquoise-collection"><i class="fas fa-gem"></i> 馆藏</span>
-        </div>
-        <div class="turquoise-product-info">
-          <h3 class="turquoise-product-name">
-            <span class="turquoise-origin">云盖寺</span>
-            <span class="turquoise-divider">·</span>
-            <span>老油绿手把件</span>
-          </h3>
-          <div class="turquoise-product-meta">
-            <div class="turquoise-product-specs">
-              <span>高瓷</span>
-              <span>墨绿</span>
-            </div>
-            <div class="turquoise-product-price">¥22,500</div>
-          </div>
-          <div class="turquoise-product-guarantee">
-            <i class="fas fa-shield-alt"></i>
-            <span>一物一证</span>
-            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 商品卡片 7 - 热门 -->
-      <div class="turquoise-product-card" data-id="7" data-category="ningmenghuang" data-mine="yajiao" data-color="huangse" data-porcelain="zhongci" data-hot="true">
-        <div class="turquoise-product-image">
-          <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=600&q=80" alt="青皮籽貔貅">
-          <span class="turquoise-product-badge turquoise-hot"><i class="fas fa-fire"></i> 热门</span>
-        </div>
-        <div class="turquoise-product-info">
-          <h3 class="turquoise-product-name">
-            <span class="turquoise-origin">丫角山</span>
-            <span class="turquoise-divider">·</span>
-            <span>青皮籽貔貅</span>
-          </h3>
-          <div class="turquoise-product-meta">
-            <div class="turquoise-product-specs">
-              <span>果冻</span>
-              <span>青绿</span>
-            </div>
-            <div class="turquoise-product-price">¥18,800</div>
-          </div>
-          <div class="turquoise-product-guarantee">
-            <i class="fas fa-shield-alt"></i>
-            <span>一物一证</span>
-            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 商品卡片 8 -->
-      <div class="turquoise-product-card" data-id="8" data-category="ziluolan" data-mine="qinggu" data-color="zise" data-porcelain="dici">
-        <div class="turquoise-product-image">
-          <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80" alt="水波纹吊坠">
-          <span class="turquoise-product-badge turquoise-normal">新品</span>
-        </div>
-        <div class="turquoise-product-info">
-          <h3 class="turquoise-product-name">
-            <span class="turquoise-origin">秦古</span>
-            <span class="turquoise-divider">·</span>
-            <span>紫罗兰水波纹吊坠</span>
-          </h3>
-          <div class="turquoise-product-meta">
-            <div class="turquoise-product-specs">
-              <span>低瓷</span>
-              <span>紫色</span>
-            </div>
-            <div class="turquoise-product-price">¥6,800</div>
-          </div>
-          <div class="turquoise-product-guarantee">
-            <i class="fas fa-shield-alt"></i>
-            <span>一物一证</span>
-            <div class="turquoise-guarantee-tooltip">本商品附带权威鉴定证书，支持官网核验</div>
-          </div>
-        </div>
-      </div>
+      </th:block>
     </div>
   </section>
 

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-head"></th:block>
+</head>
+<body>
+    <th:block th:replace="admin/turquoise-admin-layout :: header"></th:block>
+    <th:block th:replace="admin/turquoise-admin-layout :: sidebar"></th:block>
+    
+    <main class="turquoise-content">
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">鉴定申请管理</h2>
+            </div>
+            
+            <!-- 搜索和筛选 -->
+            <div class="turquoise-search-filter">
+                <form th:action="@{/admin/appraisal}" method="get">
+                    <div class="turquoise-search-row">
+                        <div class="turquoise-search-item">
+                            <input type="text" name="keyword" placeholder="用户名称" class="turquoise-input">
+                        </div>
+                        <div class="turquoise-search-item">
+                            <select name="status" class="turquoise-select">
+                                <option value="">全部状态</option>
+                                <option value="0">待鉴定</option>
+                                <option value="1">已鉴定</option>
+                            </select>
+                        </div>
+                        <div class="turquoise-search-item">
+                            <button type="submit" class="turquoise-btn turquoise-btn-primary">搜索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- 鉴定申请列表 -->
+            <div class="turquoise-table-container">
+                <table class="turquoise-table">
+                    <thead>
+                        <tr>
+                            <th>申请ID</th>
+                            <th>用户</th>
+                            <th>商品名称</th>
+                            <th>商品图片</th>
+                            <th>申请时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="appraisal : ${appraisalList}">
+                            <td th:text="${appraisal.appraisalId}"></td>
+                            <td th:text="${appraisal.userName}"></td>
+                            <td th:text="${appraisal.goodsName}"></td>
+                            <td>
+                                <img th:if="${appraisal.goodsImage != null}" th:src="@{${appraisal.goodsImage}}" width="60" height="60" alt="商品图片">
+                                <span th:else>无图片</span>
+                            </td>
+                            <td th:text="${appraisal.createTime}"></td>
+                            <td>
+                                <span th:if="${appraisal.status == 0}" class="turquoise-status turquoise-status-up">待鉴定</span>
+                                <span th:else class="turquoise-status turquoise-status-down">已鉴定</span>
+                            </td>
+                            <td>
+                                <a th:href="@{/admin/appraisal/detail/{id}(id=${appraisal.appraisalId})}" class="turquoise-btn turquoise-btn-blue">查看详情</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${appraisalList == null or appraisalList.size() == 0}">
+                            <td colspan="7" class="turquoise-table-empty">暂无鉴定申请数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 分页 -->
+            <div class="turquoise-pagination" th:if="${totalPages > 1}">
+                <ul>
+                    <li th:if="${currentPage > 1}">
+                        <a th:href="@{/admin/appraisal(page=${currentPage - 1})}">上一页</a>
+                    </li>
+                    <li th:each="page : ${#numbers.sequence(1, totalPages)}" th:class="${page == currentPage} ? 'active' : ''">
+                        <a th:href="@{/admin/appraisal(page=${page})}" th:text="${page}"></a>
+                    </li>
+                    <li th:if="${currentPage < totalPages}">
+                        <a th:href="@{/admin/appraisal(page=${currentPage + 1})}">下一页</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-script"></th:block>
+</body>
+</html>

@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>松石雅集 - 确认订单</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background-color: #f5f3f0;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .serif {
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    /* Navigation */
+    .navbar {
+      background: linear-gradient(135deg, #faf9f7 0%, #f5f3f0 100%);
+      border-bottom: 1px solid #e8e4df;
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: #2c3e50;
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
+
+    .logo span {
+      color: #4A90E2;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #666;
+      font-size: 15px;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: #4A90E2;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #4A90E2;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav-icon {
+      color: #666;
+      font-size: 18px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .nav-icon:hover {
+      color: #4A90E2;
+    }
+
+    /* Main Content */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 40px;
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .page-title {
+      font-size: 36px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 12px;
+      letter-spacing: 3px;
+    }
+
+    .page-subtitle {
+      font-size: 16px;
+      color: #999;
+      letter-spacing: 1px;
+    }
+
+    /* Section Styles */
+    .section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f0f0f0;
+      letter-spacing: 1px;
+    }
+
+    /* Address Cards */
+    .address-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .address-card {
+      border: 2px solid #e8e4df;
+      border-radius: 10px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .address-card:hover {
+      border-color: #4A90E2;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.1);
+    }
+
+    .address-card.selected {
+      border-color: #4A90E2;
+      background: linear-gradient(135deg, rgba(74, 144, 226, 0.03) 0%, rgba(74, 144, 226, 0.01) 100%);
+    }
+
+    .address-default-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #4A90E2;
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .address-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 8px;
+    }
+
+    .address-phone {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .address-detail {
+      font-size: 14px;
+      color: #999;
+      line-height: 1.8;
+    }
+
+    .add-address-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px;
+      border: 2px dashed #d0d0d0;
+      border-radius: 10px;
+      background: transparent;
+      color: #999;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    .add-address-btn:hover {
+      border-color: #4A90E2;
+      color: #4A90E2;
+      background: rgba(74, 144, 226, 0.03);
+    }
+
+    /* Product List */
+    .product-item {
+      display: flex;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid #f0f0f0;
+      transition: all 0.3s ease;
+    }
+
+    .product-item:last-child {
+      border-bottom: none;
+    }
+
+    .product-item:hover {
+      background: rgba(74, 144, 226, 0.02);
+      margin: 0 -20px;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .product-image {
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #f5f3f0;
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
+    .product-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: #2c3e50;
+      margin-bottom: 8px;
+    }
+
+    .product-tags {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .product-tag {
+      padding: 4px 10px;
+      background: rgba(74, 144, 226, 0.1);
+      color: #4A90E2;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .product-price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .product-price {
+      font-size: 18px;
+      font-weight: 600;
+      color: #C5A059;
+    }
+
+    .product-quantity {
+      font-size: 14px;
+      color: #999;
+    }
+
+    .product-subtotal {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    /* Order Summary */
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      font-size: 15px;
+    }
+
+    .summary-label {
+      color: #666;
+    }
+
+    .summary-value {
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    .summary-value.free {
+      color: #4A90E2;
+    }
+
+    .summary-value.discount {
+      color: #e74c3c;
+    }
+
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 0 0;
+      margin-top: 12px;
+      border-top: 2px solid #f0f0f0;
+    }
+
+    .total-label {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .total-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #4A90E2;
+    }
+
+    /* Payment Methods */
+    .payment-methods {
+      display: flex;
+      gap: 16px;
+    }
+
+    .payment-method {
+      flex: 1;
+      border: 2px solid #e8e4df;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .payment-method:hover {
+      border-color: #4A90E2;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.1);
+    }
+
+    .payment-method.selected {
+      border-color: #4A90E2;
+      background: linear-gradient(135deg, rgba(74, 144, 226, 0.03) 0%, rgba(74, 144, 226, 0.01) 100%);
+    }
+
+    .payment-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      color: #666;
+    }
+
+    .payment-method.selected .payment-icon {
+      color: #4A90E2;
+    }
+
+    .payment-name {
+      font-size: 15px;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    /* Submit Button */
+    .submit-section {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .submit-btn {
+      display: inline-block;
+      padding: 18px 60px;
+      background: linear-gradient(135deg, #4A90E2 0%, #3a7bc8 100%);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+      background: linear-gradient(135deg, #5a9ff2 0%, #4a8bd8 100%);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .guarantee-text {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #999;
+      letter-spacing: 1px;
+    }
+
+    /* Footer */
+    .footer {
+      background: #2c3e50;
+      color: #fff;
+      padding: 60px 0 30px;
+      margin-top: 80px;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-column h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #C5A059;
+      letter-spacing: 1px;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: 12px;
+    }
+
+    .footer-column a {
+      color: #bdc3c7;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    .footer-column a:hover {
+      color: #4A90E2;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid #34495e;
+      color: #95a5a6;
+      font-size: 14px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-container {
+        padding: 0 20px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .main-content {
+        padding: 40px 20px;
+      }
+
+      .section {
+        padding: 24px;
+      }
+
+      .product-item {
+        flex-direction: column;
+      }
+
+      .product-image {
+        width: 100%;
+        height: 200px;
+      }
+
+      .payment-methods {
+        flex-direction: column;
+      }
+
+      .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo serif">松石<span>雅集</span></a>
+      <ul class="nav-links">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">藏品</a></li>
+        <li><a href="#">矿口</a></li>
+        <li><a href="#">关于</a></li>
+      </ul>
+      <div class="nav-icons">
+        <i class="fas fa-search nav-icon"></i>
+        <i class="fas fa-shopping-bag nav-icon"></i>
+        <i class="fas fa-user nav-icon"></i>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title serif">确认订单</h1>
+      <p class="page-subtitle">核对您的藏品与订单信息</p>
+    </div>
+
+    <!-- Shipping Address Section -->
+    <section class="section">
+      <h2 class="section-title serif">收货地址</h2>
+      <div class="address-list">
+        <div class="address-card selected" onclick="selectAddress(this)">
+          <span class="address-default-badge">默认</span>
+          <div class="address-name">张先生</div>
+          <div class="address-phone">138****8888</div>
+          <div class="address-detail">北京市朝阳区建国路88号SOHO现代城A座1201室</div>
+        </div>
+        <div class="address-card" onclick="selectAddress(this)">
+          <div class="address-name">李女士</div>
+          <div class="address-phone">139****6666</div>
+          <div class="address-detail">上海市浦东新区陆家嘴环路1000号恒生银行大厦28楼</div>
+        </div>
+        <div class="address-card" onclick="selectAddress(this)">
+          <div class="address-name">王先生</div>
+          <div class="address-phone">137****9999</div>
+          <div class="address-detail">深圳市南山区科技园南路腾讯大厦15层</div>
+        </div>
+        <button class="add-address-btn" onclick="addNewAddress()">
+          <i class="fas fa-plus"></i>
+          <span>新增地址</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Product List Section -->
+    <section class="section">
+      <h2 class="section-title serif">订单商品</h2>
+      <div class="product-list">
+        <div class="product-item">
+          <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=200&h=200&fit=crop" alt="云盖寺·高瓷蓝水滴吊坠" class="product-image">
+          <div class="product-info">
+            <div class="product-name">云盖寺·高瓷蓝水滴吊坠</div>
+            <div class="product-tags">
+              <span class="product-tag">云盖寺</span>
+              <span class="product-tag">高瓷蓝</span>
+            </div>
+            <div class="product-price-row">
+              <span class="product-price">¥12,800</span>
+              <span class="product-quantity">×1</span>
+              <span class="product-subtotal">¥12,800</span>
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=200&h=200&fit=crop" alt="丫角山·果冻料圆珠手串" class="product-image">
+          <div class="product-info">
+            <div class="product-name">丫角山·果冻料圆珠手串</div>
+            <div class="product-tags">
+              <span class="product-tag">丫角山</span>
+              <span class="product-tag">果冻料</span>
+            </div>
+            <div class="product-price-row">
+              <span class="product-price">¥8,800</span>
+              <span class="product-quantity">×1</span>
+              <span class="product-subtotal">¥8,800</span>
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <img src="https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?w=200&h=200&fit=crop" alt="秦古·高瓷蓝雕件" class="product-image">
+          <div class="product-info">
+            <div class="product-name">秦古·高瓷蓝雕件</div>
+            <div class="product-tags">
+              <span class="product-tag">秦古</span>
+              <span class="product-tag">高瓷蓝</span>
+            </div>
+            <div class="product-price-row">
+              <span class="product-price">¥15,600</span>
+              <span class="product-quantity">×1</span>
+              <span class="product-subtotal">¥15,600</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Order Summary Section -->
+    <section class="section">
+      <h2 class="section-title serif">订单费用明细</h2>
+      <div class="summary-content">
+        <div class="summary-row">
+          <span class="summary-label">商品总额</span>
+          <span class="summary-value">¥37,200</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">运费</span>
+          <span class="summary-value free">¥0（满99包邮）</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">优惠</span>
+          <span class="summary-value discount">-¥2,000</span>
+        </div>
+        <div class="summary-total">
+          <span class="total-label serif">合计实付</span>
+          <span class="total-value">¥35,200</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Payment Method Section -->
+    <section class="section">
+      <h2 class="section-title serif">支付方式</h2>
+      <div class="payment-methods">
+        <div class="payment-method selected" onclick="selectPayment(this)">
+          <i class="fab fa-weixin payment-icon"></i>
+          <div class="payment-name">微信支付</div>
+        </div>
+        <div class="payment-method" onclick="selectPayment(this)">
+          <i class="fab fa-alipay payment-icon"></i>
+          <div class="payment-name">支付宝</div>
+        </div>
+        <div class="payment-method" onclick="selectPayment(this)">
+          <i class="fas fa-credit-card payment-icon"></i>
+          <div class="payment-name">银行卡</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Submit Section -->
+    <div class="submit-section">
+      <button class="submit-btn" onclick="submitOrder()">
+        提交订单 · ¥35,200
+      </button>
+      <p class="guarantee-text">一物一证 · 7天退换 · 顺丰包邮</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h4 class="serif">关于松石雅集</h4>
+          <ul>
+            <li><a href="#">品牌故事</a></li>
+            <li><a href="#">工艺传承</a></li>
+            <li><a href="#">品质承诺</a></li>
+            <li><a href="#">联系我们</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="serif">客户服务</h4>
+          <ul>
+            <li><a href="#">购买指南</a></li>
+            <li><a href="#">配送说明</a></li>
+            <li><a href="#">退换政策</a></li>
+            <li><a href="#">常见问题</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="serif">藏品分类</h4>
+          <ul>
+            <li><a href="#">原矿绿松石</a></li>
+            <li><a href="#">雕刻艺术品</a></li>
+            <li><a href="#">珠宝首饰</a></li>
+            <li><a href="#">文玩把件</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="serif">关注我们</h4>
+          <ul>
+            <li><a href="#"><i class="fab fa-weixin"></i> 微信公众号</a></li>
+            <li><a href="#"><i class="fab fa-weibo"></i> 官方微博</a></li>
+            <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 松石雅集. All rights reserved. | 京ICP备XXXXXXXX号</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Address selection
+    function selectAddress(element) {
+      document.querySelectorAll('.address-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      element.classList.add('selected');
+    }
+
+    // Add new address
+    function addNewAddress() {
+      alert('新增地址功能即将上线');
+    }
+
+    // Payment method selection
+    function selectPayment(element) {
+      document.querySelectorAll('.payment-method').forEach(method => {
+        method.classList.remove('selected');
+      });
+      element.classList.add('selected');
+    }
+
+    // Submit order
+    function submitOrder() {
+      const selectedAddress = document.querySelector('.address-card.selected');
+      const selectedPayment = document.querySelector('.payment-method.selected');
+      
+      if (!selectedAddress) {
+        alert('请选择收货地址');
+        return;
+      }
+      
+      if (!selectedPayment) {
+        alert('请选择支付方式');
+        return;
+      }
+
+      alert('订单提交成功！感谢您的购买。');
+    }
+  </script>
+</body>
+</html>

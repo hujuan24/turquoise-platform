@@ -25,6 +25,12 @@
         <if test="loginName!=null and loginName!=''">
             and login_name = #{loginName}
         </if>
+        <if test="keyword!=null and keyword!=''">
+            and nick_name like CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="status!=null">
+            and locked_flag = #{status}
+        </if>
         order by create_time desc
         <if test="start!=null and limit!=null">
             limit #{start},#{limit}
@@ -36,6 +42,12 @@
         where 1=1
         <if test="loginName!=null and loginName!=''">
             and login_name = #{loginName}
+        </if>
+        <if test="keyword!=null and keyword!=''">
+            and nick_name like CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="status!=null">
+            and locked_flag = #{status}
         </if>
     </select>
 
@@ -181,4 +193,36 @@
             #{id}
         </foreach>
     </update>
+
+    <select id="findCollectList" parameterType="Map" resultType="Map">
+        SELECT 
+            uc.id,
+            uc.user_id,
+            uc.product_id,
+            uc.collect_time,
+            u.nick_name,
+            p.goods_name
+        FROM user_collect uc
+        LEFT JOIN tb_newbee_mall_user u ON uc.user_id = u.user_id
+        LEFT JOIN tb_newbee_mall_goods p ON uc.product_id = p.goods_id
+        WHERE u.is_deleted = 0
+        <if test="keyword!=null and keyword!=''">
+            AND (u.nick_name LIKE CONCAT('%',#{keyword},'%') OR p.goods_name LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+        ORDER BY uc.collect_time DESC
+        <if test="start!=null and limit!=null">
+            LIMIT #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalCollects" parameterType="Map" resultType="int">
+        SELECT COUNT(*) 
+        FROM user_collect uc
+        LEFT JOIN tb_newbee_mall_user u ON uc.user_id = u.user_id
+        LEFT JOIN tb_newbee_mall_goods p ON uc.product_id = p.goods_id
+        WHERE u.is_deleted = 0
+        <if test="keyword!=null and keyword!=''">
+            AND (u.nick_name LIKE CONCAT('%',#{keyword},'%') OR p.goods_name LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+    </select>
 </mapper>

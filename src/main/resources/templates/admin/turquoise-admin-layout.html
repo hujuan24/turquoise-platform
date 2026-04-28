@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="admin-head">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>松石雅集 · 管理后台</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <link rel="stylesheet" th:href="@{/admin/css/turquoise-admin.css}">
+</head>
+<body>
+  <!-- 顶部栏 -->
+  <header class="turquoise-header" th:fragment="header">
+    <h1 class="turquoise-header-title">松石雅集 · 管理后台</h1>
+    <div class="turquoise-header-right">
+      <div class="turquoise-bell-icon">
+        <i class="fas fa-bell"></i>
+        <span class="turquoise-bell-badge">2</span>
+      </div>
+      <div class="turquoise-admin-info">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin" alt="admin" class="turquoise-admin-avatar">
+        <span class="turquoise-admin-name">李明</span>
+      </div>
+      <a th:href="@{/admin/logout}" class="turquoise-logout-btn">退出</a>
+    </div>
+  </header>
+
+  <!-- 左侧菜单 -->
+  <aside class="turquoise-sidebar" th:fragment="sidebar">
+    <div class="turquoise-sidebar-logo">
+      <span>松石雅集</span>
+    </div>
+    <nav class="turquoise-menu-list">
+      <li>
+        <a th:href="@{/admin/dashboard}" th:class="'turquoise-menu-btn ' + (${#httpServletRequest.requestURI.contains('/admin/dashboard')} ? 'active' : '')">
+          <i class="menu-icon fas fa-dashboard"></i>
+          <span>数据驾驶舱</span>
+        </a>
+      </li>
+      
+      <li th:class="'has-submenu ' + (${#httpServletRequest.requestURI.contains('/admin/products') or #httpServletRequest.requestURI.contains('/admin/categories')} ? 'menu-open' : '')">
+        <a href="#" onclick="toggleSubmenu(this)">
+          <i class="menu-icon fas fa-shopping-bag"></i>
+          <span>商品中心</span>
+          <i class="arrow fas fa-angle-down"></i>
+        </a>
+        <ul class="submenu">
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/products') and not #httpServletRequest.requestURI.contains('/add') and not #httpServletRequest.requestURI.contains('/edit')} ? 'active' : ''">
+            <a th:href="@{/admin/products}">商品列表</a>
+          </li>
+          <li>
+            <a href="#" onclick="openAddProductModal()">添加商品</a>
+          </li>
+          <script>
+            function openAddProductModal() {
+              // 检查当前是否已经在商品列表页面
+              if (window.location.pathname === '/admin/products') {
+                // 如果已经在商品列表页面，直接调用打开弹窗的函数
+                setTimeout(function() {
+                  if (window.openAddProductModal) {
+                    window.openAddProductModal();
+                  }
+                }, 100);
+              } else {
+                // 如果不在商品列表页面，跳转到商品列表页面并添加参数
+                window.location.href = '/admin/products?showAddModal=true';
+              }
+            }
+          </script>
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/categories')} ? 'active' : ''">
+            <a th:href="@{/admin/categories}">分类管理</a>
+          </li>
+        </ul>
+      </li>
+      
+      <li th:class="'has-submenu ' + (${#httpServletRequest.requestURI.contains('/admin/orders') or #httpServletRequest.requestURI.contains('/admin/refunds') or #httpServletRequest.requestURI.contains('/admin/payments')} ? 'menu-open' : '')">
+        <a href="#" onclick="toggleSubmenu(this)">
+          <i class="menu-icon fas fa-shopping-cart"></i>
+          <span>交易中心</span>
+          <i class="arrow fas fa-angle-down"></i>
+        </a>
+        <ul class="submenu">
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/orders')} ? 'active' : ''">
+            <a th:href="@{/admin/orders}">订单管理</a>
+          </li>
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/refunds')} ? 'active' : ''">
+            <a th:href="@{/admin/refunds}">退款审核</a>
+          </li>
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/payments')} ? 'active' : ''">
+            <a th:href="@{/admin/payments}">支付流水</a>
+          </li>
+        </ul>
+      </li>
+      
+      <li th:class="'has-submenu ' + (${#httpServletRequest.requestURI.contains('/admin/members') or #httpServletRequest.requestURI.contains('/admin/collections')} ? 'menu-open' : '')">
+        <a href="#" onclick="toggleSubmenu(this)">
+          <i class="menu-icon fas fa-users"></i>
+          <span>用户中心</span>
+          <i class="arrow fas fa-angle-down"></i>
+        </a>
+        <ul class="submenu">
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/members')} ? 'active' : ''">
+            <a th:href="@{/admin/members}">会员管理</a>
+          </li>
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/collections')} ? 'active' : ''">
+            <a th:href="@{/admin/collections}">收藏分析</a>
+          </li>
+        </ul>
+      </li>
+      
+      <li th:class="'has-submenu ' + (${#httpServletRequest.requestURI.contains('/admin/content/forum') or #httpServletRequest.requestURI.contains('/admin/content/showroom') or #httpServletRequest.requestURI.contains('/admin/content/knowledge')} ? 'menu-open' : '')">
+        <a href="#" onclick="toggleSubmenu(this)">
+          <i class="menu-icon fas fa-comments"></i>
+          <span>内容中心</span>
+          <i class="arrow fas fa-angle-down"></i>
+        </a>
+        <ul class="submenu">
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/content/forum')} ? 'active' : ''">
+            <a th:href="@{/admin/content/forum}">论坛管理</a>
+          </li>
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/content/showroom')} ? 'active' : ''">
+            <a th:href="@{/admin/content/showroom}">展厅管理</a>
+          </li>
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/content/knowledge')} ? 'active' : ''">
+            <a th:href="@{/admin/content/knowledge}">知识库</a>
+          </li>
+        </ul>
+      </li>
+      
+      <li th:class="'has-submenu ' + (${#httpServletRequest.requestURI.contains('/admin/appraisals') or #httpServletRequest.requestURI.contains('/admin/appraisers') or #httpServletRequest.requestURI.contains('/admin/certificates')} ? 'menu-open' : '')">
+        <a href="#" onclick="toggleSubmenu(this)">
+          <i class="menu-icon fas fa-certificate"></i>
+          <span>鉴定中心</span>
+          <i class="arrow fas fa-angle-down"></i>
+        </a>
+        <ul class="submenu">
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/appraisals')} ? 'active' : ''">
+            <a th:href="@{/admin/appraisals}">鉴定订单</a>
+          </li>
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/appraisers')} ? 'active' : ''">
+            <a th:href="@{/admin/appraisers}">鉴定师管理</a>
+          </li>
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/certificates')} ? 'active' : ''">
+            <a th:href="@{/admin/certificates}">证书管理</a>
+          </li>
+        </ul>
+      </li>
+      
+      <li th:class="'has-submenu ' + (${#httpServletRequest.requestURI.contains('/admin/admin-accounts') or #httpServletRequest.requestURI.contains('/admin/roles') or #httpServletRequest.requestURI.contains('/admin/logs')} ? 'menu-open' : '')">
+        <a href="#" onclick="toggleSubmenu(this)">
+          <i class="menu-icon fas fa-cog"></i>
+          <span>系统设置</span>
+          <i class="arrow fas fa-angle-down"></i>
+        </a>
+        <ul class="submenu">
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/admin-accounts')} ? 'active' : ''">
+            <a th:href="@{/admin/admin-accounts}">管理员账户</a>
+          </li>
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/roles')} ? 'active' : ''">
+            <a th:href="@{/admin/roles}">角色权限</a>
+          </li>
+          <li th:class="${#httpServletRequest.requestURI.contains('/admin/logs')} ? 'active' : ''">
+            <a th:href="@{/admin/logs}">操作日志</a>
+          </li>
+        </ul>
+      </li>
+    </nav>
+  </aside>
+
+  <!-- 内容区 -->
+  <main class="turquoise-content" th:fragment="admin-content">
+    <div th:replace="${content}"></div>
+  </main>
+
+  <script th:fragment="admin-script">
+    // 切换子菜单
+    function toggleSubmenu(link) {
+      const parentLi = link.parentElement;
+      const submenu = link.nextElementSibling;
+      const arrow = link.querySelector('.arrow');
+      
+      if (parentLi.classList.contains('menu-open')) {
+        parentLi.classList.remove('menu-open');
+      } else {
+        parentLi.classList.add('menu-open');
+      }
+    }
+  </script>
+</body>
+</html>

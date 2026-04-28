@@ -59,4 +59,20 @@ public interface NewBeeMallUserService {
      * @return
      */
     Boolean lockUsers(Integer[] ids, int lockStatus);
+
+    /**
+     * 根据用户ID获取用户信息
+     *
+     * @param userId
+     * @return
+     */
+    MallUser getUserById(Long userId);
+
+    /**
+     * 获取收藏列表（带用户和商品信息）
+     *
+     * @param pageUtil
+     * @return
+     */
+    PageResult getCollectList(PageQueryUtil pageUtil);
 }

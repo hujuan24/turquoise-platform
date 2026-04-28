@@ -1,210 +1,329 @@
-<!-- Copyright (c) 2019-2020 十三 all rights reserved. -->
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>NewBee商城-购物车</title>
-    <link rel="stylesheet" th:href="@{/mall/css/iconfont.css}">
-    <link rel="stylesheet" th:href="@{/mall/css/common.css}">
-    <link rel="stylesheet" th:href="@{/mall/styles/header.css}">
-    <link rel="stylesheet" th:href="@{/mall/styles/cart.css}">
-    <link rel="stylesheet" th:href="@{/admin/plugins/sweetalert2/sweetalert2.min.css}"/>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="mall/header::head-fragment('松石雅集 - 我的购物车','cart')">
 </head>
 <body>
+<header th:replace="mall/header::header-fragment"></header>
 
-<div id="cart">
-    <div class="banner_x center">
-        <a th:href="@{index}" target="_blank">
-            <div class="logo fl">
-                <img th:src="@{/mall/image/new-bee-logo-3.png}"/>
-            </div>
-        </a>
+  <!-- 页面标题区 -->
+  <header class="page-header">
+    <h1 class="page-title font-serif">我的购物车</h1>
+    <p class="page-subtitle">确认您的甄选藏品</p>
+  </header>
 
-        <div class="wdgwc fl ml20">购物车</div>
-        <div class="wxts fl ml20">温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</div>
-        <div class="clear"></div>
-    </div>
-    <div class="cart_line"></div>
-    <div class="cart_bg">
-        <th:block th:if="${#lists.isEmpty(myShoppingCartItems)}">
-            <div class="list center">
-                <img style="position: absolute;margin-top: 16px;left: 45%;" th:src="@{mall/image/null-content.png}">
+  <!-- 商品列表 -->
+  <main class="cart-container">
+    <!-- 有商品时显示 -->
+    <div id="cartItems" th:if="${myShoppingCartItems != null and not #lists.isEmpty(myShoppingCartItems)}">
+      <th:block th:each="item : ${myShoppingCartItems}">
+        <div class="cart-item" th:data-id="${item.cartItemId}">
+          <input type="checkbox" class="item-checkbox" checked 
+                 th:onchange="'toggleItem('+${item.cartItemId}+')'">
+          <img th:src="@{${item.goodsCoverImg}}" th:alt="${item.goodsName}" class="item-image">
+          <div class="item-info">
+            <div class="item-name" th:text="${item.goodsName}"></div>
+            <div class="item-tags">
+              <span class="tag">云盖寺</span>
+              <span class="tag gold">高瓷蓝</span>
             </div>
-        </th:block>
-        <th:block th:unless="${#lists.isEmpty(myShoppingCartItems)}">
-            <div class="list center">
-                <div class="top2 center">
-                    <div class="sub_top fl">
-                    </div>
-                    <div class="sub_top fl">商品名称</div>
-                    <div class="sub_top fl">单价</div>
-                    <div class="sub_top fl">数量</div>
-                    <div class="sub_top fl">小计</div>
-                    <div class="sub_top fr">操作</div>
-                    <div class="clear"></div>
-                </div>
-                <th:block th:each="item : ${myShoppingCartItems}">
-                    <div class="content2 center">
-                        <div class="sub_content fl ">
-                        </div>
-                        <div class="sub_content cover fl"><img th:src="@{${item.goodsCoverImg}}"></div>
-                        <div class="sub_content fl ft20" th:text="${item.goodsName}">商品名称</div>
-                        <div class="sub_content fl" th:text="${item.sellingPrice+'元'}">1299元</div>
-                        <div class="sub_content fl">
-                            <input class="goods_count" th:id="${'goodsCount'+item.cartItemId}" type="number"
-                                   th:onblur="'updateItem('+${item.cartItemId}+')'"
-                                   th:value="${item.goodsCount}" step="1" min="1"
-                                   max="5">
-                        </div>
-                        <div class="sub_content fl" th:text="${item.goodsCount*item.sellingPrice+'元'}">1299元</div>
-                        <div class="sub_content fl"><a href="##" th:onclick="'deleteItem('+${item.cartItemId}+')'">×</a>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                </th:block>
-            </div>
-        </th:block>
-        <div class="pre_order mt20 center">
-            <div class="tips fl ml20">
-                <ul>
-                    <li><a th:href="@{index}">继续购物</a></li>
-                    <li>|</li>
-                    <li>共<span th:text="${itemsTotal}">13</span>件商品</li>
-                    <div class="clear"></div>
-                </ul>
-            </div>
-            <div class="order_div fr">
-                <div class="order_total fl">合计（不含运费）：<span th:text="${priceTotal}+'.00元'">1299.00元</span></div>
-                <div class="order_button fr">
-                    <th:block th:if="${itemsTotal == 0}">
-                        <input class="order_button_c" type="button" name="tip"
-                               onclick="tip()"
-                               value="去结算"/>
-                    </th:block>
-                    <th:block th:unless="${itemsTotal == 0}">
-                        <input class="order_button_d" type="button" name="settle"
-                               onclick="settle()"
-                               value="去结算"/>
-                    </th:block>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div class="clear"></div>
+            <div class="item-price">¥<span th:text="${item.sellingPrice}"></span></div>
+          </div>
+          <div class="quantity-control">
+            <button class="qty-btn" th:onclick="'updateQuantity('+${item.cartItemId}+', -1)'" 
+                    th:disabled="${item.goodsCount <= 1}">
+              <i class="fas fa-minus"></i>
+            </button>
+            <span class="qty-value" th:text="${item.goodsCount}"></span>
+            <button class="qty-btn" th:onclick="'updateQuantity('+${item.cartItemId}+', 1)'">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="item-subtotal">¥<span th:text="${item.goodsCount * item.sellingPrice}"></span></div>
+          <button class="delete-btn" th:onclick="'removeItem('+${item.cartItemId}+')'">
+            <i class="fas fa-trash-alt"></i>
+          </button>
         </div>
+      </th:block>
+
+      <!-- 保障横条 -->
+      <div class="guarantee-bar">
+        <i class="fas fa-certificate"></i>
+        一物一证
+        <i class="fas fa-undo-alt"></i>
+        7天退换
+        <i class="fas fa-truck"></i>
+        顺丰包邮
+      </div>
     </div>
-</div>
-<div th:replace="mall/footer::footer-fragment"></div>
 
-</body>
-<!-- jQuery -->
-<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
-<script th:src="@{/admin/plugins/sweetalert2/sweetalert2.all.min.js}"></script>
-<script th:src="@{/mall/js/search.js}" type="text/javascript"></script>
-<script type="text/javascript">
+    <!-- 无商品时显示 -->
+    <div th:if="${myShoppingCartItems == null or #lists.isEmpty(myShoppingCartItems)}">
+      <!-- 空购物车状态 -->
+      <div class="empty-cart show" id="emptyCart">
+        <div class="empty-icon">
+          <i class="fas fa-gem"></i>
+        </div>
+        <p class="empty-text">您的藏宝阁还是空的，去珍宝馆寻觅心仪藏品吧</p>
+        <button class="shop-btn" onclick="window.location.href='/treasure'">去珍宝馆</button>
+      </div>
 
-    /**
-     * 购物车中数量为0时提示
-     */
-    function tip() {
-        Swal.fire({
-            text: "购物车中无数据，无法结算",
-            icon: "error",iconColor:"#f05b72",
-        });
+      <!-- 保障横条 -->
+      <div class="guarantee-bar">
+        <i class="fas fa-certificate"></i>
+        一物一证
+        <i class="fas fa-undo-alt"></i>
+        7天退换
+        <i class="fas fa-truck"></i>
+        顺丰包邮
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部结算栏 -->
+  <div class="checkout-bar" th:if="${myShoppingCartItems != null and not #lists.isEmpty(myShoppingCartItems)}">
+    <div class="checkout-container">
+      <label class="select-all">
+        <input type="checkbox" id="selectAll" checked>
+        <span>全选</span>
+      </label>
+      <div class="checkout-right">
+        <a href="/goods/category" class="continue-shopping">继续购物</a>
+        <div class="total-amount">
+          合计：<strong id="totalAmount">¥<span th:text="${priceTotal}"></span></strong>
+        </div>
+        <button class="checkout-btn" onclick="handleCheckout()">去结算</button>
+      </div>
+    </div>
+  </div>
+
+<footer th:replace="mall/footer::footer"></footer>
+
+  <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+  <script th:src="@{/admin/plugins/sweetalert2/sweetalert2.all.min.js}"></script>
+  <script type="text/javascript">
+    // 渲染购物车
+    function renderCart() {
+      const cartItemsEl = document.getElementById('cartItems');
+      const emptyCartEl = document.getElementById('emptyCart');
+      
+      if (cartItemsEl && cartItemsEl.children.length === 0) {
+        cartItemsEl.style.display = 'none';
+        emptyCartEl.classList.add('show');
+        updateTotal();
+        return;
+      }
+
+      if (cartItemsEl) {
+        cartItemsEl.style.display = 'block';
+      }
+      emptyCartEl.classList.remove('show');
+
+      updateTotal();
+      updateSelectAll();
     }
 
-    /**
-     * 跳转至结算页面
-     */
-    function settle() {
-        window.location.href = '/shop-cart/settle'
+    // 更新数量
+    function updateQuantity(id, change) {
+      const itemEl = document.querySelector(`[data-id="${id}"]`);
+      if (!itemEl) return;
+
+      const qtyValueEl = itemEl.querySelector('.qty-value');
+      const currentQty = parseInt(qtyValueEl.textContent);
+      const newQty = currentQty + change;
+      
+      // 最小数量为1
+      if (newQty < 1) return;
+
+      // 发送请求更新数量
+      const data = {
+        "cartItemId": id,
+        "goodsCount": newQty
+      };
+      
+      $.ajax({
+        type: 'PUT',
+        url: '/shop-cart',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (result) {
+          if (result.resultCode == 200) {
+            qtyValueEl.textContent = newQty;
+            
+            // 更新小计
+            const priceEl = itemEl.querySelector('.item-price');
+            const price = parseInt(priceEl.textContent.replace('¥', ''));
+            const subtotalEl = itemEl.querySelector('.item-subtotal');
+            subtotalEl.textContent = '¥' + (price * newQty);
+            
+            // 更新按钮状态
+            const minusBtn = itemEl.querySelector('.qty-btn:first-child');
+            const plusBtn = itemEl.querySelector('.qty-btn:last-child');
+            
+            // 减号按钮：只有当数量≤1时禁用
+            minusBtn.disabled = newQty <= 1;
+            
+            // 加号按钮：暂时不自动禁用，由后端校验
+            // 点击减号成功减少数量后，加号按钮恢复可点击状态
+            plusBtn.disabled = false;
+            
+            updateTotal();
+            updateCartBadge();
+          } else {
+            console.error('更新数量失败:', result);
+            Swal.fire({
+              text: result.message || "更新失败，请刷新重试",
+              icon: "error",
+              iconColor: "#f05b72",
+            });
+          }
+        },
+        error: function (error) {
+          console.error('更新数量请求失败:', error);
+          Swal.fire({
+            text: "网络错误，请稍后重试",
+            icon: "error",
+            iconColor: "#f05b72",
+          });
+        }
+      });
     }
 
-    /**
-     *更新购物项
-     */
-    function updateItem(id) {
-        var domId = 'goodsCount' + id;
-        var goodsCount = $("#" + domId).val();
-        if (goodsCount > 5) {
-            Swal.fire({
-                text: "单个商品最多可购买5个",
-                icon: "error",iconColor:"#f05b72",
-            });
-            return;
-        }
-        if (goodsCount < 1) {
-            Swal.fire({
-                text: "数量异常",
-                icon: "error",iconColor:"#f05b72",
-            });
-            return;
-        }
-        var data = {
-            "cartItemId": id,
-            "goodsCount": goodsCount
-        };
-        $.ajax({
-            type: 'PUT',
-            url: 'shop-cart',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function (result) {
-                if (result.resultCode == 200) {
-                    window.location.reload();
-                } else {
+    // 删除商品
+    function removeItem(id) {
+      Swal.fire({
+        title: "确认删除",
+        text: "确定要从购物车中移除该商品吗？",
+        icon: "warning",
+        iconColor: "#dea32c",
+        showCancelButton: true,
+        confirmButtonText: '确认',
+        cancelButtonText: '取消'
+      }).then((flag) => {
+        if (flag.value) {
+          const itemEl = document.querySelector(`[data-id="${id}"]`);
+          if (itemEl) {
+            itemEl.classList.add('removing');
+            setTimeout(() => {
+              // 发送请求删除商品
+              $.ajax({
+                type: 'DELETE',
+                url: '/shop-cart/' + id,
+                success: function (result) {
+                  if (result.resultCode == 200) {
+                    itemEl.remove();
+                    renderCart();
+                    updateCartBadge();
+                  } else {
+                    console.error('删除商品失败:', result);
                     Swal.fire({
-                        text: "操作失败",
-                        icon: "error",iconColor:"#f05b72",
+                      text: "删除失败，请刷新重试",
+                      icon: "error",
+                      iconColor: "#f05b72",
                     });
+                  }
+                },
+                error: function (error) {
+                  console.error('删除商品请求失败:', error);
+                  Swal.fire({
+                    text: "网络错误，请稍后重试",
+                    icon: "error",
+                    iconColor: "#f05b72",
+                  });
                 }
-            },
-            error: function () {
-                Swal.fire({
-                    text: "操作失败",
-                    icon: "error",iconColor:"#f05b72",
-                });
-            }
-        });
+              });
+            }, 300);
+          }
+        }
+      });
     }
 
-    /**
-     * * 删除购物项
-     * @param id
-     */
-    function deleteItem(id) {
-        Swal.fire({
-            title: "确认弹框",
-            text: "确认要删除数据吗?",
-            icon: "warning",iconColor:"#dea32c",
-            showCancelButton: true,
-            confirmButtonText: '确认',
-            cancelButtonText: '取消'
-        }).then((flag) => {
-                if (flag.value) {
-                    $.ajax({
-                        type: 'DELETE',
-                        url: 'shop-cart/' + id,
-                        success: function (result) {
-                            if (result.resultCode == 200) {
-                                window.location.reload();
-                            } else {
-                                Swal.fire({
-                                    text: "操作失败",
-                                    icon: "error",iconColor:"#f05b72",
-                                });
-                            }
-                        },
-                        error: function () {
-                            Swal.fire({
-                                text: "操作失败",
-                                icon: "error",iconColor:"#f05b72",
-                            });
-                        }
-                    });
-                }
-            }
-        )
-        ;
+    // 切换单个商品选中状态
+    function toggleItem(id) {
+      const checkbox = document.querySelector(`[data-id="${id}"] .item-checkbox`);
+      
+      // 纯前端处理选中状态，不向后端发送请求
+      updateTotal();
+      updateSelectAll();
     }
-</script>
+
+    // 全选/取消全选
+    document.getElementById('selectAll').addEventListener('change', function(e) {
+      const checked = e.target.checked;
+      const checkboxes = document.querySelectorAll('.item-checkbox');
+      
+      // 纯前端处理全选状态，不向后端发送请求
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = checked;
+      });
+      updateTotal();
+    });
+
+    // 更新全选状态
+    function updateSelectAll() {
+      const selectAllEl = document.getElementById('selectAll');
+      const checkboxes = document.querySelectorAll('.item-checkbox');
+      
+      if (checkboxes.length === 0) {
+        selectAllEl.checked = false;
+        return;
+      }
+      
+      const allSelected = Array.from(checkboxes).every(checkbox => checkbox.checked);
+      selectAllEl.checked = allSelected;
+    }
+
+    // 更新总金额
+    function updateTotal() {
+      const selectedItems = document.querySelectorAll('.item-checkbox:checked');
+      let total = 0;
+      
+      selectedItems.forEach(checkbox => {
+        const itemEl = checkbox.closest('.cart-item');
+        const subtotalEl = itemEl.querySelector('.item-subtotal');
+        const subtotal = parseFloat(subtotalEl.textContent.replace('¥', ''));
+        total += subtotal;
+      });
+      
+      const totalAmountEl = document.getElementById('totalAmount');
+      if (totalAmountEl) {
+        totalAmountEl.textContent = '¥' + total.toFixed(2);
+      }
+    }
+
+    // 更新购物车角标
+    function updateCartBadge() {
+      const badge = document.getElementById('cartBadge');
+      const items = document.querySelectorAll('.cart-item');
+      let totalCount = 0;
+      
+      items.forEach(item => {
+        const qty = parseInt(item.querySelector('.qty-value').textContent);
+        totalCount += qty;
+      });
+      
+      badge.textContent = totalCount;
+      badge.style.display = totalCount > 0 ? 'flex' : 'none';
+    }
+
+    // 结算处理
+    function handleCheckout() {
+      // 检查是否有选中的商品
+      const checkedBoxes = document.querySelectorAll('.item-checkbox:checked');
+      if (checkedBoxes.length === 0) {
+        Swal.fire({
+          text: "请至少选择一件商品",
+          icon: "warning",
+          iconColor: "#dea32c",
+        });
+        return;
+      }
+      
+      // 跳转到订单确认页
+      window.location.href = '/shop-cart/settle';
+    }
+
+    // 初始化
+    renderCart();
+  </script>
+</body>
 </html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>收藏分析 - 后台管理</title>
+    <link rel="stylesheet" th:href="@{/admin/css/turquoise-admin.css}">
+    <style>
+        /* 统计卡片样式 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 24px;
+        }
+        
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+        
+        .stat-icon.green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: #fff;
+        }
+        
+        .stat-icon.orange {
+            background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);
+            color: #fff;
+        }
+        
+        .stat-icon.purple {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #666;
+        }
+        
+        .stat-content {
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #888;
+        }
+        
+        /* 区块标题 */
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            position: relative;
+            padding-left: 12px;
+        }
+        
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 18px;
+            background: #1abc9c;
+            border-radius: 2px;
+        }
+        
+        .section-subtitle {
+            font-size: 14px;
+            color: #999;
+            margin-left: 12px;
+            font-weight: 400;
+        }
+        
+        /* 表格美化 */
+        .data-table {
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+        
+        .data-table thead tr {
+            background: #f8f9fa;
+        }
+        
+        .data-table th {
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .data-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #fafafa;
+        }
+        
+        /* 排名徽章 */
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .rank-badge.gold {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb700 100%);
+            color: #8b6914;
+        }
+        
+        .rank-badge.silver {
+            background: linear-gradient(135deg, #c0c0c0 0%, #a8a8a8 100%);
+            color: #5a5a5a;
+        }
+        
+        .rank-badge.bronze {
+            background: linear-gradient(135deg, #cd7f32 0%, #b87333 100%);
+            color: #4a2c0a;
+        }
+        
+        .rank-badge.default {
+            background: #f0f0f0;
+            color: #888;
+        }
+        
+        /* 空数据提示 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .empty-state p {
+            font-size: 14px;
+        }
+        
+        /* 搜索区域 */
+        .search-bar {
+            background: #fff;
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .search-bar .form-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-bar label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .search-bar input,
+        .search-bar select {
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            min-width: 200px;
+            transition: border-color 0.2s;
+        }
+        
+        .search-bar input:focus,
+        .search-bar select:focus {
+            outline: none;
+            border-color: #1abc9c;
+        }
+        
+        .search-bar button {
+            padding: 10px 24px;
+            background: #1abc9c;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .search-bar button:hover {
+            background: #16a085;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-primary {
+            background: #1abc9c;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background: #16a085;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+            color: #fff;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+        
+        /* 面板样式 */
+        .panel {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="admin/turquoise-admin-layout :: header"></div>
+    <div th:replace="admin/turquoise-admin-layout :: sidebar"></div>
+    <main class="turquoise-content">
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">收藏分析</h2>
+            </div>
+
+            <!-- 统计卡片 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fa fa-heart"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" th:text="${totalCollects}"></div>
+                        <div class="stat-label">收藏总次数</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fa fa-calendar-check-o"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" th:text="${todayCollects}"></div>
+                        <div class="stat-label">今日新增收藏</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fa fa-bar-chart"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" th:text="${avgCollectsPerUser}"></div>
+                        <div class="stat-label">人均收藏数</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" th:text="${activeCollectUsers}"></div>
+                        <div class="stat-label">活跃收藏用户</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 热门收藏商品排行 -->
+            <div class="panel">
+                <div class="section-header">
+                    <h3 class="section-title">热门收藏商品排行</h3>
+                    <span class="section-subtitle">Top 10</span>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>商品名称</th>
+                            <th>被收藏次数</th>
+                            <th>收藏用户数</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <th:block th:if="${hotProducts != null and not hotProducts.isEmpty()}">
+                            <tr th:each="(product, index) : ${hotProducts}">
+                                <td>
+                                    <span class="rank-badge" 
+                                          th:class="${index == 0 ? 'gold' : (index == 1 ? 'silver' : (index == 2 ? 'bronze' : 'default'))}"
+                                          th:text="${index + 1}"></span>
+                                </td>
+                                <td th:text="${product.product_name}"></td>
+                                <td th:text="${product.collect_count}"></td>
+                                <td th:text="${product.user_count}"></td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm">查看商品</button>
+                                </td>
+                            </tr>
+                        </th:block>
+                        <tr th:if="${hotProducts == null or hotProducts.isEmpty()}">
+                            <td colspan="5">
+                                <div class="empty-state">
+                                    <i class="fa fa-bar-chart-o"></i>
+                                    <p>暂无热门商品数据</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 收藏记录查询 -->
+            <div class="panel">
+                <div class="section-header">
+                    <h3 class="section-title">收藏记录查询</h3>
+                </div>
+                
+                <!-- 搜索筛选 -->
+                <div class="search-bar">
+                    <div class="form-group">
+                        <input type="text" name="keyword" placeholder="搜索用户昵称/商品名称" 
+                               class="turquoise-input" th:value="${keyword}">
+                    </div>
+                    <div class="form-group">
+                        <select name="timeRange" class="turquoise-select">
+                            <option value="" th:selected="${timeRange == null or timeRange == ''}">全部时间</option>
+                            <option value="today" th:selected="${timeRange == 'today'}">今日</option>
+                            <option value="week" th:selected="${timeRange == 'week'}">近7天</option>
+                            <option value="month" th:selected="${timeRange == 'month'}">近30天</option>
+                        </select>
+                    </div>
+                    <button type="submit" form="searchForm">搜索</button>
+                </div>
+                <form id="searchForm" th:action="@{/admin/collections}" method="get">
+                    <input type="hidden" name="keyword" th:value="${keyword}">
+                    <input type="hidden" name="timeRange" th:value="${timeRange}">
+                </form>
+
+                <!-- 收藏记录列表 -->
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>用户昵称</th>
+                            <th>收藏商品</th>
+                            <th>收藏时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <th:block th:if="${collectList != null and not collectList.isEmpty()}">
+                            <tr th:each="collect : ${collectList}">
+                                <td th:text="${collect.nick_name}"></td>
+                                <td th:text="${collect.product_name}"></td>
+                                <td th:text="${collect.collect_time}"></td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" 
+                                            th:onclick="|cancelCollect(${collect.collect_id})|">取消收藏</button>
+                                </td>
+                            </tr>
+                        </th:block>
+                        <tr th:if="${collectList == null or collectList.isEmpty()}">
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <i class="fa fa-folder-open-o"></i>
+                                    <p>暂无收藏记录</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- 分页 -->
+                <div class="turquoise-pagination" style="margin-top: 20px;">
+                    <ul class="turquoise-pagination-list">
+                        <li>
+                            <a th:href="@{/admin/collections(page=${page-1}, keyword=${keyword}, timeRange=${timeRange})}" 
+                               th:if="${page > 1}">上一页</a>
+                            <span th:else class="turquoise-pagination-disabled">上一页</span>
+                        </li>
+                        <li class="turquoise-pagination-item active">
+                            <span th:text="${page}"></span>
+                        </li>
+                        <li>
+                            <a th:href="@{/admin/collections(page=${page+1}, keyword=${keyword}, timeRange=${timeRange})}" 
+                               th:if="${(page * limit) < total}">下一页</a>
+                            <span th:else class="turquoise-pagination-disabled">下一页</span>
+                        </li>
+                    </ul>
+                    <div class="turquoise-pagination-info">
+                        共 <span th:text="${total}"></span> 条记录
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-script"></th:block>
+
+    <script th:inline="javascript">
+        function cancelCollect(collectId) {
+            if (confirm('确定要取消这条收藏记录吗？')) {
+                fetch('/admin/collections/cancel/' + collectId, {
+                    method: 'POST'
+                }).then(function(response) {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('取消收藏失败');
+                    }
+                }).catch(function() {
+                    alert('取消收藏失败');
+                });
+            }
+        }
+        
+        // 搜索表单提交
+        document.addEventListener('DOMContentLoaded', function() {
+            var searchBtn = document.querySelector('.search-bar button');
+            var searchForm = document.getElementById('searchForm');
+            var keywordInput = document.querySelector('.search-bar input[name="keyword"]');
+            var timeRangeSelect = document.querySelector('.search-bar select[name="timeRange"]');
+            
+            searchBtn.addEventListener('click', function() {
+                searchForm.querySelector('input[name="keyword"]').value = keywordInput.value;
+                searchForm.querySelector('input[name="timeRange"]').value = timeRangeSelect.value;
+                searchForm.submit();
+            });
+        });
+    </script>
+</body>
+</html>

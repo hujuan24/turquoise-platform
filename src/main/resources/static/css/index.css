@@ -1,3 +1,8 @@
+/* 平滑滚动 */
+html {
+    scroll-behavior: smooth;
+}
+
 /* 动画效果 */
 @keyframes textureMove {
     0% { transform: translate(0, 0); }

@@ -48,9 +48,14 @@ public class NewBeeMallShoppingCartServiceImpl implements NewBeeMallShoppingCart
             return ServiceResultEnum.GOODS_NOT_EXIST.getResult();
         }
         int totalItem = newBeeMallShoppingCartItemMapper.selectCountByUserId(newBeeMallShoppingCartItem.getUserId()) + 1;
+        //获取商品的最大购买数量，默认为5
+        Integer maxBuyNum = newBeeMallGoods.getMaxBuyNum();
+        if (maxBuyNum == null) {
+            maxBuyNum = 5;
+        }
         //超出单个商品的最大数量
-        if (newBeeMallShoppingCartItem.getGoodsCount() > Constants.SHOPPING_CART_ITEM_LIMIT_NUMBER) {
-            return ServiceResultEnum.SHOPPING_CART_ITEM_LIMIT_NUMBER_ERROR.getResult();
+        if (newBeeMallShoppingCartItem.getGoodsCount() > maxBuyNum) {
+            return "该商品限购 " + maxBuyNum + " 件";
         }
         //超出最大数量
         if (totalItem > Constants.SHOPPING_CART_ITEM_TOTAL_NUMBER) {
@@ -69,9 +74,19 @@ public class NewBeeMallShoppingCartServiceImpl implements NewBeeMallShoppingCart
         if (newBeeMallShoppingCartItemUpdate == null) {
             return ServiceResultEnum.DATA_NOT_EXIST.getResult();
         }
+        //根据goodsId查询商品信息
+        NewBeeMallGoods newBeeMallGoods = newBeeMallGoodsMapper.selectByPrimaryKey(newBeeMallShoppingCartItemUpdate.getGoodsId());
+        if (newBeeMallGoods == null) {
+            return ServiceResultEnum.GOODS_NOT_EXIST.getResult();
+        }
+        //获取商品的最大购买数量，默认为5
+        Integer maxBuyNum = newBeeMallGoods.getMaxBuyNum();
+        if (maxBuyNum == null) {
+            maxBuyNum = 5;
+        }
         //超出单个商品的最大数量
-        if (newBeeMallShoppingCartItem.getGoodsCount() > Constants.SHOPPING_CART_ITEM_LIMIT_NUMBER) {
-            return ServiceResultEnum.SHOPPING_CART_ITEM_LIMIT_NUMBER_ERROR.getResult();
+        if (newBeeMallShoppingCartItem.getGoodsCount() > maxBuyNum) {
+            return "该商品限购 " + maxBuyNum + " 件";
         }
         //当前登录账号的userId与待修改的cartItem中userId不同，返回错误
         if (!newBeeMallShoppingCartItemUpdate.getUserId().equals(newBeeMallShoppingCartItem.getUserId())) {

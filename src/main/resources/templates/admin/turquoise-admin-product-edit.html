@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑商品 - 后台管理</title>
+    <link rel="stylesheet" th:href="@{/admin/css/turquoise-admin.css}">
+
+</head>
+<body>
+    <div th:replace="admin/turquoise-admin-layout :: header"></div>
+    <div th:replace="admin/turquoise-admin-layout :: sidebar"></div>
+    <main class="turquoise-content">
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">编辑商品：<span th:text="${goods.goodsName}"></span></h2>
+            </div>
+            
+            <div class="turquoise-form-container">
+                <form th:action="@{/admin/products/update}" method="post">
+                    <input type="hidden" th:name="goodsId" th:value="${goods.goodsId}">
+                    
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-group">
+                            <label class="turquoise-form-label" for="goodsName">商品名称</label>
+                            <input type="text" id="goodsName" name="goodsName" th:value="${goods.goodsName}" required class="turquoise-form-input">
+                        </div>
+                        <div class="turquoise-form-group">
+                            <label class="turquoise-form-label" for="sellingPrice">售价</label>
+                            <input type="number" id="sellingPrice" name="sellingPrice" th:value="${goods.sellingPrice}" step="0.01" required class="turquoise-form-input">
+                        </div>
+                    </div>
+                    
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-group">
+                            <label class="turquoise-form-label" for="originalPrice">原价</label>
+                            <input type="number" id="originalPrice" name="originalPrice" th:value="${goods.originalPrice}" step="0.01" required class="turquoise-form-input">
+                        </div>
+                        <div class="turquoise-form-group">
+                            <label class="turquoise-form-label" for="stockNum">库存</label>
+                            <input type="number" id="stockNum" name="stockNum" th:value="${goods.stockNum}" required class="turquoise-form-input">
+                        </div>
+                    </div>
+                    
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-group">
+                            <label class="turquoise-form-label" for="maxBuyNum">限购数量</label>
+                            <input type="number" id="maxBuyNum" name="maxBuyNum" th:value="${goods.maxBuyNum != null ? goods.maxBuyNum : 5}" min="1" class="turquoise-form-input">
+                        </div>
+                    </div>
+                    
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label" for="goodsIntro">商品简介</label>
+                        <textarea id="goodsIntro" name="goodsIntro" th:text="${goods.goodsIntro}" required class="turquoise-form-input"></textarea>
+                    </div>
+                    
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-group">
+                            <label class="turquoise-form-label" for="goodsCategoryId">品类</label>
+                            <select id="goodsCategoryId" name="goodsCategoryId" class="turquoise-form-select">
+                                <option value="">请选择</option>
+                                <option th:each="category : ${categoryList}" th:value="${category.categoryId}" th:text="${category.categoryName}" th:selected="${goods.goodsCategoryId == category.categoryId}"></option>
+                            </select>
+                        </div>
+                        <div class="turquoise-form-group">
+                            <label class="turquoise-form-label" for="turquoiseOrigin">矿口</label>
+                            <select id="turquoiseOrigin" name="turquoiseOrigin" class="turquoise-form-select">
+                                <option value="">请选择</option>
+                                <option th:each="item : ${originList}" th:value="${item.attrName}" th:text="${item.attrName}" th:selected="${goods.turquoiseOrigin == item.attrName}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-group">
+                            <label class="turquoise-form-label" for="turquoiseColor">颜色</label>
+                            <select id="turquoiseColor" name="turquoiseColor" class="turquoise-form-select">
+                                <option value="">请选择</option>
+                                <option th:each="item : ${colorList}" th:value="${item.attrName}" th:text="${item.attrName}" th:selected="${goods.turquoiseColor == item.attrName}"></option>
+                            </select>
+                        </div>
+                        <div class="turquoise-form-group">
+                            <label class="turquoise-form-label" for="turquoiseDensity">瓷度</label>
+                            <select id="turquoiseDensity" name="turquoiseDensity" class="turquoise-form-select">
+                                <option value="">请选择</option>
+                                <option th:each="item : ${gradeList}" th:value="${item.attrName}" th:text="${item.attrName}" th:selected="${goods.turquoiseDensity == item.attrName}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-group">
+                            <label class="turquoise-form-label" for="goodsSellStatus">上架状态</label>
+                            <select id="goodsSellStatus" name="goodsSellStatus" th:value="${goods.goodsSellStatus}" required class="turquoise-form-select">
+                                <option value="0">下架</option>
+                                <option value="1">上架</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="turquoise-form-group">
+                        <label class="turquoise-form-label" for="goodsDetailContent">商品详情</label>
+                        <textarea id="goodsDetailContent" name="goodsDetailContent" th:text="${goods.goodsDetailContent}" class="turquoise-form-input"></textarea>
+                    </div>
+                    
+                    <div class="turquoise-form-row">
+                        <div class="turquoise-form-group">
+                            <label class="turquoise-form-label">商品图片</label>
+                            <div class="turquoise-upload-area">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>点击或拖拽文件到此处上传</p>
+                                <input type="file" name="goodsImg" class="turquoise-file-input">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="turquoise-modal-footer">
+                        <a href="@{/admin/products}" class="turquoise-btn-cancel">取消</a>
+                        <button type="submit" class="turquoise-btn-submit">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

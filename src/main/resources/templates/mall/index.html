@@ -8,25 +8,25 @@
 <header th:replace="mall/header::header-fragment"></header>
 
 <!-- 文化沉浸板块 -->
-<div class="hero" style="height: 100vh; width: 100%; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; top: 0; left: 0;">
+<div class="hero">
     <!-- 背景图 -->
-    <div class="hero-bg" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1920&q=85'); background-size: cover; background-position: center; background-attachment: fixed;"></div>
+    <div class="hero-bg"></div>
     
     <!-- 遮罩层 -->
-    <div class="hero-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, rgba(232, 228, 220, 0.3) 0%, rgba(232, 228, 220, 0.5) 50%, rgba(232, 228, 220, 0.7) 100%);"></div>
+    <div class="hero-overlay"></div>
     
     <!-- 纹理效果 -->
-    <div class="hero-texture" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.15; background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(64, 224, 208, 0.02) 35px, rgba(64, 224, 208, 0.02) 70px), repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(201, 162, 39, 0.015) 35px, rgba(201, 162, 39, 0.015) 70px); animation: textureMove 20s linear infinite;"></div>
+    <div class="hero-texture"></div>
     
     <!-- 内容 -->
-    <div class="hero-content" style="text-align: center; z-index: 10; padding: 0 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
-        <h1 class="hero-title" style="font-size: 68px; font-weight: 900; letter-spacing: 16px; margin-bottom: 20px; background: linear-gradient(135deg, #0d5c5c 0%, #1a7a7a 50%, #c9a227 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: titleGlow 3s ease-in-out infinite alternate; font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;">东方美学 · 千年瑰宝</h1>
-        <p class="hero-subtitle" style="font-size: 20px; color: #5a5a5a; letter-spacing: 8px; margin-bottom: 60px; font-weight: 400; font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;">探寻东方矿物之美，感受绿松石的文化底蕴</p>
-        <div class="hero-buttons" style="display: flex; gap: 40px; justify-content: center;">
-            <a href="#culture-origin" class="gate-btn" style="position: relative; padding: 20px 50px; background: rgba(15, 12, 8, 0.7); border: 1px solid rgba(201, 162, 39, 0.5); cursor: pointer; font-family: inherit; font-size: 16px; letter-spacing: 4px; color: #40e0d0; overflow: hidden; transition: all 0.5s ease; border-radius: 4px; text-decoration: none;">
+    <div class="hero-content">
+        <h1 class="hero-title">东方美学 · 千年瑰宝</h1>
+        <p class="hero-subtitle">探寻东方矿物之美，感受绿松石的文化底蕴</p>
+        <div class="hero-buttons">
+            <a href="#culture-origin" class="gate-btn">
                 <span>探索文化渊源</span>
             </a>
-            <a href="#treasure-hall" class="gate-btn" style="position: relative; padding: 20px 50px; background: rgba(15, 12, 8, 0.7); border: 1px solid rgba(201, 162, 39, 0.5); cursor: pointer; font-family: inherit; font-size: 16px; letter-spacing: 4px; color: #40e0d0; overflow: hidden; transition: all 0.5s ease; border-radius: 4px; text-decoration: none;">
+            <a href="#treasure-section" class="gate-btn">
                 <span>进入珍宝馆</span>
             </a>
         </div>
@@ -40,7 +40,7 @@
 
     
     <!-- 珍宝馆板块 --> 
-    <section class="turquoise-treasure-section"> 
+    <section id="treasure-section" class="turquoise-treasure-section"> 
         <!-- 1. 轮播精选 --> 
         <div class="turquoise-carousel-container"> 
             <div class="turquoise-carousel"> 
@@ -186,70 +186,24 @@
             <h2 class="turquoise-section-title">新入馆藏</h2> 
             <div class="turquoise-scroll-container"> 
                 <div class="turquoise-scroll-track"> 
-                    <div class="turquoise-arrival-card"> 
-                        <div class="turquoise-arrival-image"> 
-                            <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
-                                藏品图片 
-                            </div> 
-                            <div class="turquoise-arrival-badge">新品</div> 
-                        </div> 
-                        <div class="turquoise-arrival-info"> 
-                            <p class="turquoise-arrival-origin">湖北十堰</p> 
-                            <h3 class="turquoise-arrival-title">高瓷蓝绿松石手串</h3> 
-                            <div class="turquoise-arrival-specs"> 
-                                <span class="turquoise-spec">规格：10mm*12颗</span> 
-                            </div> 
-                            <p class="turquoise-arrival-price">¥ 2,880.00</p> 
-                        </div> 
-                    </div> 
-                    <div class="turquoise-arrival-card"> 
-                        <div class="turquoise-arrival-image"> 
-                            <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
-                                藏品图片 
-                            </div> 
-                            <div class="turquoise-arrival-badge">精品</div> 
-                        </div> 
-                        <div class="turquoise-arrival-info"> 
-                            <p class="turquoise-arrival-origin">湖北十堰</p> 
-                            <h3 class="turquoise-arrival-title">乌兰花绿松石挂件</h3> 
-                            <div class="turquoise-arrival-specs"> 
-                                <span class="turquoise-spec">规格：25mm*35mm</span> 
-                            </div> 
-                            <p class="turquoise-arrival-price">¥ 5,680.00</p> 
-                        </div> 
-                    </div> 
-                    <div class="turquoise-arrival-card"> 
-                        <div class="turquoise-arrival-image"> 
-                            <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
-                                藏品图片 
-                            </div> 
-                            <div class="turquoise-arrival-badge">新品</div> 
-                        </div> 
-                        <div class="turquoise-arrival-info"> 
-                            <p class="turquoise-arrival-origin">湖北十堰</p> 
-                            <h3 class="turquoise-arrival-title">菜籽黄绿松石戒面</h3> 
-                            <div class="turquoise-arrival-specs"> 
-                                <span class="turquoise-spec">规格：15mm*18mm</span> 
-                            </div> 
-                            <p class="turquoise-arrival-price">¥ 1,980.00</p> 
-                        </div> 
-                    </div> 
-                    <div class="turquoise-arrival-card"> 
-                        <div class="turquoise-arrival-image"> 
-                            <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
-                                藏品图片 
-                            </div> 
-                            <div class="turquoise-arrival-badge">精品</div> 
-                        </div> 
-                        <div class="turquoise-arrival-info"> 
-                            <p class="turquoise-arrival-origin">湖北十堰</p> 
-                            <h3 class="turquoise-arrival-title">苹果绿绿松石雕刻件</h3> 
-                            <div class="turquoise-arrival-specs"> 
-                                <span class="turquoise-spec">规格：30mm*40mm</span> 
-                            </div> 
-                            <p class="turquoise-arrival-price">¥ 8,880.00</p> 
-                        </div> 
-                    </div> 
+                    <th:block th:each="goods : ${newGoodses}">
+                        <a th:href="@{'/turquoise/goods/detail/' + ${goods.goodsId}}" class="turquoise-product-link">
+                            <div class="turquoise-arrival-card"> 
+                                <div class="turquoise-arrival-image"> 
+                                    <img th:src="@{${goods.goodsCoverImg}}" th:alt="${goods.goodsName}" style="width:100%; height:100%; object-fit: cover; border-radius: 8px;" /> 
+                                    <div class="turquoise-arrival-badge">新品</div> 
+                                </div> 
+                                <div class="turquoise-arrival-info"> 
+                                    <p class="turquoise-arrival-origin">湖北十堰</p> 
+                                    <h3 class="turquoise-arrival-title" th:text="${goods.goodsName}"></h3> 
+                                    <div class="turquoise-arrival-specs"> 
+                                        <span class="turquoise-spec">规格：10mm*12颗</span> 
+                                    </div> 
+                                    <p class="turquoise-arrival-price" th:text="|¥ ${#numbers.formatDecimal(goods.sellingPrice/100, 2, 'COMMA', 2, 'POINT')}|"></p> 
+                                </div> 
+                            </div>
+                        </a>
+                    </th:block> 
                 </div> 
             </div> 
         </div> 
@@ -259,48 +213,26 @@
             <h2 class="turquoise-section-title">馆藏精选</h2> 
             <p class="turquoise-section-subtitle">仅供鉴赏的顶级绿松石藏品</p> 
             <div class="turquoise-featured-collection-grid"> 
-                <div class="turquoise-featured-collection-card"> 
-                    <div class="turquoise-featured-collection-image"> 
-                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
-                            藏品图片 
-                        </div> 
-                        <div class="turquoise-view-only-badge">仅供鉴赏</div> 
-                    </div> 
-                    <div class="turquoise-featured-collection-info"> 
-                        <h3 class="turquoise-featured-collection-title">极品高瓷蓝绿松石原石</h3> 
-                        <p class="turquoise-featured-collection-desc">罕见的高瓷蓝绿松石原石，色泽浓郁，质地细腻，是收藏级别的珍品。</p> 
-                    </div> 
-                </div> 
-                <div class="turquoise-featured-collection-card"> 
-                    <div class="turquoise-featured-collection-image"> 
-                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
-                            藏品图片 
-                        </div> 
-                        <div class="turquoise-view-only-badge">仅供鉴赏</div> 
-                    </div> 
-                    <div class="turquoise-featured-collection-info"> 
-                        <h3 class="turquoise-featured-collection-title">乌兰花绿松石雕刻摆件</h3> 
-                        <p class="turquoise-featured-collection-desc">精湛的雕刻工艺，独特的乌兰花纹理，展现了绿松石的天然魅力。</p> 
-                    </div> 
-                </div> 
-                <div class="turquoise-featured-collection-card"> 
-                    <div class="turquoise-featured-collection-image"> 
-                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc7 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;"> 
-                            藏品图片 
-                        </div> 
-                        <div class="turquoise-view-only-badge">仅供鉴赏</div> 
-                    </div> 
-                    <div class="turquoise-featured-collection-info"> 
-                        <h3 class="turquoise-featured-collection-title">菜籽黄绿松石手镯</h3> 
-                        <p class="turquoise-featured-collection-desc">温润的菜籽黄色调，质地纯净，是不可多得的艺术珍品。</p> 
-                    </div> 
-                </div> 
+                <th:block th:each="goods : ${recommendGoodses}">
+                    <a th:href="@{'/turquoise/goods/detail/' + ${goods.goodsId}}" class="turquoise-product-link">
+                        <div class="turquoise-featured-collection-card"> 
+                            <div class="turquoise-featured-collection-image"> 
+                                <img th:src="@{${goods.goodsCoverImg}}" th:alt="${goods.goodsName}" style="width:100%; height:100%; object-fit: cover; border-radius: 8px;" /> 
+                                <div class="turquoise-view-only-badge">仅供鉴赏</div> 
+                            </div> 
+                            <div class="turquoise-featured-collection-info"> 
+                                <h3 class="turquoise-featured-collection-title" th:text="${goods.goodsName}"></h3> 
+                                <p class="turquoise-featured-collection-desc" th:text="${goods.goodsIntro}"></p> 
+                            </div> 
+                        </div>
+                    </a>
+                </th:block> 
             </div> 
         </div> 
     </section>
     
     <!-- 文化渊源板块 --> 
-    <section class="turquoise-culture-section"> 
+    <section id="culture-origin" class="turquoise-culture-section"> 
       <div class="turquoise-culture-header"> 
         <h2 class="turquoise-culture-title">文化渊源</h2> 
         <p class="turquoise-culture-subtitle">从远古图腾到东方美学，探寻绿松石的千年文脉</p> 

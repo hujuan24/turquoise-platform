@@ -76,4 +76,11 @@ public interface NewBeeMallGoodsService {
      * @return 是否删除成功
      */
     boolean deleteGoodsById(Long goodsId);
+    
+    /**
+     * 获取上架商品列表
+     * @param limit 数量限制
+     * @return 上架商品列表
+     */
+    List<NewBeeMallGoods> getOnSaleGoods(int limit);
 }

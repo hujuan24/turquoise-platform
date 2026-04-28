@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ltd.newbee.mall.mapper.TurquoiseAttrDictMapper" >
+  <resultMap id="BaseResultMap" type="ltd.newbee.mall.entity.TurquoiseAttrDict" >
+    <id column="attr_id" property="attrId" />
+    <result column="attr_type" property="attrType" />
+    <result column="attr_name" property="attrName" />
+    <result column="attr_code" property="attrCode" />
+    <result column="sort_order" property="sortOrder" />
+    <result column="is_deleted" property="isDeleted" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    attr_id, attr_type, attr_name, attr_code, sort_order, is_deleted, create_time, update_time
+  </sql>
+
+  <select id="selectListByType" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_turquoise_attr_dict
+    where is_deleted = 0
+    and attr_type = #{attrType,jdbcType=VARCHAR}
+    order by create_time desc
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_turquoise_attr_dict
+    where attr_id = #{attrId,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insert" parameterType="ltd.newbee.mall.entity.TurquoiseAttrDict" >
+    insert into tb_turquoise_attr_dict (attr_type, attr_name, attr_code, sort_order, is_deleted, create_time, update_time)
+    values (#{attrType,jdbcType=VARCHAR}, #{attrName,jdbcType=VARCHAR}, #{attrCode,jdbcType=VARCHAR}, #{sortOrder,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER}, now(), now())
+  </insert>
+
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    update tb_turquoise_attr_dict
+    set is_deleted = 1,
+        update_time = now()
+    where attr_id = #{attrId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="ltd.newbee.mall.entity.TurquoiseAttrDict" >
+    update tb_turquoise_attr_dict
+    set attr_name = #{attrName,jdbcType=VARCHAR},
+        update_time = now()
+    where attr_id = #{attrId,jdbcType=BIGINT}
+  </update>
+</mapper>

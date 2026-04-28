@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ltd.newbee.mall.dao.TurquoiseKnowledgeMapper">
+
+    <resultMap id="BaseResultMap" type="ltd.newbee.mall.entity.TurquoiseKnowledge">
+        <id column="knowledge_id" property="knowledgeId" jdbcType="BIGINT"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="category" property="category" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="TEXT"/>
+        <result column="cover_img" property="coverImg" jdbcType="VARCHAR"/>
+        <result column="author" property="author" jdbcType="VARCHAR"/>
+        <result column="view_count" property="viewCount" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!-- 分页查询知识库列表 -->
+    <select id="findKnowledgeList" parameterType="Map" resultMap="BaseResultMap">
+        SELECT * FROM turquoise_knowledge
+        WHERE is_deleted = 0
+        <if test="title != null and title != ''">
+            AND title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="category != null and category != ''">
+            AND category = #{category}
+        </if>
+        ORDER BY create_time DESC
+        <if test="start != null and limit != null">
+            LIMIT #{start}, #{limit}
+        </if>
+    </select>
+
+    <!-- 统计知识库数量 -->
+    <select id="getTotalKnowledges" parameterType="Map" resultType="Integer">
+        SELECT COUNT(*) FROM turquoise_knowledge
+        WHERE is_deleted = 0
+        <if test="title != null and title != ''">
+            AND title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="category != null and category != ''">
+            AND category = #{category}
+        </if>
+    </select>
+
+    <!-- 根据ID查询知识 -->
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        SELECT * FROM turquoise_knowledge
+        WHERE knowledge_id = #{knowledgeId} AND is_deleted = 0
+    </select>
+
+    <!-- 新增知识 -->
+    <insert id="insert" parameterType="ltd.newbee.mall.entity.TurquoiseKnowledge">
+        INSERT INTO turquoise_knowledge (title, category, content, cover_img, author, view_count, status, create_time, update_time)
+        VALUES (#{title}, #{category}, #{content}, #{coverImg}, #{author}, #{viewCount}, #{status}, NOW(), NOW())
+    </insert>
+
+    <!-- 更新知识 -->
+    <update id="updateByPrimaryKey" parameterType="ltd.newbee.mall.entity.TurquoiseKnowledge">
+        UPDATE turquoise_knowledge
+        SET title = #{title},
+            category = #{category},
+            content = #{content},
+            cover_img = #{coverImg},
+            author = #{author},
+            status = #{status},
+            update_time = NOW()
+        WHERE knowledge_id = #{knowledgeId}
+    </update>
+
+    <!-- 删除知识（软删除） -->
+    <update id="deleteByPrimaryKey" parameterType="Long">
+        UPDATE turquoise_knowledge
+        SET is_deleted = 1, update_time = NOW()
+        WHERE knowledge_id = #{knowledgeId}
+    </update>
+
+    <!-- 批量删除知识 -->
+    <update id="batchDelete" parameterType="Map">
+        UPDATE turquoise_knowledge
+        SET is_deleted = 1, update_time = NOW()
+        WHERE knowledge_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <!-- 更新状态 -->
+    <update id="updateStatus" parameterType="Map">
+        UPDATE turquoise_knowledge
+        SET status = #{status}, update_time = NOW()
+        WHERE knowledge_id = #{knowledgeId}
+    </update>
+
+    <!-- 更新浏览量 -->
+    <update id="updateViewCount" parameterType="Long">
+        UPDATE turquoise_knowledge
+        SET view_count = view_count + 1, update_time = NOW()
+        WHERE knowledge_id = #{knowledgeId}
+    </update>
+
+    <!-- 获取所有分类 -->
+    <select id="getAllCategories" resultType="String">
+        SELECT DISTINCT category FROM turquoise_knowledge
+        WHERE is_deleted = 0 AND category IS NOT NULL AND category != ''
+        ORDER BY category
+    </select>
+
+</mapper>

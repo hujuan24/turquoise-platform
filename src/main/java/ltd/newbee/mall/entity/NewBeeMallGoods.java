@@ -47,6 +47,16 @@ public class NewBeeMallGoods {
 
     private String goodsDetailContent;
 
+    private String turquoiseOrigin;   // 矿口
+
+    private String turquoiseType;     // 品类
+
+    private String turquoiseColor;    // 颜色
+
+    private String turquoiseDensity;  // 瓷度
+
+    private Integer maxBuyNum;  // 最大购买数量
+
     public Long getGoodsId() {
         return goodsId;
     }
@@ -175,6 +185,46 @@ public class NewBeeMallGoods {
         this.goodsDetailContent = goodsDetailContent == null ? null : goodsDetailContent.trim();
     }
 
+    public String getTurquoiseOrigin() {
+        return turquoiseOrigin;
+    }
+
+    public void setTurquoiseOrigin(String turquoiseOrigin) {
+        this.turquoiseOrigin = turquoiseOrigin == null ? null : turquoiseOrigin.trim();
+    }
+
+    public String getTurquoiseType() {
+        return turquoiseType;
+    }
+
+    public void setTurquoiseType(String turquoiseType) {
+        this.turquoiseType = turquoiseType == null ? null : turquoiseType.trim();
+    }
+
+    public String getTurquoiseColor() {
+        return turquoiseColor;
+    }
+
+    public void setTurquoiseColor(String turquoiseColor) {
+        this.turquoiseColor = turquoiseColor == null ? null : turquoiseColor.trim();
+    }
+
+    public String getTurquoiseDensity() {
+        return turquoiseDensity;
+    }
+
+    public void setTurquoiseDensity(String turquoiseDensity) {
+        this.turquoiseDensity = turquoiseDensity == null ? null : turquoiseDensity.trim();
+    }
+
+    public Integer getMaxBuyNum() {
+        return maxBuyNum;
+    }
+
+    public void setMaxBuyNum(Integer maxBuyNum) {
+        this.maxBuyNum = maxBuyNum;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -196,6 +246,11 @@ public class NewBeeMallGoods {
         sb.append(", updateUser=").append(updateUser);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", goodsDetailContent=").append(goodsDetailContent);
+        sb.append(", turquoiseOrigin=").append(turquoiseOrigin);
+        sb.append(", turquoiseType=").append(turquoiseType);
+        sb.append(", turquoiseColor=").append(turquoiseColor);
+        sb.append(", turquoiseDensity=").append(turquoiseDensity);
+        sb.append(", maxBuyNum=").append(maxBuyNum);
         sb.append("]");
         return sb.toString();
     }

@@ -1,3 +1,8 @@
+/* 全局样式 */
+html {
+    scroll-behavior: smooth;
+}
+
 /* 全局变量定义 */
 :root {
     --primary-color: #4A6B4D; /* 深绿色 - 主色调（降低饱和度） */
@@ -10,6 +15,140 @@
     --text-color: #333333; /* 文字颜色 */
     --light-text: #666666; /* 浅文字颜色 */
     --border-color: #E8E6E0; /* 边框颜色（更柔和） */
+    --turquoise-dark: #0d5c5c;
+    --turquoise-main: #1a7a7a;
+    --turquoise-light: #2d9a9a;
+    --turquoise-bright: #40e0d0;
+    --gold: #c9a227;
+    --gold-light: #e8d5a3;
+    --warm-bg: #e8e4dc;
+    --warm-bg-light: #f0ece4;
+    --card-bg: rgba(255, 255, 255, 0.75);
+    --text-dark: #2c2c2c;
+    --text-muted: #5a5a5a;
+}
+
+/* 英雄区样式 */
+.hero {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1920&q=85');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(232, 228, 220, 0.3) 0%, rgba(232, 228, 220, 0.5) 50%, rgba(232, 228, 220, 0.7) 100%);
+}
+
+.hero-texture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.15;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(64, 224, 208, 0.02) 35px, rgba(64, 224, 208, 0.02) 70px), repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(201, 162, 39, 0.015) 35px, rgba(201, 162, 39, 0.015) 70px);
+    animation: textureMove 20s linear infinite;
+}
+
+@keyframes textureMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+.hero-content {
+    text-align: center;
+    z-index: 10;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.hero-title {
+    font-size: 68px;
+    font-weight: 900;
+    letter-spacing: 16px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--turquoise-dark) 0%, var(--turquoise-main) 50%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleGlow 3s ease-in-out infinite alternate;
+    font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+}
+
+@keyframes titleGlow {
+    0% { filter: drop-shadow(0 0 30px rgba(64, 224, 208, 0.3)); }
+    100% { filter: drop-shadow(0 0 50px rgba(201, 162, 39, 0.3)); }
+}
+
+.hero-subtitle {
+    font-size: 20px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    margin-bottom: 60px;
+    font-weight: 400;
+    font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+}
+
+.gate-btn {
+    position: relative;
+    padding: 20px 50px;
+    background: rgba(15, 12, 8, 0.7);
+    border: 1px solid rgba(201, 162, 39, 0.5);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 16px;
+    letter-spacing: 4px;
+    color: var(--turquoise-bright);
+    overflow: hidden;
+    transition: all 0.5s ease;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.gate-btn:hover {
+    background: rgba(15, 12, 8, 0.85);
+    border-color: var(--gold);
+    color: var(--turquoise-bright);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.gate-btn span {
+    position: relative;
+    z-index: 1;
 }
 
 /* 文化沉浸板块样式 */
@@ -2202,10 +2341,13 @@ body {
 
 /* 珍宝馆板块样式 */
 .turquoise-treasure-section {
-    padding: 100px 60px;
+    width: 100%;
+    padding: 100px 20px;
     background: linear-gradient(180deg, #e8e4dc 0%, #f0ece4 100%);
     position: relative;
     z-index: 1;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .turquoise-section-title {
@@ -3646,7 +3788,7 @@ body {
 
 .turquoise-appraisal-btn {
     padding: 12px 24px;
-    background: linear-gradient(135deg, #c9a227, #d4af37);
+    background: linear-gradient(135deg, #40e0d0, #1a7a7a);
     color: #fff;
     text-decoration: none;
     font-size: 14px;
@@ -3657,6 +3799,25 @@ body {
 }
 
 .turquoise-appraisal-btn:hover {
+    background: linear-gradient(135deg, #1a7a7a, #40e0d0);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(64, 224, 208, 0.3);
+}
+
+.turquoise-appraisal-btn-secondary {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #c9a227, #d4af37);
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: 2px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-left: 15px;
+}
+
+.turquoise-appraisal-btn-secondary:hover {
     background: linear-gradient(135deg, #d4af37, #c9a227);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(201, 162, 39, 0.3);

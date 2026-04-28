@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-head"></th:block>
+</head>
+<body>
+    <th:block th:replace="admin/turquoise-admin-layout :: header"></th:block>
+    <th:block th:replace="admin/turquoise-admin-layout :: sidebar"></th:block>
+    
+    <main class="turquoise-content">
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">编辑内容</h2>
+                <a href="/admin/content" class="turquoise-btn turquoise-btn-primary">返回列表</a>
+            </div>
+            
+            <!-- 表单 -->
+            <div class="turquoise-card">
+                <div class="turquoise-card-content">
+                    <form id="contentForm">
+                        <input type="hidden" id="contentId" name="contentId" th:value="${content.contentId}">
+                        <div class="turquoise-form-row">
+                            <div class="turquoise-form-item">
+                                <label class="turquoise-form-label">标题：</label>
+                                <input type="text" id="title" name="title" class="turquoise-input" th:value="${content.title}" placeholder="请输入标题">
+                            </div>
+                        </div>
+                        <div class="turquoise-form-row">
+                            <div class="turquoise-form-item">
+                                <label class="turquoise-form-label">分类：</label>
+                                <select id="category" name="category" class="turquoise-select">
+                                    <option value="1" th:selected="${content.category == '1'}">新闻资讯</option>
+                                    <option value="2" th:selected="${content.category == '2'}">行业动态</option>
+                                    <option value="3" th:selected="${content.category == '3'}">品牌故事</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="turquoise-form-row">
+                            <div class="turquoise-form-item">
+                                <label class="turquoise-form-label">内容：</label>
+                                <textarea id="content" name="content" class="turquoise-textarea" rows="10" placeholder="请输入内容" th:text="${content.content}"></textarea>
+                            </div>
+                        </div>
+                        <div class="turquoise-form-row">
+                            <div class="turquoise-form-item">
+                                <label class="turquoise-form-label">状态：</label>
+                                <label class="turquoise-radio">
+                                    <input type="radio" name="status" value="1" th:checked="${content.status == 1}"> 发布
+                                </label>
+                                <label class="turquoise-radio">
+                                    <input type="radio" name="status" value="0" th:checked="${content.status == 0}"> 草稿
+                                </label>
+                            </div>
+                        </div>
+                        <div class="turquoise-form-row">
+                            <div class="turquoise-form-item">
+                                <button type="button" id="updateBtn" class="turquoise-btn turquoise-btn-primary">更新</button>
+                                <button type="button" id="deleteBtn" class="turquoise-btn turquoise-btn-red">删除</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-script"></th:block>
+    
+    <script>
+        // 更新内容
+        document.getElementById('updateBtn').addEventListener('click', function() {
+            const contentId = document.getElementById('contentId').value;
+            const title = document.getElementById('title').value;
+            const category = document.getElementById('category').value;
+            const content = document.getElementById('content').value;
+            const status = document.querySelector('input[name="status"]:checked').value;
+            
+            if (!title) {
+                alert('请输入标题');
+                return;
+            }
+            
+            if (!content) {
+                alert('请输入内容');
+                return;
+            }
+            
+            const formData = {
+                contentId: parseInt(contentId),
+                title: title,
+                category: category,
+                content: content,
+                status: parseInt(status)
+            };
+            
+            fetch('/admin/content/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.resultCode === 200) {
+                    alert(data.message || '更新成功');
+                    location.href = '/admin/content';
+                } else {
+                    alert(data.message || '更新失败');
+                }
+            })
+            .catch(error => {
+                console.error('更新失败：', error);
+                alert('更新失败，请重试');
+            });
+        });
+        
+        // 删除内容
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            const contentId = document.getElementById('contentId').value;
+            
+            if (confirm('确认删除该内容？')) {
+                fetch('/admin/content/delete/' + contentId, {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200) {
+                        alert(data.message || '删除成功');
+                        location.href = '/admin/content';
+                    } else {
+                        alert(data.message || '删除失败');
+                    }
+                })
+                .catch(error => {
+                    console.error('删除失败：', error);
+                    alert('删除失败，请重试');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

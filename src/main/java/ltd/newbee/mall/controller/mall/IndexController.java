@@ -13,10 +13,11 @@ import ltd.newbee.mall.common.IndexConfigTypeEnum;
 import ltd.newbee.mall.common.NewBeeMallException;
 import ltd.newbee.mall.controller.vo.NewBeeMallIndexCarouselVO;
 import ltd.newbee.mall.controller.vo.NewBeeMallIndexCategoryVO;
-import ltd.newbee.mall.controller.vo.NewBeeMallIndexConfigGoodsVO;
+import ltd.newbee.mall.entity.NewBeeMallGoods;
 import ltd.newbee.mall.service.NewBeeMallCarouselService;
-import ltd.newbee.mall.service.NewBeeMallCategoryService;
 import ltd.newbee.mall.service.NewBeeMallIndexConfigService;
+import ltd.newbee.mall.service.NewBeeMallCategoryService;
+import ltd.newbee.mall.service.TurquoiseGoodsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,9 @@ public class IndexController {
 
     @Resource
     private NewBeeMallCategoryService newBeeMallCategoryService;
+    
+    @Resource
+    private TurquoiseGoodsService turquoiseGoodsService;
 
     @GetMapping({"/index", "/", "/index.html"})
     public String indexPage(HttpServletRequest request) {
@@ -62,9 +66,13 @@ public class IndexController {
 
 
         List<NewBeeMallIndexCarouselVO> carousels = newBeeMallCarouselService.getCarouselsForIndex(Constants.INDEX_CAROUSEL_NUMBER);
-        List<NewBeeMallIndexConfigGoodsVO> hotGoodses = newBeeMallIndexConfigService.getConfigGoodsesForIndex(IndexConfigTypeEnum.INDEX_GOODS_HOT.getType(), Constants.INDEX_GOODS_HOT_NUMBER);
-        List<NewBeeMallIndexConfigGoodsVO> newGoodses = newBeeMallIndexConfigService.getConfigGoodsesForIndex(IndexConfigTypeEnum.INDEX_GOODS_NEW.getType(), Constants.INDEX_GOODS_NEW_NUMBER);
-        List<NewBeeMallIndexConfigGoodsVO> recommendGoodses = newBeeMallIndexConfigService.getConfigGoodsesForIndex(IndexConfigTypeEnum.INDEX_GOODS_RECOMMOND.getType(), Constants.INDEX_GOODS_RECOMMOND_NUMBER);
+        // 直接从商品表获取上架商品
+        List<NewBeeMallGoods> hotGoodses = turquoiseGoodsService.getOnSaleGoods(Constants.INDEX_GOODS_HOT_NUMBER);
+        List<NewBeeMallGoods> newGoodses = turquoiseGoodsService.getOnSaleGoods(Constants.INDEX_GOODS_NEW_NUMBER);
+        List<NewBeeMallGoods> recommendGoodses = turquoiseGoodsService.getOnSaleGoods(3);
+        System.out.println("热销商品数量：" + hotGoodses.size());
+        System.out.println("新品数量：" + newGoodses.size());
+        System.out.println("馆藏精选数量：" + recommendGoodses.size());
         request.setAttribute("categories", categories);//分类数据
         request.setAttribute("carousels", carousels);//轮播图
         request.setAttribute("hotGoodses", hotGoodses);//热销商品
@@ -74,7 +82,9 @@ public class IndexController {
     }
 
     @GetMapping("/treasure")
-    public String treasurePage() {
+    public String treasurePage(HttpServletRequest request) {
+        List<NewBeeMallGoods> goodsList = turquoiseGoodsService.getOnSaleGoods(20);
+        request.setAttribute("goodsList", goodsList);
         return "mall/treasure";
     }
 

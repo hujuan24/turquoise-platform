@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ltd.newbee.mall.dao.TurquoiseForumPostMapper">
+
+    <resultMap id="BaseResultMap" type="ltd.newbee.mall.entity.TurquoiseForumPost">
+        <id column="post_id" property="postId" jdbcType="BIGINT"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="TEXT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="author_name" property="authorName" jdbcType="VARCHAR"/>
+        <result column="view_count" property="viewCount" jdbcType="INTEGER"/>
+        <result column="reply_count" property="replyCount" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!-- 分页查询帖子列表 -->
+    <select id="findPostList" parameterType="Map" resultMap="BaseResultMap">
+        SELECT * FROM turquoise_forum_post
+        WHERE is_deleted = 0
+        <if test="title != null and title != ''">
+            AND title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY create_time DESC
+        <if test="start != null and limit != null">
+            LIMIT #{start}, #{limit}
+        </if>
+    </select>
+
+    <!-- 统计帖子数量 -->
+    <select id="getTotalPosts" parameterType="Map" resultType="Integer">
+        SELECT COUNT(*) FROM turquoise_forum_post
+        WHERE is_deleted = 0
+        <if test="title != null and title != ''">
+            AND title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+    </select>
+
+    <!-- 根据ID查询帖子 -->
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        SELECT * FROM turquoise_forum_post
+        WHERE post_id = #{postId} AND is_deleted = 0
+    </select>
+
+    <!-- 更新状态 -->
+    <update id="updateStatus" parameterType="Map">
+        UPDATE turquoise_forum_post
+        SET status = #{status}, update_time = NOW()
+        WHERE post_id = #{postId}
+    </update>
+
+    <!-- 删除帖子（软删除） -->
+    <update id="deleteByPrimaryKey" parameterType="Long">
+        UPDATE turquoise_forum_post
+        SET is_deleted = 1, update_time = NOW()
+        WHERE post_id = #{postId}
+    </update>
+
+    <!-- 批量删除帖子 -->
+    <update id="batchDelete" parameterType="Map">
+        UPDATE turquoise_forum_post
+        SET is_deleted = 1, update_time = NOW()
+        WHERE post_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <!-- 更新浏览量 -->
+    <update id="updateViewCount" parameterType="Long">
+        UPDATE turquoise_forum_post
+        SET view_count = view_count + 1, update_time = NOW()
+        WHERE post_id = #{postId}
+    </update>
+
+</mapper>

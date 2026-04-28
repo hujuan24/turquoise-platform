@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>会员管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        .turquoise-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .turquoise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .turquoise-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+        .turquoise-search-bar {
+            display: flex;
+            gap: 10px;
+        }
+        .turquoise-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 200px;
+        }
+        .turquoise-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .turquoise-btn-blue {
+            background-color: #1890ff;
+            color: white;
+        }
+        .turquoise-btn-blue:hover {
+            background-color: #40a9ff;
+        }
+        .turquoise-btn-green {
+            background-color: #52c41a;
+            color: white;
+        }
+        .turquoise-btn-green:hover {
+            background-color: #73d13d;
+        }
+        .turquoise-btn-red {
+            background-color: #ff4d4f;
+            color: white;
+        }
+        .turquoise-btn-red:hover {
+            background-color: #ff7875;
+        }
+        .turquoise-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .turquoise-table th,
+        .turquoise-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .turquoise-table th {
+            background-color: #fafafa;
+            font-weight: 600;
+            color: #666;
+        }
+        .turquoise-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        .turquoise-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .turquoise-status-active {
+            background-color: #f6ffed;
+            color: #52c41a;
+        }
+        .turquoise-status-locked {
+            background-color: #fff2f0;
+            color: #ff4d4f;
+        }
+        .turquoise-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        .turquoise-page-btn {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .turquoise-page-btn:hover:not(:disabled) {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+        .turquoise-page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .turquoise-page-info {
+            color: #666;
+            font-size: 14px;
+        }
+        .turquoise-tab-header {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .turquoise-tab-item {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #666;
+        }
+        .turquoise-tab-item.active {
+            color: #1890ff;
+            border-bottom-color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="turquoise-container">
+        <div class="turquoise-header">
+            <h1 class="turquoise-title">会员管理</h1>
+            <div class="turquoise-search-bar">
+                <input type="text" class="turquoise-input" id="searchKeyword" placeholder="搜索昵称/手机号" th:value="${keyword}">
+                <button class="turquoise-btn turquoise-btn-blue" onclick="searchUsers()">搜索</button>
+            </div>
+        </div>
+
+        <div class="turquoise-tab-header">
+            <div class="turquoise-tab-item active">会员列表</div>
+            <div class="turquoise-tab-item" onclick="window.location.href='/admin/users/favorite'">收藏分析</div>
+        </div>
+
+        <table class="turquoise-table">
+            <thead>
+                <tr>
+                    <th>用户ID</th>
+                    <th>昵称</th>
+                    <th>手机号</th>
+                    <th>注册时间</th>
+                    <th>账号状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.userId}"></td>
+                    <td th:text="${user.nickName}"></td>
+                    <td th:text="${user.loginName}"></td>
+                    <td th:text="${#dates.format(user.createTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td>
+                        <span th:class="${user.lockedFlag == 0 ? 'turquoise-status turquoise-status-active' : 'turquoise-status turquoise-status-locked'}">
+                            <span th:text="${user.lockedFlag == 0 ? '正常' : '已禁用'}"></span>
+                        </span>
+                    </td>
+                    <td>
+                        <button class="turquoise-btn turquoise-btn-blue" th:onclick="|viewDetail(${user.userId})|">查看详情</button>
+                        <button th:class="${user.lockedFlag == 0 ? 'turquoise-btn turquoise-btn-red' : 'turquoise-btn turquoise-btn-green'}"
+                                th:onclick="|toggleLock(${user.userId}, ${user.lockedFlag == 0 ? 1 : 0})|">
+                            <span th:text="${user.lockedFlag == 0 ? '禁用' : '启用'}"></span>
+                        </button>
+                    </td>
+                </tr>
+                <tr th:if="${users == null or users.isEmpty()}">
+                    <td colspan="6" style="text-align: center; color: #999;">暂无数据</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div id="pagination" th:data-curr-page="${pageResult.currPage}" th:data-total-page="${pageResult.totalPage}">
+            <div class="turquoise-pagination">
+                <button class="turquoise-page-btn" id="btnPrev" th:disabled="${pageResult.currPage <= 1}">上一页</button>
+                <span class="turquoise-page-info">第 <span id="currPage" th:text="${pageResult.currPage}">1</span> 页 / 共 <span id="totalPage" th:text="${pageResult.totalPage}">1</span> 页</span>
+                <button class="turquoise-page-btn" id="btnNext" th:disabled="${pageResult.currPage >= pageResult.totalPage}">下一页</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function viewDetail(userId) {
+            window.location.href = '/admin/users/detail/' + userId;
+        }
+
+        function toggleLock(userId, lockStatus) {
+            const action = lockStatus === 1 ? '禁用' : '启用';
+            if (confirm('确认' + action + '该用户？')) {
+                const formData = new FormData();
+                formData.append('userId', userId);
+                formData.append('lockStatus', lockStatus);
+
+                fetch('/admin/users/lock', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        alert(data.message || '操作失败');
+                    }
+                })
+                .catch(error => {
+                    console.error('操作失败：', error);
+                    alert('操作失败，请重试');
+                });
+            }
+        }
+
+        function searchUsers() {
+            const keyword = document.getElementById('searchKeyword').value;
+            window.location.href = '/admin/users?keyword=' + encodeURIComponent(keyword);
+        }
+
+        function goPage(pageNum) {
+            const keyword = document.getElementById('searchKeyword').value;
+            let url = '/admin/users?page=' + pageNum;
+            if (keyword) {
+                url += '&keyword=' + encodeURIComponent(keyword);
+            }
+            window.location.href = url;
+        }
+
+        document.getElementById('btnPrev').addEventListener('click', function() {
+            const currPage = parseInt(document.getElementById('currPage').textContent);
+            if (currPage > 1) {
+                goPage(currPage - 1);
+            }
+        });
+
+        document.getElementById('btnNext').addEventListener('click', function() {
+            const currPage = parseInt(document.getElementById('currPage').textContent);
+            const totalPage = parseInt(document.getElementById('totalPage').textContent);
+            if (currPage < totalPage) {
+                goPage(currPage + 1);
+            }
+        });
+    </script>
+</body>
+</html>

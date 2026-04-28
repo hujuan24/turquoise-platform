@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>会员详情 - 后台管理</title>
+    <link rel="stylesheet" th:href="@{/admin/css/turquoise-admin.css}">
+    <style>
+        .turquoise-detail-container {
+            padding: 20px;
+        }
+        .turquoise-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .turquoise-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .turquoise-user-info {
+            display: flex;
+            gap: 20px;
+        }
+        .turquoise-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #e6f7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #1890ff;
+        }
+        .turquoise-user-detail {
+            flex: 1;
+        }
+        .turquoise-info-row {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .turquoise-info-label {
+            width: 100px;
+            color: #999;
+            font-size: 14px;
+        }
+        .turquoise-info-value {
+            flex: 1;
+            color: #333;
+            font-size: 14px;
+        }
+        .turquoise-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .turquoise-status-active {
+            background-color: #f6ffed;
+            color: #52c41a;
+        }
+        .turquoise-status-locked {
+            background-color: #fff2f0;
+            color: #ff4d4f;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="admin/turquoise-admin-layout :: header"></div>
+    <div th:replace="admin/turquoise-admin-layout :: sidebar"></div>
+    <main class="turquoise-content">
+        <div class="turquoise-detail-container">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">会员详情</h2>
+                <button class="turquoise-btn turquoise-btn-primary" onclick="goBack()">返回列表</button>
+            </div>
+
+            <div class="turquoise-card">
+                <h3 class="turquoise-card-title">基本信息</h3>
+                <div class="turquoise-user-info">
+                    <div class="turquoise-avatar">
+                        <span th:text="${user.nickName != null ? user.nickName.charAt(0) : '用'}"></span>
+                    </div>
+                    <div class="turquoise-user-detail">
+                        <div class="turquoise-info-row">
+                            <span class="turquoise-info-label">昵称</span>
+                            <span class="turquoise-info-value" th:text="${user.nickName}"></span>
+                        </div>
+                        <div class="turquoise-info-row">
+                            <span class="turquoise-info-label">手机号</span>
+                            <span class="turquoise-info-value" th:text="${user.loginName}"></span>
+                        </div>
+                        <div class="turquoise-info-row">
+                            <span class="turquoise-info-label">注册时间</span>
+                            <span class="turquoise-info-value" th:text="${#dates.format(user.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                        </div>
+                        <div class="turquoise-info-row">
+                            <span class="turquoise-info-label">账号状态</span>
+                            <span class="turquoise-info-value">
+                                <span th:class="${user.lockedFlag == 0 ? 'turquoise-status turquoise-status-active' : 'turquoise-status turquoise-status-locked'}">
+                                    <span th:text="${user.lockedFlag == 0 ? '正常' : '已禁用'}"></span>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="turquoise-card">
+                <h3 class="turquoise-card-title">收货地址</h3>
+                <div th:if="${user.address != null and user.address != ''}">
+                    <div class="turquoise-info-row">
+                        <span class="turquoise-info-label">地址</span>
+                        <span class="turquoise-info-value" th:text="${user.address}"></span>
+                    </div>
+                </div>
+                <div th:else>
+                    <p style="color: #999; text-align: center; padding: 20px;">暂无收货地址</p>
+                </div>
+            </div>
+
+            <div class="turquoise-card">
+                <h3 class="turquoise-card-title">订单记录</h3>
+                <p style="color: #999; text-align: center; padding: 20px;">暂无订单数据</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function goBack() {
+            window.location.href = '/admin/members';
+        }
+    </script>
+</body>
+</html>

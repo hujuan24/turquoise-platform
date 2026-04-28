@@ -50,4 +50,6 @@ public interface NewBeeMallGoodsMapper {
 
     int batchUpdateSellStatus(@Param("orderIds")Long[] orderIds,@Param("sellStatus") int sellStatus);
 
+    List<NewBeeMallGoods> getOnSaleGoods(@Param("limit") int limit);
+
 }

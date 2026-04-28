@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ltd.newbee.mall.mapper.TurquoiseCertificateMapper" >
+  <resultMap id="BaseResultMap" type="ltd.newbee.mall.entity.TurquoiseCertificate" >
+    <id column="certificate_id" property="certificateId" />
+    <result column="goods_id" property="goodsId" />
+    <result column="certificate_no" property="certificateNo" />
+    <result column="certificate_org" property="certificateOrg" />
+    <result column="certificate_result" property="certificateResult" />
+    <result column="certificate_img" property="certificateImg" />
+    <result column="certificate_date" property="certificateDate" />
+    <result column="is_deleted" property="isDeleted" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="goods_name" property="goodsName" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    c.certificate_id, c.goods_id, c.certificate_no, c.certificate_org, c.certificate_result, c.certificate_img, c.certificate_date, c.is_deleted, c.create_time, c.update_time, g.goods_name
+  </sql>
+
+  <select id="selectList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_turquoise_certificate c
+    left join tb_newbee_mall_goods_info g on c.goods_id = g.goods_id
+    where c.is_deleted = 0
+    order by c.create_time desc
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_turquoise_certificate c
+    left join tb_newbee_mall_goods_info g on c.goods_id = g.goods_id
+    where c.certificate_id = #{certificateId,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insert" parameterType="ltd.newbee.mall.entity.TurquoiseCertificate" >
+    insert into tb_turquoise_certificate (goods_id, certificate_no, certificate_org, certificate_result, certificate_img, certificate_date, is_deleted, create_time, update_time)
+    values (#{goodsId,jdbcType=BIGINT}, #{certificateNo,jdbcType=VARCHAR}, #{certificateOrg,jdbcType=VARCHAR}, #{certificateResult,jdbcType=VARCHAR}, #{certificateImg,jdbcType=VARCHAR}, #{certificateDate,jdbcType=VARCHAR}, 0, now(), now())
+  </insert>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_turquoise_certificate
+    where certificate_id = #{certificateId,jdbcType=BIGINT}
+  </delete>
+
+  <update id="updateByPrimaryKey" parameterType="ltd.newbee.mall.entity.TurquoiseCertificate" >
+    update tb_turquoise_certificate
+    set goods_id = #{goodsId,jdbcType=BIGINT},
+        certificate_no = #{certificateNo,jdbcType=VARCHAR},
+        certificate_org = #{certificateOrg,jdbcType=VARCHAR},
+        certificate_result = #{certificateResult,jdbcType=VARCHAR},
+        certificate_img = #{certificateImg,jdbcType=VARCHAR},
+        certificate_date = #{certificateDate,jdbcType=VARCHAR},
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+        update_time = now()
+    where certificate_id = #{certificateId,jdbcType=BIGINT}
+  </update>
+
+  <select id="countByDate" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select count(*)
+    from tb_turquoise_certificate
+    where is_deleted = 0
+    and certificate_no like concat('NG', #{dateStr,jdbcType=VARCHAR}, '%')
+  </select>
+</mapper>

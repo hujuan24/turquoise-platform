@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="admin/turquoise-admin-layout :: admin-head"></th:block>
+</head>
+<body>
+  <th:block th:replace="admin/turquoise-admin-layout :: header"></th:block>
+  <th:block th:replace="admin/turquoise-admin-layout :: sidebar"></th:block>
+  
+  <main class="turquoise-content">
+    <!-- 数据驾驶舱 -->
+    <div class="turquoise-page">
+      <div class="turquoise-page-header">
+        <h2 class="turquoise-page-title">数据驾驶舱</h2>
+        <div class="turquoise-page-date"><i class="fas fa-calendar-alt"></i>2024-01-20 周二</div>
+      </div>
+      
+      <!-- 指标卡片 -->
+      <div class="turquoise-metrics-grid">
+        <div class="turquoise-metric-card">
+          <div class="turquoise-metric-icon blue">
+            <i class="fas fa-yen-sign"></i>
+          </div>
+          <div class="turquoise-metric-label">今日销售额</div>
+          <div class="turquoise-metric-value">¥<span th:text="${todaySales}">0</span></div>
+          <div class="turquoise-metric-change up"><i class="fas fa-arrow-up"></i>12%</div>
+        </div>
+        
+        <div class="turquoise-metric-card">
+          <div class="turquoise-metric-icon green">
+            <i class="fas fa-shopping-bag"></i>
+          </div>
+          <div class="turquoise-metric-label">今日订单数</div>
+          <div class="turquoise-metric-value"><span th:text="${todayOrders}">0</span>笔</div>
+          <div class="turquoise-metric-change up"><i class="fas fa-arrow-up"></i>8%</div>
+        </div>
+        
+        <div class="turquoise-metric-card">
+          <div class="turquoise-metric-icon purple">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <div class="turquoise-metric-label">今日新增会员</div>
+          <div class="turquoise-metric-value"><span th:text="${todayNewMembers}">0</span>人</div>
+          <div class="turquoise-metric-change up"><i class="fas fa-arrow-up"></i>15%</div>
+        </div>
+        
+        <div class="turquoise-metric-card">
+          <div class="turquoise-metric-icon orange">
+            <i class="fas fa-clipboard-check"></i>
+          </div>
+          <div class="turquoise-metric-label">待处理鉴定</div>
+          <div class="turquoise-metric-value"><span th:text="${pendingAppraisals}">0</span>单</div>
+        </div>
+        
+        <div class="turquoise-metric-card">
+          <div class="turquoise-metric-icon pink">
+            <i class="fas fa-chart-pie"></i>
+          </div>
+          <div class="turquoise-metric-label">本月文化转化率</div>
+          <div class="turquoise-metric-value"><span class="counter" data-target="23">0</span>%</div>
+          <div class="turquoise-metric-sub">浏览文化内容后下单占比</div>
+        </div>
+        
+        <div class="turquoise-metric-card">
+          <div class="turquoise-metric-icon red">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="turquoise-metric-label">库存预警</div>
+          <div class="turquoise-metric-value turquoise-text-red"><span th:text="${stockAlert}">0</span>件</div>
+          <div class="turquoise-metric-sub">秦古高瓷蓝等</div>
+        </div>
+      </div>
+      
+      <!-- 销售趋势 + 品类占比 -->
+      <div class="turquoise-charts-row two-col">
+        <div class="turquoise-chart-card">
+          <div class="turquoise-chart-title">
+            <i class="fas fa-chart-line"></i>
+            近30天销售趋势
+          </div>
+          <div class="turquoise-chart-placeholder">
+            <p>图表区域</p>
+          </div>
+        </div>
+        <div class="turquoise-chart-card">
+          <div class="turquoise-chart-title">
+            <i class="fas fa-chart-pie turquoise-icon-gold"></i>
+            品类销量占比
+          </div>
+          <div class="turquoise-chart-placeholder">
+            <p>图表区域</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 矿口热度 + 稀有度矩阵 -->
+      <div class="turquoise-charts-row equal">
+        <div class="turquoise-chart-card">
+          <div class="turquoise-chart-title">
+            <i class="fas fa-fire turquoise-icon-orange"></i>
+            矿口热度排行榜
+          </div>
+          <div class="turquoise-chart-placeholder">
+            <p>图表区域</p>
+          </div>
+        </div>
+        <div class="turquoise-chart-card">
+          <div class="turquoise-chart-title">
+            <i class="fas fa-th-large turquoise-icon-purple"></i>
+            品类稀有度热度矩阵
+          </div>
+          <div class="turquoise-chart-placeholder">
+            <p>图表区域</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 矿口销量 + 鉴定漏斗 -->
+      <div class="turquoise-charts-row equal">
+        <div class="turquoise-chart-card">
+          <div class="turquoise-chart-title">
+            <i class="fas fa-chart-bar turquoise-icon-green"></i>
+            矿口销量对比
+          </div>
+          <div class="turquoise-chart-placeholder">
+            <p>图表区域</p>
+          </div>
+        </div>
+        <div class="turquoise-chart-card">
+          <div class="turquoise-chart-title">
+            <i class="fas fa-filter"></i>
+            鉴定业务转化漏斗
+          </div>
+          <div class="turquoise-chart-placeholder">
+            <p>图表区域</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 实时动态 -->
+      <div class="turquoise-realtime-card">
+        <div class="turquoise-chart-title">
+          <i class="fas fa-satellite-dish turquoise-icon-pulse"></i>
+          实时动态
+        </div>
+        <div class="turquoise-realtime-list" id="realtimeList"></div>
+      </div>
+    </div>
+  </main>
+  
+  <th:block th:replace="admin/turquoise-admin-layout :: admin-script"></th:block>
+  
+  <script>
+    // 数字计数动画
+    document.addEventListener('DOMContentLoaded', function() {
+      const counters = document.querySelectorAll('.counter');
+      counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        let count = 0;
+        const duration = 2000; // 2秒
+        const increment = target / (duration / 16); // 60fps
+        
+        function updateCount() {
+          if (count < target) {
+            count += increment;
+            counter.textContent = Math.floor(count);
+            requestAnimationFrame(updateCount);
+          } else {
+            counter.textContent = target;
+          }
+        }
+        
+        updateCount();
+      });
+    });
+  </script>
+</body>
+</html>

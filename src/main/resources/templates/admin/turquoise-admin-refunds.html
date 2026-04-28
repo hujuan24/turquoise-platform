@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-head"></th:block>
+</head>
+<body>
+    <th:block th:replace="admin/turquoise-admin-layout :: header"></th:block>
+    <th:block th:replace="admin/turquoise-admin-layout :: sidebar"></th:block>
+    
+    <main class="turquoise-content">
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">退款审核</h2>
+            </div>
+            
+            <!-- 退款列表 -->
+            <div class="turquoise-table-container">
+                <table class="turquoise-table">
+                    <thead>
+                        <tr>
+                            <th>退款单号</th>
+                            <th>关联订单</th>
+                            <th>申请人</th>
+                            <th>退款金额</th>
+                            <th>原因</th>
+                            <th>状态</th>
+                            <th>申请时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="refund : ${refundList}">
+                            <td th:text="${refund.refundId}"></td>
+                            <td th:text="${refund.orderId}"></td>
+                            <td th:text="${refund.userName}"></td>
+                            <td th:text="${refund.refundAmount}"></td>
+                            <td th:text="${refund.refundReason}"></td>
+                            <td>
+                                <span th:switch="${refund.refundStatus}">
+                                    <span th:case="0" class="refund-status-pending">待审核</span>
+                                    <span th:case="1" class="refund-status-approved">已通过</span>
+                                    <span th:case="2" class="refund-status-rejected">已拒绝</span>
+                                </span>
+                            </td>
+                            <td th:text="${refund.createTime}"></td>
+                            <td>
+                                <button th:if="${refund.refundStatus == 0}" class="turquoise-btn turquoise-btn-green" th:onclick="'approveRefund(' + ${refund.refundId} + ')'">审核通过</button>
+                                <button th:if="${refund.refundStatus == 0}" class="turquoise-btn turquoise-btn-red" th:onclick="'rejectRefund(' + ${refund.refundId} + ')'">审核拒绝</button>
+                            </td>
+                        </tr>
+                        <tr th:if="${refundList == null or refundList.size() == 0}">
+                            <td colspan="8" class="turquoise-table-empty">暂无退款数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 分页 -->
+            <div class="turquoise-pagination" th:if="${totalPages > 1}">
+                <ul>
+                    <li th:if="${currentPage > 1}">
+                        <a th:href="@{/admin/refunds(page=${currentPage - 1})}">上一页</a>
+                    </li>
+                    <li th:each="page : ${#numbers.sequence(1, totalPages)}" th:class="${page == currentPage} ? 'active' : ''">
+                        <a th:href="@{/admin/refunds(page=${page})}" th:text="${page}"></a>
+                    </li>
+                    <li th:if="${currentPage < totalPages}">
+                        <a th:href="@{/admin/refunds(page=${currentPage + 1})}">下一页</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-script"></th:block>
+    
+    <script>
+        // 审核通过
+        function approveRefund(refundId) {
+            if (confirm('确认通过该退款申请？')) {
+                const formData = new FormData();
+                formData.append('refundId', refundId);
+                formData.append('refundStatus', 1);
+                
+                fetch('/admin/refunds/update-status', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200) {
+                        alert('审核通过成功');
+                        location.reload();
+                    } else {
+                        alert(data.message || '审核通过失败');
+                    }
+                })
+                .catch(error => {
+                    console.error('审核通过失败：', error);
+                    alert('审核通过失败，请重试');
+                });
+            }
+        }
+        
+        // 审核拒绝
+        function rejectRefund(refundId) {
+            if (confirm('确认拒绝该退款申请？')) {
+                const formData = new FormData();
+                formData.append('refundId', refundId);
+                formData.append('refundStatus', 2);
+                
+                fetch('/admin/refunds/update-status', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200) {
+                        alert('审核拒绝成功');
+                        location.reload();
+                    } else {
+                        alert(data.message || '审核拒绝失败');
+                    }
+                })
+                .catch(error => {
+                    console.error('审核拒绝失败：', error);
+                    alert('审核拒绝失败，请重试');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

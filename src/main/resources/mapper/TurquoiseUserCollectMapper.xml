@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ltd.newbee.mall.dao.TurquoiseUserCollectMapper">
+
+    <!-- 获取收藏总次数 -->
+    <select id="getTotalCollects" resultType="Integer">
+        SELECT COUNT(*) FROM user_collect WHERE is_deleted = 0
+    </select>
+
+    <!-- 获取今日新增收藏 -->
+    <select id="getTodayCollects" resultType="Integer">
+        SELECT COUNT(*) FROM user_collect 
+        WHERE is_deleted = 0 AND collect_time >= CURDATE()
+    </select>
+
+    <!-- 获取有收藏行为的用户数 -->
+    <select id="getActiveCollectUsers" resultType="Integer">
+        SELECT COUNT(DISTINCT user_id) FROM user_collect WHERE is_deleted = 0
+    </select>
+
+    <!-- 获取热门收藏商品排行（Top 10） -->
+    <select id="getHotProducts" resultType="Map">
+        SELECT 
+            c.product_id,
+            c.product_name,
+            COUNT(*) as collect_count,
+            COUNT(DISTINCT c.user_id) as user_count
+        FROM user_collect c
+        WHERE c.is_deleted = 0
+        GROUP BY c.product_id, c.product_name
+        ORDER BY collect_count DESC
+        LIMIT 10
+    </select>
+
+    <!-- 获取收藏记录分页列表 -->
+    <select id="getCollectList" parameterType="Map" resultType="Map">
+        SELECT 
+            c.collect_id,
+            c.user_id,
+            c.product_id,
+            c.product_name,
+            c.collect_time,
+            u.nick_name
+        FROM user_collect c
+        LEFT JOIN tb_newbee_mall_user u ON c.user_id = u.user_id
+        WHERE c.is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND (u.nick_name LIKE CONCAT('%', #{keyword}, '%') 
+                 OR c.product_name LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="timeRange == 'today'">
+            AND c.collect_time >= CURDATE()
+        </if>
+        <if test="timeRange == 'week'">
+            AND c.collect_time >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        </if>
+        <if test="timeRange == 'month'">
+            AND c.collect_time >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+        </if>
+        ORDER BY c.collect_time DESC
+        <if test="start != null and limit != null">
+            LIMIT #{start}, #{limit}
+        </if>
+    </select>
+
+    <!-- 获取收藏记录总数 -->
+    <select id="getCollectListCount" parameterType="Map" resultType="Integer">
+        SELECT COUNT(*)
+        FROM user_collect c
+        LEFT JOIN tb_newbee_mall_user u ON c.user_id = u.user_id
+        WHERE c.is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND (u.nick_name LIKE CONCAT('%', #{keyword}, '%') 
+                 OR c.product_name LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="timeRange == 'today'">
+            AND c.collect_time >= CURDATE()
+        </if>
+        <if test="timeRange == 'week'">
+            AND c.collect_time >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        </if>
+        <if test="timeRange == 'month'">
+            AND c.collect_time >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+        </if>
+    </select>
+
+    <!-- 取消收藏（软删除） -->
+    <update id="cancelCollect" parameterType="Long">
+        UPDATE user_collect 
+        SET is_deleted = 1, update_time = NOW()
+        WHERE collect_id = #{collectId} AND is_deleted = 0
+    </update>
+
+</mapper>

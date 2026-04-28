@@ -75,6 +75,10 @@ public enum ServiceResultEnum {
 
     NO_PERMISSION_ERROR("无权限！"),
 
+    ORDER_NOT_EXIST("订单不存在！"),
+
+    PAYMENT_NOT_EXIST("支付记录不存在！"),
+
     DB_ERROR("database error");
 
     private String result;

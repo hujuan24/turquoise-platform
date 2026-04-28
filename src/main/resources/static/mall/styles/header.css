@@ -23,10 +23,11 @@
 .turquoise-logo {
     font-size: 28px;
     font-weight: 700;
-    color: #1a7a7a;
+    color: #0d5c5c;
     letter-spacing: 4px;
     text-decoration: none;
     font-family: 'Noto Serif SC', 'STSong', '宋体', 'Times New Roman', serif;
+    text-shadow: 0 0 20px rgba(26, 122, 122, 0.15);
 }
 
 .turquoise-nav-links {
@@ -68,16 +69,19 @@
 }
 
 .turquoise-nav-links a.turquoise-secondary {
-    color: #999;
+    color: #5a5a5a;
     font-size: 14px;
+}
+
+.turquoise-nav-links a.turquoise-secondary:hover {
+    color: #1a7a7a;
 }
 
 /* 右侧图标 */
 .turquoise-nav-icons {
     display: flex;
     align-items: center;
-    gap: 25px;
-    height: 20px;
+    gap: 30px;
 }
 
 .turquoise-nav-icons a,
@@ -85,20 +89,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 20px;
-    width: 20px;
-    color: #333;
+    color: #1a1a1a;
     text-decoration: none;
     position: relative;
     margin: 0;
     padding: 0;
+    font-size: 22px;
+    transition: all 0.3s ease;
 }
 
-.turquoise-nav-icons a svg,
-.turquoise-nav-icons .turquoise-user-dropdown svg {
+/* Font Awesome icons */
+.turquoise-nav-icons a i,
+.turquoise-nav-icons .turquoise-user-dropdown i {
     display: block;
-    width: 20px;
-    height: 20px;
+    font-size: 22px;
+    font-weight: bold;
 }
 
 .turquoise-nav-icons a:hover,
@@ -134,7 +139,7 @@
 .turquoise-dropdown-menu {
     display: none;
     position: absolute;
-    top: calc(100% + 10px);
+    top: 100%;
     right: -10px;
     background: #f5f0e8;
     border: 1px solid #d4cfc7;
@@ -143,6 +148,16 @@
     padding: 10px 0;
     min-width: 160px;
     z-index: 1001;
+}
+
+/* 消除hover间隙 */
+.turquoise-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 10px;
 }
 
 .turquoise-user-dropdown:hover .turquoise-dropdown-menu {

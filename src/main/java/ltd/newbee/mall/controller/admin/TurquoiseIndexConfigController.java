@@ -1,0 +1,94 @@
+package ltd.newbee.mall.controller.admin;
+
+import ltd.newbee.mall.common.ServiceResultEnum;
+import ltd.newbee.mall.entity.IndexConfig;
+import ltd.newbee.mall.service.NewBeeMallIndexConfigService;
+import ltd.newbee.mall.util.PageQueryUtil;
+import ltd.newbee.mall.util.Result;
+import ltd.newbee.mall.util.ResultGenerator;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
+@Controller
+@RequestMapping("/admin")
+public class TurquoiseIndexConfigController {
+
+    @Resource
+    private NewBeeMallIndexConfigService indexConfigService;
+
+    @GetMapping("/indexConfigs")
+    public String indexConfigPage(HttpServletRequest request, @RequestParam(required = false) Integer configType) {
+        request.setAttribute("path", "newbee_mall_index_config");
+        if (configType == null || configType < 1 || configType > 5) {
+            configType = 1;
+        }
+        request.setAttribute("configType", configType);
+        return "admin/newbee_mall_index_config";
+    }
+
+    @RequestMapping(value = "/indexConfigs/list", method = RequestMethod.GET)
+    @ResponseBody
+    public Result list(@RequestParam Map<String, Object> params) {
+        if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit")) || StringUtils.isEmpty(params.get("configType"))) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return ResultGenerator.genSuccessResult(indexConfigService.getConfigsPage(pageUtil));
+    }
+
+    @GetMapping("/indexConfigs/info/{id}")
+    @ResponseBody
+    public Result info(@PathVariable Long id) {
+        IndexConfig config = indexConfigService.getIndexConfigById(id);
+        if (config == null) {
+            return ResultGenerator.genFailResult(ServiceResultEnum.DATA_NOT_EXIST.getResult());
+        }
+        return ResultGenerator.genSuccessResult(config);
+    }
+
+    @PostMapping("/indexConfigs/save")
+    @ResponseBody
+    public Result save(@RequestBody IndexConfig indexConfig) {
+        if (StringUtils.isEmpty(indexConfig.getConfigName()) || StringUtils.isEmpty(indexConfig.getRedirectUrl()) || indexConfig.getConfigType() == null || indexConfig.getConfigRank() == null) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+        String result = indexConfigService.saveIndexConfig(indexConfig);
+        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
+            return ResultGenerator.genSuccessResult();
+        } else {
+            return ResultGenerator.genFailResult(result);
+        }
+    }
+
+    @PostMapping("/indexConfigs/update")
+    @ResponseBody
+    public Result update(@RequestBody IndexConfig indexConfig) {
+        if (StringUtils.isEmpty(indexConfig.getConfigName()) || StringUtils.isEmpty(indexConfig.getRedirectUrl()) || indexConfig.getConfigType() == null || indexConfig.getConfigRank() == null || indexConfig.getConfigId() == null) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+        String result = indexConfigService.updateIndexConfig(indexConfig);
+        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
+            return ResultGenerator.genSuccessResult();
+        } else {
+            return ResultGenerator.genFailResult(result);
+        }
+    }
+
+    @PostMapping("/indexConfigs/delete")
+    @ResponseBody
+    public Result delete(@RequestBody Long[] ids) {
+        if (ids.length < 1) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+        if (indexConfigService.deleteBatch(ids)) {
+            return ResultGenerator.genSuccessResult();
+        } else {
+            return ResultGenerator.genFailResult("删除失败");
+        }
+    }
+}

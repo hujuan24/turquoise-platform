@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-head"></th:block>
+</head>
+<body>
+    <th:block th:replace="admin/turquoise-admin-layout :: header"></th:block>
+    <th:block th:replace="admin/turquoise-admin-layout :: sidebar"></th:block>
+    
+    <main class="turquoise-content">
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">订单管理</h2>
+            </div>
+            
+            <!-- 订单列表 -->
+            <div class="turquoise-table-container">
+                <table class="turquoise-table">
+                    <thead>
+                        <tr>
+                            <th>订单号</th>
+                            <th>买家</th>
+                            <th>商品</th>
+                            <th>金额</th>
+                            <th>订单状态</th>
+                            <th>下单时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order : ${orderList}">
+                            <td th:text="${order.orderNo}"></td>
+                            <td th:text="${order.userName}"></td>
+                            <td>
+                                <div th:each="item : ${order.orderItems}">
+                                    <span th:text="${item.goodsName}"></span><br>
+                                </div>
+                            </td>
+                            <td th:text="${order.totalPrice}"></td>
+                            <td>
+                                <span th:switch="${order.orderStatus}">
+                                    <span th:case="0" class="order-status-pending">待支付</span>
+                                    <span th:case="1" class="order-status-paid">已支付</span>
+                                    <span th:case="2" class="order-status-shipped">已发货</span>
+                                    <span th:case="3" class="order-status-completed">已完成</span>
+                                    <span th:case="4" class="order-status-cancelled">已取消</span>
+                                </span>
+                            </td>
+                            <td th:text="${order.createTime}"></td>
+                            <td>
+                                <button class="turquoise-btn turquoise-btn-blue" th:onclick="'viewOrderDetail(' + ${order.orderId} + ')'">查看详情</button>
+                                <button th:if="${order.orderStatus == 1}" class="turquoise-btn turquoise-btn-green" th:onclick="'updateOrderStatus(' + ${order.orderId} + ', 2)'">发货</button>
+                                <button th:if="${order.orderStatus == 2}" class="turquoise-btn turquoise-btn-green" th:onclick="'updateOrderStatus(' + ${order.orderId} + ', 3)'">完成</button>
+                                <button th:if="${order.orderStatus == 0 or order.orderStatus == 1}" class="turquoise-btn turquoise-btn-red" th:onclick="'updateOrderStatus(' + ${order.orderId} + ', 4)'">取消</button>
+                            </td>
+                        </tr>
+                        <tr th:if="${orderList == null or orderList.size() == 0}">
+                            <td colspan="7" class="turquoise-table-empty">暂无订单数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 分页 -->
+            <div class="turquoise-pagination" th:if="${totalPages > 1}">
+                <ul>
+                    <li th:if="${currentPage > 1}">
+                        <a th:href="@{/admin/orders(page=${currentPage - 1})}">上一页</a>
+                    </li>
+                    <li th:each="page : ${#numbers.sequence(1, totalPages)}" th:class="${page == currentPage} ? 'active' : ''">
+                        <a th:href="@{/admin/orders(page=${page})}" th:text="${page}"></a>
+                    </li>
+                    <li th:if="${currentPage < totalPages}">
+                        <a th:href="@{/admin/orders(page=${currentPage + 1})}">下一页</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 订单详情弹窗 -->
+    <div id="orderDetailModal" class="turquoise-modal-overlay">
+        <div class="turquoise-modal">
+            <div class="turquoise-modal-header">
+                <h3 class="turquoise-modal-title">订单详情</h3>
+                <button id="closeOrderDetailBtn" class="turquoise-modal-close">&times;</button>
+            </div>
+            <div class="turquoise-modal-body">
+                <div class="order-detail-info">
+                    <p><strong>订单号：</strong><span id="detailOrderNo"></span></p>
+                    <p><strong>买家：</strong><span id="detailUserName"></span></p>
+                    <p><strong>订单金额：</strong><span id="detailTotalPrice"></span></p>
+                    <p><strong>订单状态：</strong><span id="detailOrderStatus"></span></p>
+                    <p><strong>下单时间：</strong><span id="detailCreateTime"></span></p>
+                </div>
+                <div class="order-detail-items">
+                    <h4>商品列表</h4>
+                    <table class="turquoise-table">
+                        <thead>
+                            <tr>
+                                <th>商品名称</th>
+                                <th>单价</th>
+                                <th>数量</th>
+                                <th>小计</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderItemsList">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="turquoise-modal-footer">
+                <button id="cancelOrderDetailBtn" class="turquoise-btn-cancel">关闭</button>
+            </div>
+        </div>
+    </div>
+    
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-script"></th:block>
+    
+    <script>
+        // 查看订单详情
+        function viewOrderDetail(orderId) {
+            fetch('/admin/orders/detail/' + orderId, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.resultCode === 200) {
+                    const order = data.data;
+                    document.getElementById('detailOrderNo').textContent = order.orderNo;
+                    document.getElementById('detailUserName').textContent = order.userName;
+                    document.getElementById('detailTotalPrice').textContent = order.totalPrice;
+                    
+                    // 订单状态
+                    let statusText = '';
+                    switch (order.orderStatus) {
+                        case 0: statusText = '待支付'; break;
+                        case 1: statusText = '已支付'; break;
+                        case 2: statusText = '已发货'; break;
+                        case 3: statusText = '已完成'; break;
+                        case 4: statusText = '已取消'; break;
+                    }
+                    document.getElementById('detailOrderStatus').textContent = statusText;
+                    document.getElementById('detailCreateTime').textContent = order.createTime;
+                    
+                    // 商品列表
+                    const orderItemsList = document.getElementById('orderItemsList');
+                    orderItemsList.innerHTML = '';
+                    order.orderItems.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${item.goodsName}</td>
+                            <td>${item.goodsPrice}</td>
+                            <td>${item.goodsCount}</td>
+                            <td>${item.goodsPrice * item.goodsCount}</td>
+                        `;
+                        orderItemsList.appendChild(row);
+                    });
+                    
+                    // 显示弹窗
+                    document.getElementById('orderDetailModal').classList.add('active');
+                } else {
+                    alert(data.message || '获取详情失败');
+                }
+            })
+            .catch(error => {
+                console.error('获取详情失败：', error);
+                alert('获取详情失败，请重试');
+            });
+        }
+        
+        // 更新订单状态
+        function updateOrderStatus(orderId, status) {
+            if (confirm('确认修改订单状态？')) {
+                const formData = new FormData();
+                formData.append('orderId', orderId);
+                formData.append('orderStatus', status);
+                
+                fetch('/admin/orders/update-status', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200) {
+                        alert('修改成功');
+                        location.reload();
+                    } else {
+                        alert(data.message || '修改失败');
+                    }
+                })
+                .catch(error => {
+                    console.error('修改失败：', error);
+                    alert('修改失败，请重试');
+                });
+            }
+        }
+        
+        // 关闭订单详情弹窗
+        document.getElementById('closeOrderDetailBtn').addEventListener('click', function() {
+            document.getElementById('orderDetailModal').classList.remove('active');
+        });
+        
+        document.getElementById('cancelOrderDetailBtn').addEventListener('click', function() {
+            document.getElementById('orderDetailModal').classList.remove('active');
+        });
+        
+        document.getElementById('orderDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

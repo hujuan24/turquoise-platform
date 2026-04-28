@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户中心 - 后台管理</title>
+    <link rel="stylesheet" th:href="@{/admin/css/turquoise-admin.css}">
+</head>
+<body>
+    <div th:replace="admin/turquoise-admin-layout :: header"></div>
+    <div th:replace="admin/turquoise-admin-layout :: sidebar"></div>
+    <main class="turquoise-content">
+        <!-- 用户列表 -->
+        <div class="turquoise-page">
+            <div class="turquoise-page-header">
+                <h2 class="turquoise-page-title">用户列表</h2>
+            </div>
+            
+            <!-- 搜索和筛选 -->
+            <div class="turquoise-search-filter">
+                <form th:action="@{/admin/members}" method="get">
+                    <div class="turquoise-search-row">
+                        <div class="turquoise-search-item">
+                            <input type="text" name="keyword" placeholder="用户昵称" class="turquoise-input" th:value="${keyword}">
+                        </div>
+                        <div class="turquoise-search-item">
+                            <select name="status" class="turquoise-select">
+                                <option value="">全部状态</option>
+                                <option value="1">正常</option>
+                                <option value="0">禁用</option>
+                            </select>
+                        </div>
+                        <div class="turquoise-search-item">
+                            <button type="submit" class="turquoise-btn turquoise-btn-primary">搜索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- 用户表格 -->
+            <div class="turquoise-table-container">
+                <table class="turquoise-table">
+                    <thead>
+                        <tr>
+                            <th>用户ID</th>
+                            <th>用户昵称</th>
+                            <th>登录名</th>
+                            <th>注册时间</th>
+                            <th>账号状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${userList}">
+                            <td th:text="${user.userId}"></td>
+                            <td th:text="${user.nickName}"></td>
+                            <td th:text="${user.loginName}"></td>
+                            <td th:text="${user.createTime}"></td>
+                            <td>
+                                <span th:if="${user.lockedFlag == 0}" class="turquoise-status turquoise-status-up">正常</span>
+                                <span th:else class="turquoise-status turquoise-status-down">禁用</span>
+                            </td>
+                            <td>
+                                <a th:href="@{/admin/users/detail/{id}(id=${user.userId})}" class="turquoise-btn turquoise-btn-blue">详情</a>
+                                <button th:if="${user.lockedFlag == 0}" class="turquoise-btn turquoise-btn-gray" th:onclick="|lockUser(${user.userId})|">禁用</button>
+                                <button th:else class="turquoise-btn turquoise-btn-green" th:onclick="|unlockUser(${user.userId})|">启用</button>
+                            </td>
+                        </tr>
+                        <!-- 无数据时显示 -->
+                        <tr th:if="${userList == null or userList.size() == 0}">
+                            <td colspan="6" class="turquoise-table-empty">暂无用户数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 分页 -->
+            <div class="turquoise-pagination">
+                <ul class="turquoise-pagination-list">
+                    <li>
+                        <a th:href="@{/admin/members(page=${page-1}, limit=${limit}, keyword=${keyword}, status=${status})}" th:if="${page > 1}">上一页</a>
+                        <span th:else class="turquoise-pagination-disabled">上一页</span>
+                    </li>
+                    <li class="turquoise-pagination-item active">
+                        <span th:text="${page}"></span>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/members(page=${page+1}, limit=${limit}, keyword=${keyword}, status=${status})}" th:if="${(page * limit) < total}">下一页</a>
+                        <span th:else class="turquoise-pagination-disabled">下一页</span>
+                    </li>
+                </ul>
+                <div class="turquoise-pagination-info">
+                    共 <span th:text="${total}"></span> 条记录
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        // 禁用用户
+        function lockUser(userId) {
+            if (confirm('确认禁用该用户？')) {
+                const formData = new FormData();
+                formData.append('userId', userId);
+                formData.append('lockStatus', 1);
+                fetch('/admin/users/lock', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200) {
+                        alert(data.message || '禁用成功');
+                        location.reload();
+                    } else {
+                        alert(data.message || '禁用失败');
+                    }
+                })
+                .catch(error => {
+                    console.error('禁用失败：', error);
+                    alert('禁用失败，请重试');
+                });
+            }
+        }
+        
+        // 启用用户
+        function unlockUser(userId) {
+            if (confirm('确认启用该用户？')) {
+                const formData = new FormData();
+                formData.append('userId', userId);
+                formData.append('lockStatus', 0);
+                fetch('/admin/users/lock', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode === 200) {
+                        alert(data.message || '启用成功');
+                        location.reload();
+                    } else {
+                        alert(data.message || '启用失败');
+                    }
+                })
+                .catch(error => {
+                    console.error('启用失败：', error);
+                    alert('启用失败，请重试');
+                });
+            }
+        }
+    </script>
+    
+    <th:block th:replace="admin/turquoise-admin-layout :: admin-script"></th:block>
+</body>
+</html>

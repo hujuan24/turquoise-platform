@@ -15,9 +15,8 @@ import ltd.newbee.mall.controller.vo.NewBeeMallGoodsDetailVO;
 import ltd.newbee.mall.controller.vo.NewBeeMallUserVO;
 import ltd.newbee.mall.controller.vo.SearchPageCategoryVO;
 import ltd.newbee.mall.entity.NewBeeMallGoods;
-import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.service.NewBeeMallCategoryService;
-import ltd.newbee.mall.service.NewBeeMallGoodsService;
+import ltd.newbee.mall.service.TurquoiseGoodsService;
 import ltd.newbee.mall.service.UserCollectService;
 import ltd.newbee.mall.util.BeanUtil;
 import ltd.newbee.mall.util.PageQueryUtil;
@@ -34,10 +33,10 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
-public class GoodsController {
+public class TurquoiseGoodsController {
 
     @Resource
-    private NewBeeMallGoodsService newBeeMallGoodsService;
+    private TurquoiseGoodsService turquoiseGoodsService;
     @Resource
     private NewBeeMallCategoryService newBeeMallCategoryService;
     @Resource
@@ -73,16 +72,16 @@ public class GoodsController {
         params.put("goodsSellStatus", Constants.SELL_STATUS_UP);
         //封装商品数据
         PageQueryUtil pageUtil = new PageQueryUtil(params);
-        request.setAttribute("pageResult", newBeeMallGoodsService.searchNewBeeMallGoods(pageUtil));
+        request.setAttribute("pageResult", turquoiseGoodsService.searchNewBeeMallGoods(pageUtil));
         return "mall/search";
     }
 
-    @GetMapping("/goods/detail/{goodsId}")
+    @GetMapping("/turquoise/goods/detail/{goodsId}")
     public String detailPage(@PathVariable("goodsId") Long goodsId, HttpServletRequest request, HttpSession session) {
         if (goodsId < 1) {
             NewBeeMallException.fail("参数异常");
         }
-        NewBeeMallGoods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
+        NewBeeMallGoods goods = turquoiseGoodsService.getNewBeeMallGoodsById(goodsId);
         if (Constants.SELL_STATUS_UP != goods.getGoodsSellStatus()) {
             NewBeeMallException.fail(ServiceResultEnum.GOODS_PUT_DOWN.getResult());
         }
